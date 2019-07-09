@@ -17,9 +17,6 @@ from app.models import Users
 from app.system.exceptions import DBError
 from app.system.session import clear_session
 
-# std
-from datetime import datetime
-
 
 auth = Blueprint(
     'auth',
@@ -29,14 +26,14 @@ auth = Blueprint(
 
 @auth.route("/login", methods=['GET'])
 def login():
-    return render_template("authentication/login.html", year= datetime.utcnow().year)
+    return render_template("authentication/login.html")
 
 @auth.route("/login", methods=['POST'])
 def submit_login():
-    username, password = request.form.get('username'), request.form.get('password')
+    identifier, password = request.form.get('identifier'), request.form.get('password')
 
     try:  
-        Users.login(username, password)
+        Users.login(identifier, password)
         return redirect(url_for("index"))
     except DBError as e:
         abort(412, {"error_msg": str(e)})

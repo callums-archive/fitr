@@ -18,6 +18,13 @@ db = MongoEngine()
 
 
 class Users(db.Document):
+    uid = db.SequenceField()
+
+    first_name =  db.StringField(required=True)
+    surname = db.StringField(required=True)
+    date_of_birth = db.DateTimeField()
+    gender = db.StringField()
+
     username = db.StringField()
     email = db.StringField()
     password = db.StringField()
@@ -52,8 +59,10 @@ class Users(db.Document):
             raise(Exception(e))
 
     @classmethod
-    def login(cls, username, password):
-        user = cls.by_username(username)
+    def login(cls, identifier, password):
+        identifiers = ['username', 'email']
+        for identity in identifiers:
+            user = cls.objects(__raw__={identity: identifier}).first()
         if not user:
             raise DBError("Username/Password combination failed.")
         if not user.check_password(password):
