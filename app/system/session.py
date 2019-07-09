@@ -1,4 +1,4 @@
-from flask import session, current_app, request
+from flask import session, current_app, request, abort
 from flask_pymongo import MongoClient
 
 
@@ -17,4 +17,11 @@ def clear_session():
 def get_store():
     store = MongoClient(app.config.get("MONGODB_HOST"), app.config.get("MONGODB_PORT"))
     return store[app.config.get("MONGODB_DB")]['session']
+
+def get_current_user():
+    from app.models import Users
+    if session:
+        if session['username']:
+            return Users.by_username(session['username'])
+        abort(403)
 

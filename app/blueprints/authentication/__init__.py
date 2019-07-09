@@ -24,7 +24,6 @@ auth = Blueprint(
 )
 
 @auth.route("/login", methods=['GET'])
-@permission("none")
 def login():
     return "Log in"
 

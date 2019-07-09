@@ -50,7 +50,20 @@ class Users(db.Document):
             if user and user.to_dbref() is not None:
                 Users.by_username(username).delete()
             raise(Exception(e))
-            
+
+    @classmethod
+    def login(cls, username, password):
+        user = cls.by_username(username)
+        if not user:
+            raise DBError("Username/Password combination failed.")
+        if not user.check_password(password):
+            raise DBError("Username/Password combination failed.")
+
+        set_session(user)
+        return True
+
+    def __str__(self)            :
+        return f"{self.username}:{self.groups}"
 
     def add_group(self, group):
         if not Groups.by_name(group):
@@ -76,15 +89,3 @@ class Users(db.Document):
         if checkpw(password.encode("utf-8"), self.password.encode("utf-8")):
             return True
         return False
-
-    @classmethod
-    def login(cls, username, password):
-        user = cls.by_username(username)
-        if not user:
-            raise DBError("Username/Password combination failed.")
-        if not user.check_password(password):
-            raise DBError("Username/Password combination failed.")
-
-        set_session(user)
-        return True
-

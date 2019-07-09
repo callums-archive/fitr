@@ -1,23 +1,26 @@
 # flask
-from flask import abort
+from flask import abort, session
 
 # acls
 from .acls import generate_acl, Allow, Deny
 
+# session
+from .session import get_current_user
+
 
 class permission():
-    def __init__(self, acl):
-        self.acl = acl
-
+    def __init__(self, permission):
+        self.permission = permission
 
     def __call__(self, f):
-        # abort(403)
-
-        print(type(f))
-
         def wrapped_f(*args, **kwargs):
+            user = get_current_user()
+            if user is None:
+                abort(403)
+            permissions = generate_acl(user.groups)
+
+            for permission_list in permissions:
+                if permission_list[1] == self.permission and permission_list[0] == Allow:
+                    return f(*args, **kwargs)
             abort(403)
-            if not g.role in self.acl[request.method]:
-                pass
-            return f(*args, **kwargs)
         return wrapped_f

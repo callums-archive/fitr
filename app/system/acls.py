@@ -23,7 +23,7 @@ acls["admin"] = [
 
 
 # acl expose per user
-def generate_acl(level):
+def generate_acl(levels):
     permissions = []
     def process_permissions_obj(item):
         result = []
@@ -34,8 +34,9 @@ def generate_acl(level):
             result.append(item)
         return result
 
-    for acl in acls:
-        for permission in acls[acl]:
-            if acl == level:
-                permissions.extend(process_permissions_obj(permission))
-    return permissions
+    for level in levels:
+        for acl in acls:
+            for permission in acls[acl]:
+                if acl == level:
+                    permissions.extend(process_permissions_obj(permission))
+        return permissions
