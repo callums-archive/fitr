@@ -17,6 +17,9 @@ from app.models import Users
 from app.system.exceptions import DBError
 from app.system.session import clear_session
 
+# std
+from datetime import datetime
+
 
 auth = Blueprint(
     'auth',
@@ -26,7 +29,7 @@ auth = Blueprint(
 
 @auth.route("/login", methods=['GET'])
 def login():
-    return render_template("authentication/login.html")
+    return render_template("authentication/login.html", year= datetime.utcnow().year)
 
 @auth.route("/login", methods=['POST'])
 def submit_login():
