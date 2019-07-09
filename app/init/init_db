@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+from app import create_app
+
+from flask_mongoengine import MongoEngine
+
+from app.models import (
+    Users,
+    Groups
+)
+
+
+db = MongoEngine(create_app())
+
+print("Creating ADMIN group...")
+Groups.create_group("admin")
+
+print("Creating ADMIN user...")
+admin = Users.create_user("admin", "123456", "admin@guaca.tk", ['admin'])
+print(admin)
