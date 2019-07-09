@@ -1,7 +1,6 @@
 # flask
 from flask_mongoengine import MongoEngine
 from flask import session
-from flask_login import UserMixin, login_user, LoginManager
 
 # std
 from bcrypt import gensalt, hashpw, checkpw
@@ -16,10 +15,9 @@ from app.system.session import set_session
 
 
 db = MongoEngine()
-login_manager = LoginManager()
 
 
-class Users(UserMixin, db.Document):
+class Users(db.Document):
     username = db.StringField()
     email = db.StringField()
     password = db.StringField()
@@ -34,10 +32,6 @@ class Users(UserMixin, db.Document):
     @classmethod
     def by_username(cls, username):
         return cls.objects.filter(username=username).first()
-
-    @classmethod
-    def by_id(cls, uid):
-        return cls.objects.filter(id=uid).first()
 
     @classmethod
     def create_user(cls, username, password, email, groups=['logged_in']):
@@ -84,16 +78,13 @@ class Users(UserMixin, db.Document):
         return False
 
     @classmethod
-    def login(cls, username, password, remember=False):
+    def login(cls, username, password):
         user = cls.by_username(username)
         if not user:
             raise DBError("Username/Password combination failed.")
         if not user.check_password(password):
             raise DBError("Username/Password combination failed.")
 
-        login_user(user, remember)
+        set_session(user)
         return True
 
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.by_id(user_id)

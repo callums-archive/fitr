@@ -7,7 +7,7 @@ from flask import (
     redirect, 
     url_for,
 )
-from flask_login import login_required
+from app.system.permissions import permission
 
 # DB imports
 from app.models import Users
@@ -24,6 +24,7 @@ auth = Blueprint(
 )
 
 @auth.route("/login", methods=['GET'])
+@permission("none")
 def login():
     return "Log in"
 
@@ -35,12 +36,11 @@ def submit_login():
         Users.login(username, password)
         return redirect(url_for("index"))
     except DBError as e:
-        abort({"error", str(e)}, 412)
+        abort(412, {"error_msg": str(e)})
     else:
-        abort({"error", "System error, please try again."}, 412)
+        abort(412, {"error_msg": "System error, please try again."})
 
 @auth.route("/logout", methods=['GET'])
-@login_required
 def logout():
     clear_session()
     return redirect(url_for("index"))

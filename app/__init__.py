@@ -1,9 +1,5 @@
 # imports flaks
-from flask import Flask, render_template
-from flask_login import LoginManager
-
-# models
-from .models import Users
+from flask import Flask
 
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
@@ -26,15 +22,10 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    # login manager
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.session_protection = "strong"
-
     # simple view
     @app.route('/')
     def index():
-        return render_template("index.html")
+        return "Hey there"
 
     # register all of the blueprints
     register_blueprints(app)
