@@ -1,5 +1,10 @@
 # imports flaks
-from flask import Flask
+from flask import (
+    Flask, 
+    render_template,
+    redirect,
+    url_for
+)
 
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
@@ -25,7 +30,7 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        return "Hey there"
+        return redirect(url_for('auth.login'))
 
     # register all of the blueprints
     register_blueprints(app)

@@ -6,6 +6,7 @@ from flask import (
     jsonify,
     redirect, 
     url_for,
+    render_template
 )
 from app.system.permissions import permission
 
@@ -25,7 +26,7 @@ auth = Blueprint(
 
 @auth.route("/login", methods=['GET'])
 def login():
-    return "Log in"
+    return render_template("authentication/login.html")
 
 @auth.route("/login", methods=['POST'])
 def submit_login():
