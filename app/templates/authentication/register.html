@@ -230,11 +230,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
                         callback: {
                             message: "You need to be 18+ to register",
                             callback: function(field) {
-                                var user_date = moment(field.value, 'YYYY-MM-DD');
-                                var compare_date = moment();
-                                compare_date.subtract(18, 'years');
+                                var user_date = new Date(field.value);
+                                var ageDifMs = Date.now() - user_date.getTime();
+                                var ageDate = new Date(ageDifMs); // miliseconds from epoch
 
-                                if (Math.sign(compare_date.diff(user_date, 'years')) == -1) {
+                                if (Math.abs(ageDate.getUTCFullYear() - 1970) < 18) {
                                     return false
                                 } else {
                                     return true;
@@ -356,11 +356,6 @@ $('input[name="confirm"]').on("input", function(e) {
     fv.revalidateField('confirm');
 });
 
-// // events
-// $('input[name="dateofbirth"]').on(":input", function(e) {
-//     console.log("sdfsdf3")
-//     fv.revalidateField('dateofbirth');
-// });
 
 // errors for stepper
 function show_errors() {
@@ -383,7 +378,7 @@ function show_errors() {
 $(document).bind('DOMSubtreeModified', function () {
     setTimeout(function() {
         show_errors()
-    }, 500);
+    }, 1000);
 });
 
 </script>
