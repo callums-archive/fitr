@@ -24,6 +24,9 @@
         <!-- font awesome -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.min.css') }}">
 
+        <!-- date picker -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='datetimepicker/css/bootstrap-datetimepicker.min.css') }}">
+
         {% block styles %}
         {% endblock styles %}
 
@@ -50,8 +53,14 @@
         <!-- jquery toast -->
         <script src="{{ url_for('static', filename='toast-manager/toast.min.js') }}"></script>
 
-        <!-- fitr mail js -->
+        <!-- fitr main js -->
         <script src="{{ url_for('static', filename='fitr.js') }}"></script>
+
+        <!-- moment js -->
+        <script src="{{ url_for('static', filename='moment.js') }}"></script>
+
+        <!-- date picker -->
+        <script src="{{ url_for('static', filename='datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
 
         {% block scripts %}
         {% endblock scripts %}

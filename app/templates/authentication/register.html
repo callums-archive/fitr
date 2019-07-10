@@ -33,7 +33,7 @@
                     <div class="d-flex justify-content-center">
                         <img class="mb-3" src="{{ url_for('static', filename='images/logo.png') }}" alt="" height="75">
                     </div>
-                    <p class="text-muted text-center mt-0 pt-0 mb-2">Select <b>Step 1</b> to get started.</p>
+                    <p class="text-muted text-center mt-0 pt-0 mb-2" id="getting-started">Select <b>Step 1</b> to get started.</p>
                 </div>
 
                 <div class="col-sm-12">
@@ -74,7 +74,7 @@
                                     <div class="card-body pb-1">
                                         <div class="form-group">
                                             <select class="form-control" name="gender" style="width: 100%" required> 
-                                                <option disabled>Please choose</option>
+                                                <option value="" disabled selected>Please choose</option>
                                                 <option value="female">Female</option>
                                                 <option value="male">Male</option>
                                             </select>
@@ -95,7 +95,7 @@
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionRegister">
                                     <div class="card-body pb-1">
                                         <div class="form-group">
-                                            <input type="date" name="dateofbirth" placeholder="Enter Date" class="form-control">
+                                            <div id="dateofbirth"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -185,16 +185,31 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     validators: {
                         notEmpty: {
                             message: 'field is required',
-                            callback: function(input) {
-                                console.log()
-                            }
                         },
+                        stringLength: {
+                            min: 2,
+                            max: 50,
+                            message: 'Field must be more than 2 and less than 50 characters long'
+                        },
+                        regexp: {
+                            regexp: /^[a-zs]+$/i,
+                            message: 'Field can consist of alphabetical characters and spaces only'
+                        }
                     }
                 },
                 surname: {
                     validators: {
                         notEmpty: {
-                            message: 'field is required'
+                            message: 'field is required',
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 50,
+                            message: 'Field must be more than 2 and less than 50 characters long'
+                        },
+                        regexp: {
+                            regexp: /^[a-zs]+$/i,
+                            message: 'Field can consist of alphabetical characters and spaces only'
                         }
                     }
                 },
@@ -209,27 +224,64 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     validators: {
                         notEmpty: {
                             message: 'field is required'
+                        },
+                        callback: {
+                            message: "You need to be 18+ to register",
+                            callback: function(field) {
+                                var user_date = moment(field.value, 'YYYY-MM-DD');
+                                var compare_date = moment();
+                                compare_date.subtract(18, 'years');
+
+                                console.log(compare_date.diff(user_date, 'years'))
+
+                                if (Math.sign(compare_date.diff(user_date, 'years')) == -1) {
+                                    return false
+                                } else {
+                                    return true;
+                                }
+                            }
                         }
                     }
                 },
                 username: {
                     validators: {
                         notEmpty: {
-                            message: 'field is required'
+                            message: 'field is required',
+                        },
+                        stringLength: {
+                            min: 5,
+                            max: 50,
+                            message: 'Field must be more than 2 and less than 50 characters long'
+                        },
+                        regexp: {
+                            regexp: /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/i,
+                            message: 'Invalid Username alphabetical charectors and numbers only'
                         }
                     }
                 },
                 password: {
                     validators: {
                         notEmpty: {
-                            message: 'field is required'
-                        }
+                            message: 'field is required',
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 50,
+                            message: 'Field must be more than 6 and less than 50 characters long'
+                        },
                     }
                 },
                 confirm: {
                     validators: {
-                        notEmpty: {
-                            message: 'field is required'
+                        callback: {
+                            message: "Passwords dont match",
+                            callback: function(field) {
+                                if (field.value == $("input[name='password']").val()) {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            }
                         }
                     }
                 },
@@ -237,6 +289,10 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     validators: {
                         notEmpty: {
                             message: 'field is required'
+                        },
+                        regexp: {
+                            regexp: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
+                            message: 'Email address is invalid'
                         }
                     }
                 },
@@ -280,7 +336,50 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 afterHidden: function () {}
             });
         });
-    });
+    }).on('core.form.invalid', function() {
+        show_errors();
+    })
+});
+
+$(document).ready(function() {
+
+
+
+    // // set date
+    // today = new Date();
+    // date_input = $('date[name="dateofbirth"]');
+    // console.log(today)
+    // console.log(date_input)
+    // $('date[name="dateofbirth"]').val(today)
+})
+
+$('#dateofbirth').datetimepicker({
+    format: 'YYYY-MM-DD',
+    inline: true
+});
+new datepicker_inline('#dateofbirth');
+
+function show_errors() {
+    for (var i=0; i < $("#register").find(".card-header").length; i++) {
+        var buttonBefore = $($("#register").find(".card-header")[i]).find('button');
+        //change colour
+        $(buttonBefore).removeClass('btn-danger');
+        $(buttonBefore).addClass('btn-outline-primary');
+    }
+
+    for (var i=0; i < $("#register").find(".is-invalid").length; i++) {
+        var heading = $($($("#register").find(".is-invalid")[i]).closest('.collapse')).attr('aria-labelledby');
+        var button = $('#register').find(`#${heading}`).find('button')
+        //change colour
+        $(button).removeClass('btn-outline-primary');
+        $(button).addClass('btn-danger');
+    }
+}
+
+$(document).bind('DOMSubtreeModified', function () {
+    setTimeout(function() {
+        show_errors()
+    }, 500);
 });
 </script>
 {% endblock scripts %}
