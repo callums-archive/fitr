@@ -24,12 +24,12 @@ function castJson(arr) {
 })(jQuery);
 
 // Datepicker inline
-var datepicker_inline = function(el, format = "YYYY-MM-DD") {
-  this.init(el, format);
+var datepicker_inline = function(el, cb = null, format = "YYYY-MM-DD") {
+  this.init(el, cb, format);
 }
 
 datepicker_inline.prototype = {
-  init: function(el, format) {
+  init: function(el, cb, format) {
     if ($(el).attr('id') != undefined) {
       this.name = $(el).attr('id');
     } else if ($(el).attr('name') != undefined) {
@@ -50,6 +50,10 @@ datepicker_inline.prototype = {
     var root = this;
     $(el).on('dp.change', function(e) {
       root.input.value = e.date.format(format);
+
+      if(cb != null) {
+        cb(root.name)
+      }
     });
   }
 };

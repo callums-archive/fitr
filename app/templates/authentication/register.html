@@ -176,8 +176,13 @@
 
 {% block scripts %}
 <script>
+
+// form validator
+var fv = null;
+
+// validation
 document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
+    fv = FormValidation.formValidation(
         document.getElementById('register'),
         {
             fields: {
@@ -222,17 +227,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 },
                 dateofbirth: {
                     validators: {
-                        notEmpty: {
-                            message: 'field is required'
-                        },
                         callback: {
                             message: "You need to be 18+ to register",
                             callback: function(field) {
                                 var user_date = moment(field.value, 'YYYY-MM-DD');
                                 var compare_date = moment();
                                 compare_date.subtract(18, 'years');
-
-                                console.log(compare_date.diff(user_date, 'years'))
 
                                 if (Math.sign(compare_date.diff(user_date, 'years')) == -1) {
                                     return false
@@ -338,27 +338,31 @@ document.addEventListener('DOMContentLoaded', function(e) {
         });
     }).on('core.form.invalid', function() {
         show_errors();
-    })
+    });
 });
 
-$(document).ready(function() {
-
-
-
-    // // set date
-    // today = new Date();
-    // date_input = $('date[name="dateofbirth"]');
-    // console.log(today)
-    // console.log(date_input)
-    // $('date[name="dateofbirth"]').val(today)
-})
-
+// date picker
 $('#dateofbirth').datetimepicker({
     format: 'YYYY-MM-DD',
     inline: true
 });
-new datepicker_inline('#dateofbirth');
+new datepicker_inline('#dateofbirth', function(name) {
+    fv.revalidateField(name)
+});
 
+
+// events
+$('input[name="confirm"]').on("input", function(e) {
+    fv.revalidateField('confirm');
+});
+
+// // events
+// $('input[name="dateofbirth"]').on(":input", function(e) {
+//     console.log("sdfsdf3")
+//     fv.revalidateField('dateofbirth');
+// });
+
+// errors for stepper
 function show_errors() {
     for (var i=0; i < $("#register").find(".card-header").length; i++) {
         var buttonBefore = $($("#register").find(".card-header")[i]).find('button');
@@ -381,5 +385,6 @@ $(document).bind('DOMSubtreeModified', function () {
         show_errors()
     }, 500);
 });
+
 </script>
 {% endblock scripts %}
