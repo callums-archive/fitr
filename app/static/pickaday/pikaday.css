@@ -11,9 +11,14 @@
     position: relative;
     color: #333;
     background: #fff;
-    border: 1px solid #ccc;
-    border-bottom-color: #bbb;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+
+}
+
+.pika-single .pika-lendar 
+{
+    width: 100% !important;
 }
 
 /*

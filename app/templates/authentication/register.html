@@ -93,9 +93,10 @@
                                 </div>
                             
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1">
+                                    <div class="card-body pb-1 pl-2 pr-4">
                                         <div class="form-group">
-                                            <div id="dateofbirth"></div>
+                                            <input type="text" id="datepicker" name="dateofbirth" hidden>
+                                            <div id="date-container"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -339,21 +340,26 @@ document.addEventListener('DOMContentLoaded', function(e) {
     }).on('core.form.invalid', function() {
         show_errors();
     });
-});
 
-// date picker
-$('#dateofbirth').datetimepicker({
-    format: 'YYYY-MM-DD',
-    inline: true
+    var picker = new Pikaday(
+    {
+        field: document.getElementById('datepicker'),
+        firstDay: 1,
+        minDate: new Date(2000, 0, 1),
+        maxDate: new Date(2020, 12, 31),
+        yearRange: [2000, 2020],
+        bound: false,
+        container: document.getElementById('date-container'),
+    });
 });
-new datepicker_inline('#dateofbirth', function(name) {
-    fv.revalidateField(name)
-});
-
 
 // events
 $('input[name="confirm"]').on("input", function(e) {
     fv.revalidateField('confirm');
+});
+
+$('#datepicker').on("change", function(e) {
+    fv.revalidateField('dateofbirth');
 });
 
 
