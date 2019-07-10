@@ -1,0 +1,286 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+    .set_ht {
+        height: 100% !important;
+    }
+
+    .accordion_wt {
+        width: 400px;
+    }
+
+    @media (max-width: 410px) {
+        .accordion_wt {
+            width: 0 auto;
+        }
+    }
+
+    @media (max-height: 575px) {
+        .set_ht {
+            height: auto !important;
+        }
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container set_ht">
+    <div class="d-flex justify-content-center set_ht">
+        <div class="d-flex align-items-center accordion_wt">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="d-flex justify-content-center">
+                        <img class="mb-3" src="{{ url_for('static', filename='images/logo.png') }}" alt="" height="75">
+                    </div>
+                    <p class="text-muted text-center mt-0 pt-0 mb-2">Select <b>Step 1</b> to get started.</p>
+                </div>
+
+                <div class="col-sm-12">
+                    <form id="register">
+                        <div class="accordion" id="accordionRegister">
+
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                            <b>Step 1</b>: Names 👤
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionRegister">
+                                    <div class="card-body pb-1">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-lg" name="first_name" placeholder="Frist Name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-lg" name="surname" placeholder="Surname" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <b>Step 2</b>: Gender 👫
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionRegister">
+                                    <div class="card-body pb-1">
+                                        <div class="form-group">
+                                            <select class="form-control" name="gender" style="width: 100%" required> 
+                                                <option disabled>Please choose</option>
+                                                <option value="female">Female</option>
+                                                <option value="male">Male</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingTree">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            <b>Step 3</b>: Date of Birth 👶
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionRegister">
+                                    <div class="card-body pb-1">
+                                        <div class="form-group">
+                                            <input type="date" name="dateofbirth" placeholder="Enter Date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingFour">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            <b>Step 4</b>: Username 🐦
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionRegister">
+                                    <div class="card-body pb-1">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-lg" name="username" placeholder="Username" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingFive">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            <b>Step 5</b>: Password and Email 📨
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionRegister">
+                                    <div class="card-body pb-1">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-lg" name="email" placeholder="Email" required>
+                                        </div>
+
+                                        <hr/>
+
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-lg" name="confirm" placeholder="Confirm Password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingSix">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            <b>Step 6</b>: Blast off! 🚀
+                                        </button>
+                                    </h2>
+                                </div>
+                            
+                                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionRegister">
+                                    <div class="card-body">
+                                        <button type="submit" class="btn btn-lg btn-success btn-block">Register Me! 🎉🎉🎉</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr>
+
+                    <a class="mt-1 mb-3 btn btn-sm btn-secondary btn-block text-center" href="{{ url_for('auth.login') }}"><b><i class="fas fa-info-circle"></i> Goto Login</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function(e) {
+    FormValidation.formValidation(
+        document.getElementById('register'),
+        {
+            fields: {
+                first_name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required',
+                            callback: function(input) {
+                                console.log()
+                            }
+                        },
+                    }
+                },
+                surname: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                gender: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                dateofbirth: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                confirm: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: 'field is required'
+                        }
+                    }
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap: new FormValidation.plugins.Bootstrap(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+            },
+        }
+    ).on('core.form.valid', function() {
+        $.ajax({
+          accept: 'application/json',
+          contentType: 'application/json',
+          type: "POST",
+          url: "{{ url_for('auth.login') }}",
+          data: $('#login').jsonString()
+        }).done(function(data, status, jqXHR) {
+          window.location.replace(data.redirect);
+        }).fail(function(data, status, jqXHR) {
+            try {
+                var error = data.responseJSON.error_msg;
+            } catch (err) {
+                var error = "Server Error, Try again.";
+            }
+            
+            $.toast({
+                text: error,
+                heading: 'Error!',
+                icon: 'error',
+                showHideTransition: 'slide',
+                allowToastClose: false,
+                hideAfter: 3000,
+                stack: 5,
+                position: 'top-center',
+                textAlign: 'left', 
+                loader: true, 
+                beforeShow: function () {},
+                afterShown: function () {},
+                beforeHide: function () {},
+                afterHidden: function () {}
+            });
+        });
+    });
+});
+</script>
+{% endblock scripts %}

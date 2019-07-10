@@ -24,10 +24,16 @@ auth = Blueprint(
     template_folder='templates'
 )
 
+# gets
 @auth.route("/login", methods=['GET'])
 def login():
     return render_template("authentication/login.html")
 
+@auth.route("/register", methods=['GET'])
+def register():
+    return render_template("authentication/register.html")
+
+# posts
 @auth.route("/login", methods=['POST'])
 def submit_login():
     identifier, password = request.form.get('identifier'), request.form.get('password')

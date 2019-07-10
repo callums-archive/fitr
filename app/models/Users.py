@@ -20,8 +20,8 @@ db = MongoEngine()
 class Users(db.Document):
     uid = db.SequenceField()
 
-    first_name =  db.StringField(required=True)
-    surname = db.StringField(required=True)
+    first_name =  db.StringField()
+    surname = db.StringField()
     date_of_birth = db.DateTimeField()
     gender = db.StringField()
 
