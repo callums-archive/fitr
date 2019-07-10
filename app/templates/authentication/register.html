@@ -10,15 +10,49 @@
         width: 400px;
     }
 
+    .year {
+        border-bottom-left-radius: .25em !important;
+        border-top-left-radius: .25rem !important;
+        font-size: 15px;
+    }
+
+    .month {
+        font-size: 15px;
+        width: 75px !important;
+    }
+
+    .day {
+        font-size: 15px;
+    }
+
     @media (max-width: 410px) {
         .accordion_wt {
             width: 0 auto;
         }
     }
 
-    @media (max-height: 575px) {
+    @media (max-height: 600px) {
         .set_ht {
             height: auto !important;
+        }
+
+        .year {
+            font-size: 8.5px;
+            font-weight: bolder;
+            width: 60px !important;
+        }
+
+        .month {
+            font-size: 8.5px;
+            font-weight: bolder;
+            width: 85px !important;
+
+        }
+
+        .day {
+            font-size: 8.5px;
+            font-weight: bolder;
+            width: 60px !important;
         }
     }
 </style>
@@ -50,12 +84,15 @@
                                 </div>
                             
                                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1">
+                                    <div class="card-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-lg" name="first_name" placeholder="Frist Name" required>
+                                            <input type="text" class="form-control ref1" name="first_name" placeholder="Frist Name" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-lg" name="surname" placeholder="Surname" required>
+                                            <input type="text" class="form-control ref1" name="surname" placeholder="Surname" required>
+                                        </div>
+                                        <div class="btn-group btn-block" role="group">
+                                            <button type="button" onclick="move_to('#collapseTwo')" class="btn btn-primary">Next</button>
                                         </div>
                                     </div>
                                 </div>
@@ -71,13 +108,18 @@
                                 </div>
                             
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1">
+                                    <div class="card-body">
                                         <div class="form-group">
                                             <select class="form-control" name="gender" style="width: 100%" required> 
                                                 <option value="" disabled selected>Please choose</option>
                                                 <option value="female">Female</option>
                                                 <option value="male">Male</option>
                                             </select>
+                                        </div>
+
+                                        <div class="btn-group btn-block" role="group">
+                                            <button type="button" onclick="move_to('#collapseOne')" class="btn btn-secondary">Previous</button>
+                                            <button type="button" onclick="move_to('#collapseThree')" class="btn btn-primary">Next</button>
                                         </div>
                                     </div>
                                 </div>
@@ -93,10 +135,14 @@
                                 </div>
                             
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1 pl-2 pr-4">
+                                    <div class="card-body">
                                         <div class="form-group">
-                                            <input type="text" id="datepicker" name="dateofbirth" hidden>
-                                            <div id="date-container"></div>
+                                            <input type="hidden" id="dateofbirth" class="form-control" name="dateofbirth">
+                                        </div>
+
+                                        <div class="btn-group btn-block" role="group">
+                                            <button type="button" onclick="move_to('#collapseTwo')" class="btn btn-secondary">Previous</button>
+                                            <button type="button" onclick="move_to('#collapseFour')" class="btn btn-primary">Next</button>
                                         </div>
                                     </div>
                                 </div>
@@ -112,9 +158,14 @@
                                 </div>
                             
                                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1">
+                                    <div class="card-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-lg" name="username" placeholder="Username" required>
+                                            <input type="text" class="form-control ref1" name="username" placeholder="Username" required>
+                                        </div>
+
+                                        <div class="btn-group btn-block" role="group">
+                                            <button type="button" onclick="move_to('#collapseThree')" class="btn btn-secondary">Previous</button>
+                                            <button type="button" onclick="move_to('#collapseFive')" class="btn btn-primary">Next</button>
                                         </div>
                                     </div>
                                 </div>
@@ -130,18 +181,23 @@
                                 </div>
                             
                                 <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionRegister">
-                                    <div class="card-body pb-1">
+                                    <div class="card-body">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-lg" name="email" placeholder="Email" required>
+                                            <input type="email" class="form-control ref1" name="email" placeholder="Email" required>
                                         </div>
 
                                         <hr/>
 
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required>
+                                            <input type="password" class="form-control ref1" name="password" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-lg" name="confirm" placeholder="Confirm Password" required>
+                                            <input type="password" class="form-control ref1" name="confirm" placeholder="Confirm Password" required>
+                                        </div>
+
+                                        <div class="btn-group btn-block" role="group">
+                                            <button type="button" onclick="move_to('#collapseFour')" class="btn btn-secondary">Previous</button>
+                                            <button type="button" onclick="move_to('#collapseSix')" class="btn btn-primary">Next</button>
                                         </div>
                                     </div>
                                 </div>
@@ -157,7 +213,7 @@
                                 </div>
                             
                                 <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionRegister">
-                                    <div class="card-body">
+                                    <div class="card-body bg-success">
                                         <button type="submit" class="btn btn-lg btn-success btn-block">Register Me! 🎉🎉🎉</button>
                                     </div>
                                 </div>
@@ -228,6 +284,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 },
                 dateofbirth: {
                     validators: {
+                        notEmpty: {
+                            message: 'Please complete the date',
+                        },
                         callback: {
                             message: "You need to be 18+ to register",
                             callback: function(field) {
@@ -274,6 +333,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 },
                 confirm: {
                     validators: {
+                        notEmpty: {
+                            message: 'field is required',
+                        },
                         callback: {
                             message: "Passwords dont match",
                             callback: function(field) {
@@ -339,29 +401,46 @@ document.addEventListener('DOMContentLoaded', function(e) {
         });
     }).on('core.form.invalid', function() {
         show_errors();
-    });
-
-    var picker = new Pikaday(
-    {
-        field: document.getElementById('datepicker'),
-        firstDay: 1,
-        minDate: new Date(2000, 0, 1),
-        maxDate: new Date(2020, 12, 31),
-        yearRange: [2000, 2020],
-        bound: false,
-        container: document.getElementById('date-container'),
+        $.toast({
+                text: "Please see red highlighted steps to fix form errors.",
+                heading: 'Error!',
+                icon: 'error',
+                showHideTransition: 'slide',
+                allowToastClose: false,
+                hideAfter: 3000,
+                stack: 5,
+                position: 'top-center',
+                textAlign: 'left', 
+                loader: true, 
+                beforeShow: function () {},
+                afterShown: function () {},
+                beforeHide: function () {},
+                afterHidden: function () {}
+            });
     });
 });
+
+// date of birth
+$("#dateofbirth").dateDropdowns({
+    displayFormat: "ymd",
+    wrapperClass: "input-group",
+    dropdownClass: "custom-select form-control",
+});
+
 
 // events
 $('input[name="confirm"]').on("input", function(e) {
     fv.revalidateField('confirm');
 });
 
-$('#datepicker').on("change", function(e) {
+$('input[name="dateofbirth"]').on("change", function(e) {
     fv.revalidateField('dateofbirth');
 });
 
+// collapse
+function move_to(el) {
+    $(el).collapse('toggle')
+}
 
 // errors for stepper
 function show_errors() {
@@ -381,10 +460,19 @@ function show_errors() {
     }
 }
 
-$(document).bind('DOMSubtreeModified', function () {
+$(document).on("change input", function () {
     setTimeout(function() {
-        show_errors()
+        show_errors();
     }, 1000);
+});
+
+// disable return
+$('#register').on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) { 
+    e.preventDefault();
+    return false;
+  }
 });
 
 </script>

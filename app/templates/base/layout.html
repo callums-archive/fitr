@@ -24,8 +24,8 @@
         <!-- font awesome -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.min.css') }}">
 
-        <!-- date picker -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='pickaday/pikaday.css') }}">
+        <script src="{{ url_for('static', filename='popper/popper.js') }}"></script>
+
 
         {% block styles %}
         {% endblock styles %}
@@ -38,8 +38,7 @@
         {% endblock content %}
 
         <!-- core js -->
-        <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='popper.js') }}"></script>
+        <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 
         <!-- for validation -->
@@ -56,11 +55,8 @@
         <!-- fitr main js -->
         <script src="{{ url_for('static', filename='fitr.js') }}"></script>
 
-        <!-- moment js -->
-        <script src="{{ url_for('static', filename='moment.js') }}"></script>
-
         <!-- date picker -->
-        <script src="{{ url_for('static', filename='pickaday/pikaday.js') }}"></script>
+        <script src="{{ url_for('static', filename='jquery.date-dropdowns.js') }}"></script>
 
         {% block scripts %}
         {% endblock scripts %}

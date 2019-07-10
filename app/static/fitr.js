@@ -22,38 +22,3 @@ function castJson(arr) {
     return JSON.stringify(jsonData);
   };
 })(jQuery);
-
-// Datepicker inline
-var datepicker_inline = function(el, cb = null, format = "YYYY-MM-DD") {
-  this.init(el, cb, format);
-}
-
-datepicker_inline.prototype = {
-  init: function(el, cb, format) {
-    if ($(el).attr('id') != undefined) {
-      this.name = $(el).attr('id');
-    } else if ($(el).attr('name') != undefined) {
-      this.name = $(el).attr('name');
-    }
-
-    this.input = document.createElement("input");
-    this.input.setAttribute("name", this.name);
-    this.input.setAttribute("type", "text");
-    this.input.setAttribute("value", "");
-    this.input.style.display = "none";
-    this.input.style.disabled = true;
-    this.input.classList = "form-control";
-    this.input.value = $(el).data("DateTimePicker").date().format(format);
-
-    $(el).append(this.input);
-
-    var root = this;
-    $(el).on('dp.change', function(e) {
-      root.input.value = e.date.format(format);
-
-      if(cb != null) {
-        cb(root.name)
-      }
-    });
-  }
-};
