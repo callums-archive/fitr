@@ -34,7 +34,7 @@ def create_app():
     }
 
     try:
-        Users.object.first().username
+        Users.objects.first().username
     except Exception as e:
         print(e)
 
