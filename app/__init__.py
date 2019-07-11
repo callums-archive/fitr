@@ -29,6 +29,7 @@ class ConfigClass(object):
     MONGODB_SETTINGS = {
         'db': 'fitr',
         'host': 'mongodb://35.247.114.174:27017/fitr',
+        "username": "fitr",
         "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
     }
 
