@@ -287,22 +287,19 @@
           },
           username: {
             validators: {
-              notEmpty: {
-                message: 'field is required',
-              },
               stringLength: {
-                min: 5,
-                max: 50,
-                message: 'Field must be more than 5 and less than 50 characters long'
+                  min: 6,
+                  max: 30,
+                  message: 'Field must be more than 6 and less than 30 characters long'
+              },
+              regexp: {
+                  regexp: /^[a-zA-Z0-9]+$/,
+                  message: 'Field can only consist of alphabetical charectors and numbers'
               },
               remote: {
                 method: 'POST',
                 url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
               },
-              regexp: {
-                regexp: /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/i,
-                message: 'Invalid Username alphabetical charectors and numbers only'
-              }
             }
           },
           password: {
