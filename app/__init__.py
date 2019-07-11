@@ -56,7 +56,7 @@ def create_app():
 
     # mongo
     # connect('fitr', alias='default')
-    db = MongoEngine(app, app.config)
+    db = MongoEngine(app)
 
     try:
         Users.objects.first().username
