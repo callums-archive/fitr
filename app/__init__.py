@@ -32,12 +32,15 @@ def create_app():
     # }
 
     # mongo
+
+    print(connection.get_connection_settings(app.config))
+    
     db = MongoEngine(app)
 
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    # print(connection.get_connection_settings(app.config))
+    print(connection.get_connection_settings(app.config))
 
     # simple view
     @app.route('/')
