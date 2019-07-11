@@ -31,7 +31,8 @@ class FormValidation(Base):
             except Exception as e:
                 if self.strict:
                     print(f"***\nVALIDATION ISSUE:\n{e}\n***")
-                    return 0, f"There was an issue attepting to validate the field {self.key}."
+                    # return 0, f"There was an issue attepting to validate the field {self.key}."
+                    return 0, f"{e}"
                 return 1, ""
 
         if len(self.data) == 1:
