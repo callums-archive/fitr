@@ -29,8 +29,8 @@ class ConfigClass(object):
     MONGODB_SETTINGS = {
         'db': True,
         'host': 'mongodb://localhost:27017/fitr',
-        "username": "fitr",
-        "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
+        "username": "callum",
+        "password": "MZmeQMi@hCb#gWx6Y4x8UJ*L6iG7$kUEx7fRCMM"
     }
 
 # create the app and get the config
