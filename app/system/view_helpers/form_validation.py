@@ -6,6 +6,8 @@ from . import Base
 
 from datetime import datetime
 
+from flask import current_app as app
+
 class FormValidation(Base):
 
     def __init__(self):
@@ -32,7 +34,7 @@ class FormValidation(Base):
                 if self.strict:
                     print(f"***\nVALIDATION ISSUE:\n{e}\n***")
                     # return 0, f"There was an issue attepting to validate the field {self.key}."
-                    return 0, f"{e}"
+                    return 0, f"{e} {app.config}"
                 return 1, ""
 
         if len(self.data) == 1:
