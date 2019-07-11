@@ -11,6 +11,8 @@ from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
 # custom errors
 from app.system.errors import register_errors
+
+# views
 from app.views import register_views
 
 
@@ -18,8 +20,9 @@ from app.views import register_views
 def create_app():
     app = Flask(__name__)
 
+
     # config
-    app.config.from_pyfile('config.cfg')
+    app.config.from_json('config.json')
 
     # mongo
     db = MongoEngine(app)
