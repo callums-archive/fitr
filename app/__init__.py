@@ -8,7 +8,6 @@ from flask import (
 
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface, connection
-from mongoengine import connect
 
 # custom errors
 from app.system.errors import register_errors
@@ -28,21 +27,12 @@ def create_app():
     # mongo
     db = MongoEngine(app)
 
-    try:
-        Users.objects.first().username
-    except Exception as e:
-        print(e)
-    print(connection.get_connection_settings(app.config))
-
-
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
-
 
     # simple view
     @app.route('/')
     def index():
-        # return connection.get_connection_settings(app.config)['host']
         return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
