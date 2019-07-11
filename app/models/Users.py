@@ -70,7 +70,7 @@ class Users(db.Document):
             user.save()
             return user
         except Exception as e:
-            if user and user.to_dbref() is not None:
+            if Users.by_username(username) is not None:
                 Users.by_username(username).delete()
             raise(DBError(e))
 
