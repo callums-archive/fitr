@@ -26,7 +26,6 @@ def create_app():
     # mongo
     db = MongoEngine(app)
 
-    from flask_debugtoolbar import DebugToolbarExtension
 
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
