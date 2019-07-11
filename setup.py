@@ -8,6 +8,7 @@ install_requires = [
     "flask_pymongo",
     "pytz",
     "flask_classy",
+    "gunicorn",
 ]
 
 setup(
