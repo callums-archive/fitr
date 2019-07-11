@@ -29,4 +29,6 @@ admin = Users.create_user(
     first_name = "Callum",
     surname = "Fleming",
 )
+print("adding admin to admin group")
+admin.add_group("admin")
 print(admin)
