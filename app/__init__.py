@@ -8,6 +8,7 @@ from flask import (
 
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
+from flask_debugtoolbar import DebugToolbarExtension
 
 # custom errors
 from app.system.errors import register_errors
@@ -23,6 +24,8 @@ def create_app():
 
     # mongo
     db = MongoEngine(app)
+
+    from flask_debugtoolbar import DebugToolbarExtension
 
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
