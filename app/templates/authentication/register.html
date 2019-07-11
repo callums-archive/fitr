@@ -71,7 +71,8 @@
         </div>
 
         <div class="col-sm-12">
-          <form id="register">
+          <form id="register" autocomplete="off">
+            <input autocomplete="false" name="hidden" type="text" style="display:none;">
             <div class="accordion" id="accordionRegister">
 
               <div class="card">
@@ -354,6 +355,9 @@
         },
       }
     ).on('core.form.valid', function() {
+
+      $("button[type='submit']").attr("disabled", true);
+
       $.ajax({
         accept: 'application/json',
         contentType: 'application/json',
@@ -378,6 +382,8 @@
           window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
         }, 2500)
       }).fail(function(data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", true);
+
         try {
           var error = data.responseJSON.error_msg;
         } catch (err) {
