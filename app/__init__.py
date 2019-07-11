@@ -18,44 +18,14 @@ from app.views import register_views
 
 from .models import Users
 
-
-class ConfigClass(object):
-    """ Flask application config """
-
-    # Flask settings
-    SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
-
-    # Flask-MongoEngine settings
-    MONGODB_SETTINGS = {
-        'db': True,
-        'host': 'mongodb://localhost:27017/fitr',
-        "username": "callum",
-        "password": "MZmeQMi@hCb#gWx6Y4x8UJ*L6iG7$kUEx7fRCMM"
-    }
-
 # create the app and get the config
 def create_app():
     app = Flask(__name__)
 
     # config
-    # app.config.from_json('config.json')
-
-
-    app.config.from_object(__name__+'.ConfigClass')
-
-    # app.config['MONGODB_SETTINGS'] = {
-    #   "db": "fitr",
-    #   "host": "mongodb://35.247.114.174:27017/fitr",
-    #   "port": 27017,
-    #   "username": "fitr",
-    #   "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
-    # }
-
-
-
+    app.config.from_json('config.json')
 
     # mongo
-    # connect('fitr', alias='default')
     db = MongoEngine(app)
 
     try:
