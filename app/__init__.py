@@ -28,7 +28,7 @@ class ConfigClass(object):
     # Flask-MongoEngine settings
     MONGODB_SETTINGS = {
         'db': True,
-        'host': 'mongodb://35.247.114.174:27017/fitr',
+        'host': 'mongodb://localhost:27017/fitr',
         "username": "fitr",
         "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
     }
