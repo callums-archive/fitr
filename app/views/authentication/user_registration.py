@@ -44,8 +44,8 @@ class UserRegistrationView(FormValidation):
                     surname = self.data.get('surname'),
                 )
                 return "OK"
-            except DBError:
-                abort(412, {"error_msg": "There was an issue registering your account, please retry."})
+            except DBError as e:
+                abort(412, {"error_msg": str(e)})
         else:
             abort(412, {"error_msg": "There where errors in your submitted data, please retry."})
 
