@@ -8,7 +8,6 @@ from flask import (
 
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
-from flask_debugtoolbar import DebugToolbarExtension
 
 # custom errors
 from app.system.errors import register_errors
@@ -20,7 +19,6 @@ from app.views import register_views
 # create the app and get the config
 def create_app():
     app = Flask(__name__)
-
 
     # config
     app.config.from_json('config.json')
