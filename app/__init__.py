@@ -37,11 +37,7 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    print(connection.get_connection_settings())
-    print(connection.get_connection_settings())
-    print(connection.get_connection_settings())
-    print(connection.get_connection_settings())
-    print(connection.get_connection_settings())
+    print(connection.get_connection_settings(app.config))
 
     # simple view
     @app.route('/')
