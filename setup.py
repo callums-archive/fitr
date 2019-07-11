@@ -13,7 +13,7 @@ install_requires = [
 
 setup(
     name="app",
-    version="1.0.3",
+    version="1.0.4",
     url="https://fitr.gq",
     license="None",
     maintainer="CDF",
