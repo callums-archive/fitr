@@ -293,9 +293,9 @@
                   message: 'Field must be more than 6 and less than 30 characters long'
               },
               regexp: {
-                  regexp: /^[a-zA-Z0-9_.]+$/,
-                  message: 'Field can only consist of alphabetical, number, dot and underscore'
-              }
+                  regexp: /^[a-zA-Z0-9]+$/,
+                  message: 'Field can only consist of alphabetical charectors and numbers'
+              },
               remote: {
                 method: 'POST',
                 url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
