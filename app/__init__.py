@@ -33,8 +33,8 @@ def create_app():
 
     # mongo
 
-    print(connection.get_connection_settings(app.config))
-    
+
+
     db = MongoEngine(app)
 
     # mongo for session
@@ -45,7 +45,8 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        return redirect(url_for('UserAuthenticationView:login_get'))
+        return connection.get_connection_settings(app.config)
+        # return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
     register_views(app)
