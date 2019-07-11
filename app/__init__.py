@@ -23,13 +23,13 @@ def create_app():
     # config
     app.config.from_json('config.json')
 
-    app.config['MONGODB_SETTINGS'] = {
-      "db": "fitr",
-      "host": "35.247.114.174",
-      "port": 27017,
-      "username": "fitr",
-      "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
-    }
+    # app.config['MONGODB_SETTINGS'] = {
+    #   "db": "fitr",
+    #   "host": "35.247.114.174",
+    #   "port": 27017,
+    #   "username": "fitr",
+    #   "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
+    # }
 
     # mongo
     db = MongoEngine(app)
@@ -37,7 +37,7 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    print(connection.get_connection_settings(app.config))
+    # print(connection.get_connection_settings(app.config))
 
     # simple view
     @app.route('/')
