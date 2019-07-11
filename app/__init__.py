@@ -51,7 +51,7 @@ def create_app():
     def index():
 
         # return connection.get_connection_settings(app.config)['host']
-        # return redirect(url_for('UserAuthenticationView:login_get'))
+        return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
     register_views(app)
