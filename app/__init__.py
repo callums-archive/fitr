@@ -15,6 +15,8 @@ from app.system.errors import register_errors
 # views
 from app.views import register_views
 
+from .models import Users
+
 
 # create the app and get the config
 def create_app():
@@ -45,7 +47,8 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        return connection.get_connection_settings(app.config)['host']
+        return Users.object.first().username
+        # return connection.get_connection_settings(app.config)['host']
         # return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
