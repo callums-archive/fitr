@@ -288,6 +288,9 @@
           },
           username: {
             validators: {
+              notEmpty: {
+                message: 'field is required',
+              },
               stringLength: {
                   min: 4,
                   max: 30,
