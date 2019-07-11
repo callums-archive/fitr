@@ -30,7 +30,7 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
     register_views(app)

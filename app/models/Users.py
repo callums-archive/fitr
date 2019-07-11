@@ -1,6 +1,6 @@
 # flask
 from flask_mongoengine import MongoEngine
-from flask import session
+from mongoengine.queryset.visitor import Q
 
 # std
 from bcrypt import gensalt, hashpw, checkpw
@@ -12,6 +12,9 @@ from .Groups import Groups
 # system
 from app.system.exceptions import DBError
 from app.system.session import set_session
+
+import app.system.datetimetools as datetimetools
+import app.system.stringtools as stringtools
 
 
 db = MongoEngine()
@@ -41,31 +44,44 @@ class Users(db.Document):
         return cls.objects.filter(username=username).first()
 
     @classmethod
-    def create_user(cls, username, password, email, groups=['logged_in']):
+    def by_email(cls, email):
+        return cls.objects.filter(email=email).first()
+
+    @classmethod
+    def create_user(cls, username, password, email, gender, date_of_birth, first_name, surname, groups=['everyone']):
         user = None
         try:
             if cls.by_username(username) is not None:
-                raise DBError("Username exists!")
+                raise DBError("Username already registered!")
 
-            user = cls(username=username, email=email)
+            if cls.by_email(email) is not None:
+                raise DBError("Email already registered!")
+
+            user = cls(
+                username=stringtools.sanitize_lower(username),
+                email=stringtools.sanitize_lower(email),
+                first_name=stringtools.sanitize_title(first_name),
+                surname=stringtools.sanitize_title(surname),
+                gender=gender,
+                date_of_birth=datetimetools.parse_date(date_of_birth))
             for group in groups:
                 user.add_group(group)
             user.set_password(password)
             user.save()
-            return user.to_json()
+            return user
         except Exception as e:
             if user and user.to_dbref() is not None:
                 Users.by_username(username).delete()
-            raise(Exception(e))
+            raise(DBError(e))
 
     @classmethod
     def login(cls, identifier, password):
-        identifiers = ['username', 'email']
-        for identity in identifiers:
-            user = cls.objects(__raw__={identity: identifier}).first()
+        user = cls.objects.filter(Q(username=identifier) or Q(email=identifier)).first()
         if not user:
+            print("no user")
             raise DBError("Username/Password combination failed.")
         if not user.check_password(password):
+            print("passwd")
             raise DBError("Username/Password combination failed.")
 
         set_session(user)

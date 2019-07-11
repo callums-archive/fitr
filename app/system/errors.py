@@ -7,5 +7,5 @@ def register_errors(app):
     @app.errorhandler(412)
     def precondition_failed(error):
         if type(error.description) is not type(dict()):
-            return error
+            return make_response(error.description, 412)
         return make_response(jsonify(error.description), 412)

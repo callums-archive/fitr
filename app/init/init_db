@@ -13,8 +13,8 @@ from app.models import (
 db = MongoEngine(create_app())
 
 print("Creating ADMIN group...")
-Groups.create_group("admin")
+Groups.create_group("everyone")
 
 print("Creating ADMIN user...")
-admin = Users.create_user("admin", "123456", "admin@guaca.tk", ['admin'])
-print(admin)
+# admin = Users.create_user("admin", "123456", "admin@guaca.tk", ['admin'])
+# print(admin)

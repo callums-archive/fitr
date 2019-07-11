@@ -2,13 +2,11 @@ from flask import (
     render_template,
     abort,
     redirect,
-    url_for
+    url_for,
+    request
 )
 
-from flask_classy import (
-    FlaskView,
-    route,
-)
+from flask_classy import route
 
 from app.models import Users
 
@@ -17,7 +15,7 @@ from app.system.exceptions import DBError
 from app.system.view_helpers import Base
 
 
-class UserAuthenticationView(FlaskView, Base):
+class UserAuthenticationView(Base):
 
     @route('/login')
     def login_get(self):
@@ -25,7 +23,7 @@ class UserAuthenticationView(FlaskView, Base):
 
     @route('/login', methods=['POST'])
     def login_post(self):
-        identifier, password = self.request.form.get('identifier'), self.request.form.get('password')
+        identifier, password = self.data.get('identifier'), self.data.get('password')
 
         try:
             Users.login(identifier, password)

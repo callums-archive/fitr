@@ -6,7 +6,8 @@ install_requires = [
     "flask_mongoengine",
     "bcrypt",
     "flask_pymongo",
-    "flask-login",
+    "pytz",
+    "flask_classy",
 ]
 
 setup(
