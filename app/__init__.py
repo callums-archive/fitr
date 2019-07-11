@@ -40,9 +40,8 @@ def create_app():
         print(e)
 
     # mongo
-    db = MongoEngine()
-    db.init_app(app, app.config)
-
+    db = MongoEngine(app)
+    connect('fitr', alias='default')
 
 
     # mongo for session
