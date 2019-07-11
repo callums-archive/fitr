@@ -12,9 +12,21 @@ from app.models import (
 
 db = MongoEngine(create_app())
 
-print("Creating ADMIN group...")
+print("Creating everyone group...")
 Groups.create_group("everyone")
 
+print("Creating admin group...")
+Groups.create_group("admin")
+
+
 print("Creating ADMIN user...")
-# admin = Users.create_user("admin", "123456", "admin@guaca.tk", ['admin'])
-# print(admin)
+admin = Users.create_user(
+    username = "admin",
+    password = "Scope009870-",
+    email = "howzitcallum@gmail.com",
+    gender = "Male",
+    date_of_birth = "1994-09-16",
+    first_name = "Callum",
+    surname = "Fleming",
+)
+print(admin)
