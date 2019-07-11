@@ -3,6 +3,6 @@
   "TESTING" : false,
   "SECRET_KEY":"bt3se3mSYqepmr2TS6W7/nIK86AyzOAL2yOwKtBV9U0=",
   "MONGODB_SETTINGS": {
-    "MONGODB_DB": "fitr",
+    "MONGODB_DB": "fitr"
   }
 }
