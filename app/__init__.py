@@ -1,6 +1,6 @@
 # imports flaks
 from flask import (
-    Flask, 
+    Flask,
     render_template,
     redirect,
     url_for
@@ -9,16 +9,16 @@ from flask import (
 # mongo
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
-# blue prints
-from app.blueprints import register_blueprints
-
 # custom errors
 from app.system.errors import register_errors
+from app.views import register_views
 
 
 # create the app and get the config
 def create_app():
     app = Flask(__name__)
+
+    # config
     app.config.from_pyfile('config.cfg')
 
     # mongo
@@ -32,10 +32,10 @@ def create_app():
     def index():
         return redirect(url_for('auth.login'))
 
-    # register all of the blueprints
-    register_blueprints(app)
+    # register views
+    register_views(app)
 
-    # register errors
+    # register custom errors
     register_errors(app)
 
     # return app to run

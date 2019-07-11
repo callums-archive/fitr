@@ -82,7 +82,7 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionRegister">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -106,11 +106,11 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionRegister">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <select class="form-control" name="gender" style="width: 100%" required> 
+                                            <select class="form-control" name="gender" style="width: 100%" required>
                                                 <option value="" disabled selected>Please choose</option>
                                                 <option value="female">Female</option>
                                                 <option value="male">Male</option>
@@ -133,7 +133,7 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseThree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionRegister">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -156,7 +156,7 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionRegister">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -179,7 +179,7 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionRegister">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -211,7 +211,7 @@
                                         </button>
                                     </h2>
                                 </div>
-                            
+
                                 <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionRegister">
                                     <div class="card-body bg-success">
                                         <button type="submit" class="btn btn-lg btn-success btn-block">Register Me! 🎉🎉🎉</button>
@@ -223,7 +223,7 @@
 
                     <hr>
 
-                    <a class="mt-1 mb-3 btn btn-sm btn-secondary btn-block text-center" href="{{ url_for('auth.login') }}"><b><i class="fas fa-info-circle"></i> Goto Login</b></a>
+                    <a class="mt-1 mb-3 btn btn-sm btn-secondary btn-block text-center" href="{{ url_for('UserAuthenticationView:login_get') }}"><b><i class="fas fa-info-circle"></i> Goto Login</b></a>
                 </div>
             </div>
         </div>
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
           accept: 'application/json',
           contentType: 'application/json',
           type: "POST",
-          url: "{{ url_for('auth.login') }}",
+          url: "{{ url_for('UserRegistrationView:register_post') }}",
           data: $('#login').jsonString()
         }).done(function(data, status, jqXHR) {
           window.location.replace(data.redirect);
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             } catch (err) {
                 var error = "Server Error, Try again.";
             }
-            
+
             $.toast({
                 text: error,
                 heading: 'Error!',
@@ -391,8 +391,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 hideAfter: 3000,
                 stack: 5,
                 position: 'top-center',
-                textAlign: 'left', 
-                loader: true, 
+                textAlign: 'left',
+                loader: true,
                 beforeShow: function () {},
                 afterShown: function () {},
                 beforeHide: function () {},
@@ -410,8 +410,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 hideAfter: 3000,
                 stack: 5,
                 position: 'top-center',
-                textAlign: 'left', 
-                loader: true, 
+                textAlign: 'left',
+                loader: true,
                 beforeShow: function () {},
                 afterShown: function () {},
                 beforeHide: function () {},
@@ -469,7 +469,7 @@ $(document).on("change input", function () {
 // disable return
 $('#register').on('keyup keypress', function(e) {
   var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
+  if (keyCode === 13) {
     e.preventDefault();
     return false;
   }

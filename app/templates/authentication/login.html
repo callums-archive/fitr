@@ -12,19 +12,19 @@
     }
 
     :-moz-placeholder { /* Firefox 18- */
-        text-align: center;  
+        text-align: center;
     }
 
     ::-moz-placeholder {  /* Firefox 19+ */
-        text-align: center;  
+        text-align: center;
     }
 
-    :-ms-input-placeholder {  
-        text-align: center; 
+    :-ms-input-placeholder {
+        text-align: center;
     }
 </style>
 {% endblock styles %}
-    
+
 {% block content %}
 <div class="d-flex justify-content-center" style="height: 100%;">
     <div class="d-flex align-items-center" style="max-width: 80%;">
@@ -46,7 +46,7 @@
             <hr>
 
             <p class="mt-1 text-muted float-left">&copy; <script>document.write(new Date().getFullYear())</script></p>
-            <a class="mt-1 float-right btn btn-sm btn-secondary" href="{{ url_for('auth.register') }}"><b><i class="fas fa-info-circle"></i> Need an account?</b></a>
+            <a class="mt-1 float-right btn btn-sm btn-secondary" href="{{ url_for('UserRegistrationView:register_get') }}"><b><i class="fas fa-info-circle"></i> Need an account?</b></a>
         </form>
     </div>
 </div>
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
           accept: 'application/json',
           contentType: 'application/json',
           type: "POST",
-          url: "{{ url_for('auth.login') }}",
+          url: "{{ url_for('UserAuthenticationView:login_post') }}",
           data: $('#login').jsonString()
         }).done(function(data, status, jqXHR) {
           window.location.replace(data.redirect);
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             } catch (err) {
                 var error = "Server Error, Try again.";
             }
-            
+
             $.toast({
                 text: error,
                 heading: 'Error!',
@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 hideAfter: 3000,
                 stack: 5,
                 position: 'top-center',
-                textAlign: 'left', 
-                loader: true, 
+                textAlign: 'left',
+                loader: true,
                 beforeShow: function () {},
                 afterShown: function () {},
                 beforeHide: function () {},
