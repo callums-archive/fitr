@@ -34,10 +34,8 @@ def create_app():
     #   "password": "4szlBDVZFOhhfACsIlZk10M5vmhTEbwCrv6f0zFV5NY="
     # }
 
-    try:
-        Users.objects.first().username
-    except Exception as e:
-        print(e)
+
+
 
     # mongo
     db = MongoEngine(app)
@@ -47,12 +45,15 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    print(connection.get_connection_settings(app.config))
 
     # simple view
     @app.route('/')
     def index():
-
+        try:
+            Users.objects.first().username
+        except Exception as e:
+            print(e)
+        print(connection.get_connection_settings(app.config))
         # return connection.get_connection_settings(app.config)['host']
         return redirect(url_for('UserAuthenticationView:login_get'))
 
