@@ -38,7 +38,7 @@ def create_app():
 
 
     # mongo
-    db = MongoEngine(app)
+    # db = MongoEngine(app)
     connect('fitr', alias='default')
 
 
