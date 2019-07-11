@@ -41,6 +41,12 @@ def create_app():
     # connect('fitr', alias='default')
     db = MongoEngine(app, app.config)
 
+    try:
+        Users.objects.first().username
+    except Exception as e:
+        print(e)
+    print(connection.get_connection_settings(app.config))
+
 
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
@@ -49,11 +55,6 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        # try:
-        #     Users.objects.first().username
-        # except Exception as e:
-        #     print(e)
-        # print(connection.get_connection_settings(app.config))
         # return connection.get_connection_settings(app.config)['host']
         return redirect(url_for('UserAuthenticationView:login_get'))
 
