@@ -49,11 +49,11 @@ def create_app():
     # simple view
     @app.route('/')
     def index():
-        try:
-            Users.objects.first().username
-        except Exception as e:
-            print(e)
-        print(connection.get_connection_settings(app.config))
+        # try:
+        #     Users.objects.first().username
+        # except Exception as e:
+        #     print(e)
+        # print(connection.get_connection_settings(app.config))
         # return connection.get_connection_settings(app.config)['host']
         return redirect(url_for('UserAuthenticationView:login_get'))
 
