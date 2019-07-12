@@ -15,7 +15,7 @@ from app.system.errors import register_errors
 # views
 from app.views import register_views
 
-# permission
+# permissions
 from app.system.permissions import permission, has_permission
 
 # session stuff
