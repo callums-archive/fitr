@@ -13,16 +13,15 @@ def set_session(user_obj):
 def clear_session():
     sid = request.cookies.get(app.session_cookie_name)
     sessions = MongoEngineSession(sid=sid)
-    raise Exception(sessions)
-    # store = get_store()
-    # store.delete_one({'_id': sid})
+    # sessions.delete()
+    store = get_store()
+    store.delete_one({'_id': sid})
     session.clear()
 
 def get_store():
     db = connection.get_connection_settings(app.config)
-    # store = MongoClient(db.get("host"), db.get("port"))
-    # return store[db.get("name")]['session']
-    MongoEngineSession()
+    store = MongoClient(db.get("host"), db.get("port"))
+    return store[db.get("name")]['session']
 
 def is_loggedin():
     if session:
