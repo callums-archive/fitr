@@ -57,7 +57,7 @@ def create_app():
 
     # init sentry
     sentry_sdk.init(
-        dsn=app.config['sentry'],
+        dsn=app.config['SENTRY'],
         integrations=[FlaskIntegration()]
     )
 
