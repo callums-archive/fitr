@@ -29,7 +29,7 @@ class UserAuthenticationView(Base):
 
         try:
             Users.login(identifier, password)
-            return redirect(url_for("index"))
+            return {"redirect": url_for("DashboardView:index")}
         except DBError as e:
             abort(412, {"error_msg": str(e)})
         else:

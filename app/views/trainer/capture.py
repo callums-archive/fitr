@@ -17,10 +17,10 @@ from app.system.view_helpers import Base
 from app.system.permissions import permission, has_permission
 
 
-class DashboardView(Base):
-
+class PTCaptureView(Base):
+    route_prefix="/trainer/"
 
     @route('/')
-    @permission('dashboard')
+    @permission('pt_clients')
     def index(self):
-        return render_template("dashboard/dashboard.html")
+        return render_template("trainer/capture.html")

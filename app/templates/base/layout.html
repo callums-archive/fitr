@@ -40,6 +40,12 @@
           	z-index: 9999;
           	background: url("{{ url_for('static', filename='images/preload.gif') }}") center no-repeat #fff;
           }
+
+          {% if is_loggedin() %}
+          html, body {
+            padding-top: 35px;
+          }
+          {% endif %}
         </style>
 
         {% block styles %}
@@ -50,6 +56,10 @@
 
     <body>
         <div class="se-pre-con"></div>
+
+        {% if is_loggedin() %}
+          {% include 'base/navbar.html' %}
+        {% endif %}
 
         {% block content %}
         {% endblock content %}
