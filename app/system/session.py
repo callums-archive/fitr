@@ -12,7 +12,7 @@ def set_session(user_obj):
 
 def clear_session():
     sid = request.cookies.get(app.session_cookie_name)
-    sessions = MongoEngineSession(sid)
+    sessions = MongoEngineSession(sid=sid)
     raise Exception(sessions)
     # store = get_store()
     # store.delete_one({'_id': sid})
