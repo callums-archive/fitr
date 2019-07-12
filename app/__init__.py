@@ -38,12 +38,6 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    # root view
-    @app.route('/')
-    def index():
-        if is_loggedin():
-            return redirect(url_for('DashboardView:index'))
-        return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register jinja2 funtions
     app.jinja_env.globals.update(is_loggedin=is_loggedin)
@@ -62,6 +56,13 @@ def create_app():
             dsn=app.config['SENTRY'],
             integrations=[FlaskIntegration()]
         )
+
+    # root view
+    @app.route('/')
+    def index():
+        if is_loggedin():
+            return redirect(url_for('DashboardView:index'))
+        return redirect(url_for('UserAuthenticationView:login_get'))
 
     # return app to run
     return app
