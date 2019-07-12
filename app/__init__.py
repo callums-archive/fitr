@@ -15,6 +15,11 @@ from app.system.errors import register_errors
 # views
 from app.views import register_views
 
+# permission
+from app.system.permissions import permission
+
+# session stuff
+from app.system.session import is_loggedin
 
 # create the app and get the config
 def create_app():
@@ -29,9 +34,11 @@ def create_app():
     # mongo for session
     app.session_interface = MongoEngineSessionInterface(db)
 
-    # simple view
+    # root view
     @app.route('/')
     def index():
+        if is_loggedin():
+            return redirect(url_for('DashboardView:index'))
         return redirect(url_for('UserAuthenticationView:login_get'))
 
     # register views
