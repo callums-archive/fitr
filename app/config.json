@@ -1,7 +1,7 @@
 {
-  "DEBUG" : false,
+  "DEBUG" : true,
   "TESTING" : false,
-  "SECRET_KEY":"bt3se3mSYqepmr2TS6W7/nIK86AyzOAL2yOwKtBV9U0=",
+  "SECRET_KEY":"key123123",
   "MONGODB_SETTINGS": {
     "MONGODB_DB": "fitr",
     "MONGODB_HOST": "35.247.114.174",
