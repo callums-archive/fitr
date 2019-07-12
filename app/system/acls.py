@@ -18,17 +18,20 @@ acls["everyone"] = [
 ]
 
 acls["trainer"] = [
+    Permission([Allow, "pt_clients"]),
     acls["everyone"]
 ]
 
 acls["admin"] = [
-    acls["everyone"]
+    acls["everyone"],
+    acls["trainer"]
 ]
 
 
 # acl expose per user
 def generate_acl(levels):
     permissions = []
+
     def process_permissions_obj(item):
         result = []
         if type(item) == type(list()):
@@ -43,4 +46,6 @@ def generate_acl(levels):
             for permission in acls[acl]:
                 if acl == level:
                     permissions.extend(process_permissions_obj(permission))
-        return permissions
+
+    print(permissions)
+    return permissions

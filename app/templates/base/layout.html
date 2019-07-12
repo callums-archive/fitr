@@ -2,9 +2,10 @@
 <html lang="en">
     <head>
         <!-- META -->
-        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
 
         <!-- favicon -->
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ico.png') }}">
@@ -39,6 +40,12 @@
           	z-index: 9999;
           	background: url("{{ url_for('static', filename='images/preload.gif') }}") center no-repeat #fff;
           }
+
+          {% if is_loggedin() %}
+          html, body {
+            padding-top: 35px;
+          }
+          {% endif %}
         </style>
 
         {% block styles %}
@@ -49,6 +56,10 @@
 
     <body>
         <div class="se-pre-con"></div>
+
+        {% if is_loggedin() %}
+          {% include 'base/navbar.html' %}
+        {% endif %}
 
         {% block content %}
         {% endblock content %}

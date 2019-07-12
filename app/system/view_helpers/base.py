@@ -15,7 +15,7 @@ class Base(FlaskView):
     def data(self):
         if has_request_context():
             if self.request.is_json:
-                data = request.get_json()
+                data = request.get_json(force=True)
             else:
                 data = request.form
         return data

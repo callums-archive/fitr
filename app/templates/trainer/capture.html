@@ -1,0 +1,73 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+  .btn {
+      font-size: 16px
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container p-2 pt-3">
+  <form id="clients">
+    <div class="form-group">
+      <input type="text" class="form-control form-control-lg" id="client_name" name="term" placeholder="Name">
+    </div>
+  </form>
+
+  <div id="results">
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $('#client_name').on('input', function(e) {
+    $.ajax({
+      accept: 'application/json',
+      contentType: 'application/json',
+      type: "POST",
+      url: "{{ url_for('PTCaptureView:clients_post') }}",
+      data: $("#clients").jsonString()
+    }).done(function(data, status, jqXHR) {
+      new_results(data);
+    }).fail(function(data, status, jqXHR) {
+        try {
+            var error = data.responseJSON.error_msg;
+        } catch (err) {
+            var error = "Server Error, Try again.";
+        }
+
+        $.toast({
+            text: error,
+            heading: 'Error!',
+            icon: 'error',
+            showHideTransition: 'slide',
+            allowToastClose: false,
+            hideAfter: 3000,
+            stack: 5,
+            position: 'top-center',
+            textAlign: 'left',
+            loader: true,
+            beforeShow: function () {},
+            afterShown: function () {},
+            beforeHide: function () {},
+            afterHidden: function () {}
+        });
+    });
+  });
+
+  function new_results(data) {
+    console.log("here ")
+    $("#results").empty();
+    if (data.constructor === Array) {
+      data.forEach(function(user) {
+        $('#results').append($(`
+          <a href="${user.username}" class="btn-lg btn btn-primary btn-block mt-2">🏋️ ${user.full_name}</a>
+        `))
+      })
+    }
+  }
+</script>
+{% endblock scripts %}

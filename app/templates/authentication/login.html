@@ -33,14 +33,12 @@
                 <img class="mb-3" src="{{ url_for('static', filename='images/logo.png') }}" alt="" height="75">
             </div>
 
-            <p class="text-center text-danger"><b>Login is currently disabled. We'll email you as soon as you can login</b></p>
-
             <div class="form-group">
-                <input type="text" class="form-control form-control-lg" name="identifier" placeholder="Username / Email" required disabled>
+                <input type="text" class="form-control form-control-lg" name="identifier" placeholder="Username / Email" required>
             </div>
 
             <div class="form-group">
-                <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required disabled>
+                <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required>
             </div>
 
             <button type="submit" class="mt-3 mb-3 btn btn-lg btn-primary btn-block">Sign in</button>
@@ -89,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             },
         }
     ).on('core.form.valid', function() {
+      console.log($('#login').jsonString())
+        console.log($('#login').jsonString())
         $.ajax({
           accept: 'application/json',
           contentType: 'application/json',

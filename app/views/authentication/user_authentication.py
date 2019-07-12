@@ -14,6 +14,8 @@ from app.system.exceptions import DBError
 
 from app.system.view_helpers import Base
 
+from app.system.session import clear_session
+
 
 class UserAuthenticationView(Base):
 
@@ -27,13 +29,13 @@ class UserAuthenticationView(Base):
 
         try:
             Users.login(identifier, password)
-            return redirect(url_for("index"))
+            return {"redirect": url_for("DashboardView:index")}
         except DBError as e:
             abort(412, {"error_msg": str(e)})
         else:
             abort(412, {"error_msg": "System error, please try again."})
 
     @route("/logout", methods=['GET'])
-    def logout():
+    def logout(self):
         clear_session()
         return redirect(url_for("index"))
