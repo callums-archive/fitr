@@ -7,7 +7,7 @@ from flask import (
 )
 
 # mongo
-from flask_mongoengine import MongoEngine, MongoEngineSessionInterface, connection
+from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
 # custom errors
 from app.system.errors import register_errors
@@ -36,7 +36,7 @@ def create_app():
     db = MongoEngine(app)
 
     # mongo for session
-    app.session_interface = MongoEngineSessionInterface(app, db, "sessions")
+    app.session_interface = MongoEngineSessionInterface(db)
 
     # root view
     @app.route('/')
