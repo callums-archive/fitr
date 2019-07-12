@@ -10,16 +10,16 @@ from flask import (
 from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
 
 # custom errors
-from app.system.errors import register_errors
+from fitr_webapp.system.errors import register_errors
 
 # views
-from app.views import register_views
+from fitr_webapp.views import register_views
 
 # permissions
-from app.system.permissions import permission, has_permission
+from fitr_webapp.system.permissions import permission, has_permission
 
 # session stuff
-from app.system.session import is_loggedin, get_current_user
+from fitr_webapp.system.session import is_loggedin, get_current_user
 
 # sentry
 import sentry_sdk

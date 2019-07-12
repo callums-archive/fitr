@@ -5,7 +5,7 @@ from flask_mongoengine import MongoEngine
 from datetime import datetime
 
 # exceptions
-from app.system.exceptions import DBError
+from fitr_webapp.system.exceptions import DBError
 
 
 db = MongoEngine()

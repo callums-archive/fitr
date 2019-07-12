@@ -1,1 +1,1 @@
-from app.app import app
+from fitr_webapp.app import app
