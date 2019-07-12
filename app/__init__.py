@@ -36,7 +36,7 @@ def create_app():
     db = MongoEngine(app)
 
     # mongo for session
-    app.session_interface = MongoEngineSessionInterface(db)
+    app.session_interface = MongoEngineSessionInterface(app, db, "sessions")
 
     # root view
     @app.route('/')
