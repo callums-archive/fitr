@@ -8,15 +8,15 @@ from flask import (
 
 from flask_classy import route
 
-from app.models import Users
+from fitr_webapp.models import Users
 
-from app.system.exceptions import DBError
+from fitr_webapp.system.exceptions import DBError
 
-from app.system.view_helpers import Base
+from fitr_webapp.system.view_helpers import Base
 
-from app.system.session import clear_session
+from fitr_webapp.system.session import clear_session
 
-from app.system.stringtools import sanitize_lower
+from fitr_webapp.system.stringtools import sanitize_lower
 
 
 class UserAuthenticationView(Base):

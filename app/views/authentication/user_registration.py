@@ -7,11 +7,11 @@ from flask import (
 
 from flask_classy import route
 
-from app.models import Users
+from fitr_webapp.models import Users
 
-from app.system.view_helpers import FormValidation
+from fitr_webapp.system.view_helpers import FormValidation
 
-from app.system.exceptions import DBError
+from fitr_webapp.system.exceptions import DBError
 
 
 class UserRegistrationView(FormValidation):

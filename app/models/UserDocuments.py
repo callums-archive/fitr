@@ -5,8 +5,8 @@ from flask_mongoengine import MongoEngine
 from datetime import datetime
 
 # system
-from app.system.exceptions import DBError
-from app.system.session import set_session, is_loggedin, get_current_user
+from fitr_webapp.system.exceptions import DBError
+from fitr_webapp.system.session import set_session, is_loggedin, get_current_user
 
 
 db = MongoEngine()

@@ -2,7 +2,7 @@ from flask import session, current_app, request, abort
 from flask_pymongo import MongoClient
 from flask_mongoengine import connection, MongoEngineSession, MongoEngine
 
-# from app import
+# from fitr_webapp import
 
 
 
@@ -37,7 +37,7 @@ def is_loggedin():
     return False
 
 def get_current_user():
-    from app.models import Users
+    from fitr_webapp.models import Users
     if session:
         if session['username']:
             user = Users.by_username(session['username'])

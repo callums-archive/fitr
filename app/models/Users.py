@@ -10,8 +10,8 @@ from datetime import datetime
 from .Groups import Groups
 
 # system
-from app.system.exceptions import DBError
-from app.system.session import set_session, is_loggedin, get_current_user
+from fitr_webapp.system.exceptions import DBError
+from fitr_webapp.system.session import set_session, is_loggedin, get_current_user
 import app.system.datetimetools as datetimetools
 import app.system.stringtools as stringtools
 
