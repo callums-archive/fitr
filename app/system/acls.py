@@ -17,6 +17,10 @@ acls["everyone"] = [
     Permission([Allow, "profile"]),
 ]
 
+acls["trainer"] = [
+    acls["everyone"]
+]
+
 acls["admin"] = [
     acls["everyone"]
 ]
