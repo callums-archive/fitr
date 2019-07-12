@@ -12,7 +12,8 @@ def set_session(user_obj):
 
 def clear_session():
     sid = request.cookies.get(app.session_cookie_name)
-    get_store().delete_one({'_id': sid})
+    store = get_store()
+    store.delete_one({'_id': sid})
     session.clear()
 
 def get_store():
