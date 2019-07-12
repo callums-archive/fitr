@@ -21,6 +21,9 @@ from app.system.permissions import permission, has_permission
 # session stuff
 from app.system.session import is_loggedin, get_current_user
 
+# sentry
+import sentry_sdk from sentry_sdk.integrations.flask import FlaskIntegration
+
 # create the app and get the config
 def create_app():
     app = Flask(__name__)
@@ -38,7 +41,6 @@ def create_app():
     @app.route('/')
     def index():
         if is_loggedin():
-            print("here here here")
             return redirect(url_for('DashboardView:index'))
         return redirect(url_for('UserAuthenticationView:login_get'))
 
@@ -52,6 +54,12 @@ def create_app():
 
     # register custom errors
     register_errors(app)
+
+    # init sentry
+    sentry_sdk.init(
+        dsn=app.config['SENTRY'],
+        integrations=[FlaskIntegration()]
+    )
 
     # return app to run
     return app

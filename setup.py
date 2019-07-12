@@ -9,6 +9,7 @@ install_requires = [
     "pytz",
     "flask_classy",
     "gunicorn",
+    'sentry-sdk[flask]==0.10.1'
 ]
 
 setup(
