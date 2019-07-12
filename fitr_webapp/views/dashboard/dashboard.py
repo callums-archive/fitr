@@ -15,6 +15,7 @@ from fitr_webapp.system.exceptions import DBError
 from fitr_webapp.system.view_helpers import Base
 
 from fitr_webapp.system.permissions import permission, has_permission
+from fitr_webapp.system.session import clear_session
 
 
 class DashboardView(Base):

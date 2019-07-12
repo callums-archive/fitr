@@ -13,7 +13,7 @@ install_requires = [
 ]
 
 setup(
-    name="app",
+    name="fitr_webapp",
     version="1.0.4",
     url="https://fitr.gq",
     license="None",
@@ -26,5 +26,5 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     extras_require={"test": ["pytest", "coverage"]},
-    scripts=['./app/init/init_db']
+    scripts=['./fitr_webapp/init/init_db']
 )

@@ -1,14 +1,6 @@
 from flask import session, current_app, request, abort
-from flask_pymongo import MongoClient
-from flask_mongoengine import connection, MongoEngineSession, MongoEngine
+from fitr_webapp.models.Session import DBSession
 
-# from fitr_webapp import
-
-
-
-
-app = current_app()
-db=MongoEngine(app)
 
 def set_session(user_obj):
     session['username'] = user_obj.username
@@ -16,19 +8,10 @@ def set_session(user_obj):
     session['groups'] = user_obj.groups
 
 def clear_session():
-    get_store()
-    # sid = request.cookies.get(app.session_cookie_name)
-    # sessions = MongoEngineSession(sid=sid)
-    # # sessions.delete()
-    # store = get_store()
-    # store.delete_one({'_id': sid})
-    # session.clear()
-
-def get_store():
-    print(db.connection())
-    # db = connection.get_connection_settings(app.config)
-    # store = MongoClient(db.get("host"), db.get("port"))
-    # return store[db.get("name")]['session']
+    session_id = request.cookies.get('session')
+    print(session_id)
+    DBSession.destroy_session(session_id)
+    session.clear()
 
 def is_loggedin():
     if session:
