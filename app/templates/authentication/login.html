@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             },
         }
     ).on('core.form.valid', function() {
+      console.log($('#login').jsonString())
+        console.log($('#login').jsonString())
         $.ajax({
           accept: 'application/json',
           contentType: 'application/json',

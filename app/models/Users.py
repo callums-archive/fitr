@@ -48,6 +48,21 @@ class Users(db.Document):
         return cls.objects.filter(email=email).first()
 
     @classmethod
+    def search(cls, term, limit=5):
+        q = []
+
+        q.append({'first_name': {'$regex': "%s" % term, '$options' : 'i'}})
+        q.append({'surname': {'$regex': "%s" % term, '$options' : 'i'}})
+        q.append({'username': {'$regex': "%s" % term, '$options' : 'i'}})
+
+        full_name = term.split(" ")
+        if len(full_name) == 2:
+            q.append({'first_name': {'$regex': "%s" % full_name[0], '$options': 'i'}, 'surname': {'$regex': "%s" % full_name[1], '$options' : 'i'}})
+
+        q = {"$or": q}
+        return cls.objects(__raw__=q).limit(limit).all()
+
+    @classmethod
     def create_user(cls, username, password, email, gender, date_of_birth, first_name, surname, groups=['everyone']):
         user = None
         try:
@@ -76,16 +91,21 @@ class Users(db.Document):
 
     @classmethod
     def login(cls, identifier, password):
-        user = cls.objects.filter(Q(username=identifier) or Q(email=identifier)).first()
-        if not user:
-            print("no user")
-            raise DBError("Username/Password combination failed.")
-        if not user.check_password(password):
-            print("passwd")
-            raise DBError("Username/Password combination failed.")
+        identifiers = ['username', 'email']
 
-        set_session(user)
-        return True
+        for identity in identifiers:
+            user = cls.objects(__raw__={identity: identifier}).first()
+            if not user:
+                continue
+            if not user.check_password(password):
+                raise DBError("Invalid login credentials.")
+            set_session(user)
+            return True
+        raise DBError("Invalid login credentials.")
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.surname}"
 
     def __str__(self)            :
         return f"{self.username}:{self.groups}"
