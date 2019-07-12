@@ -22,7 +22,8 @@ from app.system.permissions import permission, has_permission
 from app.system.session import is_loggedin, get_current_user
 
 # sentry
-import sentry_sdk from sentry_sdk.integrations.flask import FlaskIntegration
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 # create the app and get the config
 def create_app():
