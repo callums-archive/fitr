@@ -35,3 +35,43 @@ class PTCaptureView(Base):
             if users is not None:
                 return jsonify([{"username": user.username, "full_name": user.full_name} for user in users])
         return {}
+
+    @route('/<user>', methods=['GET'])
+    def clients_get(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+        return render_template("trainer/capture_data.html", client=user)
+
+    @route('/<user>/weight', methods=['POST'])
+    def weight_post(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+
+        if not user.capture_weight(str(self.data.get('weight')).replace(",", ".")):
+            abort(412, "Failed to add weight")
+        return "OK"
+
+    @route('/<user>/measuremets', methods=['POST'])
+    def measurements_post(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+
+        if not user.capture_mesaurements(
+            str(self.data.get('neck')).replace(",", "."),
+            str(self.data.get('bicep')).replace(",", "."),
+            str(self.data.get('chest')).replace(",", "."),
+            str(self.data.get('abs1')).replace(",", "."),
+            self.data.get('abs1_comment'),
+            str(self.data.get('abs2')).replace(",", "."),
+            self.data.get('abs2_comment'),
+            str(self.data.get('abs3')).replace(",", "."),
+            self.data.get('abs3_comment'),
+            str(self.data.get('upperthigh')).replace(",", "."),
+            str(self.data.get('midthigh')).replace(",", "."),
+            str(self.data.get('calf')).replace(",", "."),
+        ):
+            abort(412, "Failed to add measurements")
+        return "OK"

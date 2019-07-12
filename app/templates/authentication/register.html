@@ -385,7 +385,7 @@
           window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
         }, 2500)
       }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", true);
+        $("button[type='submit']").attr("disabled", false);
 
         try {
           var error = data.responseJSON.error_msg;

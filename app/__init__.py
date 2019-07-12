@@ -51,7 +51,7 @@ def create_app():
     register_errors(app)
 
     # init sentry
-    if len(app.config['SENTRY']) > 0:
+    if len(app.config.get("SENTRY", "")) > 0:
         sentry_sdk.init(
             dsn=app.config['SENTRY'],
             integrations=[FlaskIntegration()]
