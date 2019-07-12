@@ -11,10 +11,12 @@ from .Groups import Groups
 
 # system
 from app.system.exceptions import DBError
-from app.system.session import set_session
-
+from app.system.session import set_session, is_loggedin, get_current_user
 import app.system.datetimetools as datetimetools
 import app.system.stringtools as stringtools
+
+# Docuements
+from .UserDocuments import Measurements, Weight
 
 
 db = MongoEngine()
@@ -38,6 +40,9 @@ class Users(db.Document):
 
     modified_user = db.ReferenceField("Users")
     modified_stamp = db.DateTimeField()
+
+    measurements = db.ListField(db.EmbeddedDocumentField(Measurements))
+    weight = db.ListField(db.EmbeddedDocumentField(Weight))
 
     @classmethod
     def by_username(cls, username):
@@ -134,3 +139,55 @@ class Users(db.Document):
         if checkpw(password.encode("utf-8"), self.password.encode("utf-8")):
             return True
         return False
+
+    def capture_mesaurements(
+        self,
+        neck,
+        bicep,
+        chest,
+        abs1,
+        abs1_comment,
+        abs2,
+        abs2_comment,
+        abs3,
+        abs3_comment,
+        upperthigh,
+        midthigh,
+        calf
+    ):
+        measurements = Measurements()
+
+        measurements.neck = float(neck)
+        measurements.bicep = float(bicep)
+        measurements.chest = float(chest)
+        measurements.abs1 = float(abs1)
+        measurements.abs1_comment = abs1_comment
+        measurements.abs2 = float(abs2)
+        measurements.abs2_comment = abs2_comment
+        measurements.abs3 = float(abs3)
+        measurements.abs3_comment = abs3_comment
+        if upperthigh != "":
+            measurements.upperthigh = float(upperthigh)
+        measurements.midthigh = float(midthigh)
+        measurements.calf = float(calf)
+
+        if is_loggedin():
+            measurements.create_user = get_current_user()
+
+        self.measurements.append(measurements)
+        self.save()
+
+        return True
+
+    def capture_weight(self, submitted_weight):
+        weight = Weight()
+
+        weight.weight = float(submitted_weight)
+
+        if is_loggedin():
+            weight.create_user = get_current_user()
+
+        self.weight.append(weight)
+        self.save()
+
+        return True
