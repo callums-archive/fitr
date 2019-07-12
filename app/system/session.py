@@ -11,9 +11,9 @@ def set_session(user_obj):
     session['groups'] = user_obj.groups
 
 def clear_session():
-    sid = request.cookies.get(app.session_cookie_name)
-    store = get_store()
-    store.delete_one({'_id': sid})
+    # sid = request.cookies.get(app.session_cookie_name)
+    # store = get_store()
+    # store.delete_one({'_id': sid})
     session.clear()
 
 def get_store():
