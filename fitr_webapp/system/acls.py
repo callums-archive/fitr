@@ -47,5 +47,4 @@ def generate_acl(levels):
                 if acl == level:
                     permissions.extend(process_permissions_obj(permission))
 
-    print(permissions)
     return permissions

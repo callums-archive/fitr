@@ -1,5 +1,7 @@
-from flask import session, current_app, request, abort
+from flask import session, abort
 from fitr_webapp.models.Session import DBSession
+
+from fitr_webapp.models import Users
 
 
 def set_session(user_obj):
@@ -8,9 +10,9 @@ def set_session(user_obj):
     session['groups'] = user_obj.groups
 
 def clear_session():
-    session_id = request.cookies.get('session')
-    print(session_id)
-    DBSession.destroy_session(session_id)
+    user = get_current_user()
+    user.logout()
+    DBSession.destroy_session(session.sid)
     session.clear()
 
 def is_loggedin():

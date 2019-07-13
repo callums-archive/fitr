@@ -40,3 +40,17 @@ class Weight(db.EmbeddedDocument):
 
     create_user = db.ReferenceField("Users")
     create_stamp = db.DateTimeField(default=datetime.utcnow)
+
+class Login(db.EmbeddedDocument):
+    uid = db.SequenceField()
+    session_id = db.StringField()
+
+    ip = db.StringField()
+    platform = db.StringField()
+    browser = db.StringField()
+    version = db.StringField()
+    language = db.StringField()
+    user_agent_string = db.StringField()
+
+    login_stamp = db.DateTimeField(default=datetime.utcnow)
+    logout_stamp = db.DateTimeField()
