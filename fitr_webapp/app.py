@@ -32,7 +32,7 @@ from os import environ
 app = Flask(__name__)
 
 # config
-if environ("ENV") and environ("ENV") == "production":
+if environ.get("ENV", "") == "production":
     app.config.from_json('production.json')
 else:
     app.config.from_json('development.json')
