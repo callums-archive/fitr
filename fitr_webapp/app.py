@@ -25,11 +25,17 @@ from fitr_webapp.system.session import is_loggedin, get_current_user
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
+# std for os env
+from os import environ
+
 # create the app and get the config
 app = Flask(__name__)
 
 # config
-app.config.from_json('config.json')
+if environ("ENV") and environ("ENV") == "production":
+    app.config.from_json('production.json')
+else:
+    app.config.from_json('development.json')
 
 # mongo
 db = MongoEngine(app)
@@ -50,7 +56,7 @@ register_views(app)
 register_errors(app)
 
 # init sentry
-if len(app.config.get("SENTRY", "")) > 0:
+if app.config.get("SENTRY", "") != "":
     sentry_sdk.init(
         dsn=app.config['SENTRY'],
         integrations=[FlaskIntegration()]
