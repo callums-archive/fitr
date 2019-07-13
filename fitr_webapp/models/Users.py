@@ -1,9 +1,17 @@
 # flask
 from flask_mongoengine import MongoEngine
 from mongoengine.queryset.visitor import Q
+from flask import (
+    request,
+    session
+)
 
 # std
-from bcrypt import gensalt, hashpw, checkpw
+from bcrypt import (
+    gensalt,
+    hashpw,
+    checkpw
+)
 from datetime import datetime
 
 # models
@@ -16,7 +24,11 @@ import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
 
 # Docuements
-from .UserDocuments import Measurements, Weight
+from .UserDocuments import (
+    Measurements,
+    Weight,
+    Login
+)
 
 
 db = MongoEngine()
@@ -43,6 +55,11 @@ class Users(db.Document):
 
     measurements = db.ListField(db.EmbeddedDocumentField(Measurements))
     weight = db.ListField(db.EmbeddedDocumentField(Weight))
+    login_sessions = db.ListField(db.EmbeddedDocumentField(Login))
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.surname}"
 
     @classmethod
     def by_username(cls, username):
@@ -104,15 +121,29 @@ class Users(db.Document):
                 continue
             if not user.check_password(password):
                 raise DBError("Invalid login credentials.")
-            set_session(user)
+            sid = set_session(user)
+            login = Login()
+
+            login.ip = request.remote_addr
+            login.platform = request.user_agent.platform
+            login.browser = request.user_agent.browser
+            login.version = request.user_agent.version
+            login.language = request.user_agent.language
+            login.user_agent_string = request.user_agent.string
+            login.session_id = session.sid
+
+            user.login_sessions.append(login)
+            user.save()
             return True
         raise DBError("Invalid login credentials.")
 
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.surname}"
+    def logout(self):
+        for login in self.login_sessions:
+            if login.session_id == session.sid:
+                login.logout_stamp = datetime.utcnow()
+        self.save()
 
-    def __str__(self)            :
+    def __str__(self):
         return f"{self.username}:{self.groups}"
 
     def add_group(self, group):
