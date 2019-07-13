@@ -28,7 +28,7 @@ from fitr_webapp.system.ip import get_ip
 from .UserDocuments import (
     Measurements,
     Weight,
-    Login
+    AuthSessions
 )
 
 
@@ -56,7 +56,7 @@ class Users(db.Document):
 
     measurements = db.ListField(db.EmbeddedDocumentField(Measurements))
     weight = db.ListField(db.EmbeddedDocumentField(Weight))
-    login_sessions = db.ListField(db.EmbeddedDocumentField(Login))
+    auth_sessions = db.ListField(db.EmbeddedDocumentField(AuthSessions))
 
     @property
     def full_name(self):
@@ -123,26 +123,31 @@ class Users(db.Document):
             if not user.check_password(password):
                 raise DBError("Invalid login credentials.")
             sid = set_session(user)
-            login = Login()
+            auth_session = AuthSessions()
 
-            login.login_ip = get_ip()
-            login.platform = request.user_agent.platform
-            login.browser = request.user_agent.browser
-            login.version = request.user_agent.version
-            login.language = request.user_agent.language
-            login.user_agent_string = request.user_agent.string
-            login.session_id = session.sid
+            auth_session.login_ip = get_ip()
+            auth_session.login_platform = request.user_agent.platform
+            auth_session.login_browser = request.user_agent.browser
+            auth_session.login_version = request.user_agent.version
+            auth_session.login_language = request.user_agent.language
+            auth_session.login_user_agent_string = request.user_agent.string
+            auth_session.session_id = session.sid
 
-            user.login_sessions.append(login)
+            user.auth_sessions.append(auth_session)
             user.save()
             return True
         raise DBError("Invalid login credentials.")
 
     def logout(self):
-        for login in self.login_sessions:
-            if login.session_id == session.sid:
-                login.logout_stamp = datetime.utcnow()
-                login.logout_ip = get_ip()
+        for auth_session in self.auth_sessions:
+            if auth_session.session_id == session.sid:
+                auth_session.logout_platform = request.user_agent.platform
+                auth_session.logout_browser = request.user_agent.browser
+                auth_session.logout_version = request.user_agent.version
+                auth_session.logout_language = request.user_agent.language
+                auth_session.logout_user_agent_string = request.user_agent.string
+                auth_session.logout_stamp = datetime.utcnow()
+                auth_session.logout_ip = get_ip()
         self.save()
 
     def __str__(self):
