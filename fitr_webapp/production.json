@@ -1,5 +1,5 @@
 {
-  "DEBUG" : true,
+  "DEBUG" : false,
   "TESTING" : false,
   "SECRET_KEY":"hDCglwzIYEAsBRVCrRu4XtazgRY1XbGkebH3fKbKrc8ipyneQBXZz9U4m7cc2XwmFvcf4vcLxi0z2w6oE+S9qQ==",
   "MONGODB_SETTINGS": {
