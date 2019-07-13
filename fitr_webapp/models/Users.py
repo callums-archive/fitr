@@ -22,6 +22,7 @@ from fitr_webapp.system.exceptions import DBError
 from fitr_webapp.system.session import set_session, is_loggedin, get_current_user
 import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
+from fitr_webapp.system.ip import get_ip
 
 # Docuements
 from .UserDocuments import (
@@ -124,7 +125,7 @@ class Users(db.Document):
             sid = set_session(user)
             login = Login()
 
-            login.ip = request.remote_addr
+            login.login_ip = get_ip()
             login.platform = request.user_agent.platform
             login.browser = request.user_agent.browser
             login.version = request.user_agent.version
@@ -141,6 +142,7 @@ class Users(db.Document):
         for login in self.login_sessions:
             if login.session_id == session.sid:
                 login.logout_stamp = datetime.utcnow()
+                login.logout_ip = get_ip()
         self.save()
 
     def __str__(self):
