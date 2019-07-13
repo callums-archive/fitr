@@ -32,10 +32,10 @@ from os import environ
 app = Flask(__name__)
 
 # config
-if environ.get("ENV", "") == "production":
-    app.config.from_json('production.json')
-else:
+if environ.get("FLASK_ENV", "") == "development":
     app.config.from_json('development.json')
+else:
+    app.config.from_json('production.json')
 
 # mongo
 db = MongoEngine(app)
