@@ -41,6 +41,16 @@ class Weight(db.EmbeddedDocument):
     create_user = db.ReferenceField("Users")
     create_stamp = db.DateTimeField(default=datetime.utcnow)
 
+class FitnessTests(db.EmbeddedDocument):
+    uid = db.SequenceField()
+
+    name = db.StringField()
+    data = db.DictField()
+
+    create_user = db.ReferenceField("Users")
+    create_stamp = db.DateTimeField(default=datetime.utcnow)
+
+
 class AuthSessions(db.EmbeddedDocument):
     uid = db.SequenceField()
     session_id = db.StringField()

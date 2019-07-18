@@ -15,14 +15,39 @@
     <div class="card">
       <div class="card-header" id="headingOne">
         <h2 class="mb-0">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="" aria-controls="collapseOne">
             <i class="fas fa-weight"></i> Weight
           </button>
         </h2>
       </div>
 
-      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Diff</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% set prev_weight = {'weight':0} %}
+              {% for weight_obj in client.weight %}
+
+                <tr>
+                  <td>{{ weight_obj.uid }}</td>
+                  <td>{{ weight_obj.weight }} {{weight_obj.unit}}</td>
+                  <td>{{ '%.2f' % (weight_obj.weight - prev_weight['weight']) }} {{weight_obj.unit}}</td>
+                  <td>{{ datetimetools.cast_string(weight_obj.create_stamp, "d") }}</td>
+                </tr>
+
+                {% if prev_weight.update({"weight": weight_obj.weight}) %} {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+
           <form id="weight">
             <div class="form-group">
               <label for="weight">Weight <i class="fas fa-level-down-alt"></i></label>
@@ -33,6 +58,7 @@
         </div>
       </div>
     </div>
+
     <div class="card">
       <div class="card-header" id="headingTwo">
         <h2 class="mb-0">
@@ -97,6 +123,76 @@
         </div>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-header" id="heading3">
+        <h2 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="" aria-controls="collapse3">
+            <i class="fas fa-flask"></i> Pushups
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordionExample">
+        <div class="card-body">
+
+          <form id="pushup">
+            <div class="form-group">
+              <label for="value">Pushups <i class="fas fa-level-down-alt"></i></label>
+              <input type="text" pattern="[0-9]*" inputmode="numeric" class="form-control form-control-lg" id="value" name="value">
+            </div>
+            <button type="submit" class="btn btn-lg btn-success btn-block mt-3">Submit PUSHUPS! 🎉🎉🎉</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" id="heading5">
+        <h2 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse5" aria-expanded="" aria-controls="collapse5">
+            <i class="fas fa-flask"></i> SitUps
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#accordionExample">
+        <div class="card-body">
+
+          <form id="situp">
+            <div class="form-group">
+              <label for="value">SitUps <i class="fas fa-level-down-alt"></i></label>
+              <input type="text" pattern="[0-9]*" inputmode="numeric" class="form-control form-control-lg" id="value" name="value">
+            </div>
+            <button type="submit" class="btn btn-lg btn-success btn-block mt-3">Submit SITUPS! 🎉🎉🎉</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" id="heading4">
+        <h2 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="" aria-controls="collapse4">
+            <i class="fas fa-flask"></i> Stepper
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordionExample">
+        <div class="card-body">
+
+          <form id="stepper">
+            <div class="form-group">
+              <label for="value">Stepper <i class="fas fa-level-down-alt"></i></label>
+              <input type="text" pattern="[0-9]*" inputmode="numeric" class="form-control form-control-lg" id="value" name="value">
+            </div>
+            <button type="submit" class="btn btn-lg btn-success btn-block mt-3">Submit STEPS! 🎉🎉🎉</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 {% endblock content %}
@@ -199,6 +295,288 @@ var fv = null
       });
     });
   });
+
+
+
+  document.addEventListener('DOMContentLoaded', function(e) {
+    FormValidation.formValidation(
+      document.getElementById('situp'), {
+        fields: {
+          value: {
+            validators:{
+              regexp: {
+                regexp: /^\d+$/,
+                message: 'Input wrong only numbers'
+              },
+            }
+          }
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+        },
+      }
+    ).on('core.form.valid', function() {
+
+      $("button[type='submit']").attr("disabled", true);
+
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='situp') }}",
+        data: $('#situp').jsonString()
+      }).done(function(data, status, jqXHR) {
+        $.busyLoadFull("show", {
+          spinner: false,
+          image: false,
+          fontawesome: false,
+          custom: false,
+          color: "#fff",
+          background: "rgba(0, 0, 0, 0.80)",
+          animation: 'fade',
+          text: `🎉 Success`,
+          textPosition: "bottom",
+          fontSize: "2rem",
+        });
+
+        setTimeout(function() {
+          window.location.replace("{{ url_for('PTCaptureView:index') }}");
+        }, 2500)
+      }).fail(function(data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
+
+        try {
+          var error = data.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+
+        $.toast({
+          text: error,
+          heading: 'Error!',
+          icon: 'error',
+          showHideTransition: 'slide',
+          allowToastClose: false,
+          hideAfter: 3000,
+          stack: 5,
+          position: 'top-center',
+          textAlign: 'left',
+          loader: true,
+          beforeShow: function() {},
+          afterShown: function() {},
+          beforeHide: function() {},
+          afterHidden: function() {}
+        });
+      });
+    }).on('core.form.invalid', function() {
+      $.toast({
+        text: "Please see red highlighted areas to fix form errors.",
+        heading: 'Error!',
+        icon: 'error',
+        showHideTransition: 'slide',
+        allowToastClose: false,
+        hideAfter: 3000,
+        stack: 5,
+        position: 'top-center',
+        textAlign: 'left',
+        loader: true,
+        beforeShow: function() {},
+        afterShown: function() {},
+        beforeHide: function() {},
+        afterHidden: function() {}
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function(e) {
+    FormValidation.formValidation(
+      document.getElementById('pushup'), {
+        fields: {
+          value: {
+            validators:{
+              regexp: {
+                regexp: /^\d+$/,
+                message: 'Input wrong only numbers'
+              },
+            }
+          }
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+        },
+      }
+    ).on('core.form.valid', function() {
+
+      $("button[type='submit']").attr("disabled", true);
+
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='pushup') }}",
+        data: $('#pushup').jsonString()
+      }).done(function(data, status, jqXHR) {
+        $.busyLoadFull("show", {
+          spinner: false,
+          image: false,
+          fontawesome: false,
+          custom: false,
+          color: "#fff",
+          background: "rgba(0, 0, 0, 0.80)",
+          animation: 'fade',
+          text: `🎉 Success`,
+          textPosition: "bottom",
+          fontSize: "2rem",
+        });
+
+        setTimeout(function() {
+          window.location.replace("{{ url_for('PTCaptureView:index') }}");
+        }, 2500)
+      }).fail(function(data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
+
+        try {
+          var error = data.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+
+        $.toast({
+          text: error,
+          heading: 'Error!',
+          icon: 'error',
+          showHideTransition: 'slide',
+          allowToastClose: false,
+          hideAfter: 3000,
+          stack: 5,
+          position: 'top-center',
+          textAlign: 'left',
+          loader: true,
+          beforeShow: function() {},
+          afterShown: function() {},
+          beforeHide: function() {},
+          afterHidden: function() {}
+        });
+      });
+    }).on('core.form.invalid', function() {
+      $.toast({
+        text: "Please see red highlighted areas to fix form errors.",
+        heading: 'Error!',
+        icon: 'error',
+        showHideTransition: 'slide',
+        allowToastClose: false,
+        hideAfter: 3000,
+        stack: 5,
+        position: 'top-center',
+        textAlign: 'left',
+        loader: true,
+        beforeShow: function() {},
+        afterShown: function() {},
+        beforeHide: function() {},
+        afterHidden: function() {}
+      });
+    });
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function(e) {
+    FormValidation.formValidation(
+      document.getElementById('stepper'), {
+        fields: {
+          value: {
+            validators:{
+              regexp: {
+                regexp: /^\d+$/,
+                message: 'Input wrong only numbers'
+              },
+            }
+          }
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+        },
+      }
+    ).on('core.form.valid', function() {
+
+      $("button[type='submit']").attr("disabled", true);
+
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='stepper') }}",
+        data: $('#stepper').jsonString()
+      }).done(function(data, status, jqXHR) {
+        $.busyLoadFull("show", {
+          spinner: false,
+          image: false,
+          fontawesome: false,
+          custom: false,
+          color: "#fff",
+          background: "rgba(0, 0, 0, 0.80)",
+          animation: 'fade',
+          text: `🎉 Success`,
+          textPosition: "bottom",
+          fontSize: "2rem",
+        });
+
+        setTimeout(function() {
+          window.location.replace("{{ url_for('PTCaptureView:index') }}");
+        }, 2500)
+      }).fail(function(data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
+
+        try {
+          var error = data.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+
+        $.toast({
+          text: error,
+          heading: 'Error!',
+          icon: 'error',
+          showHideTransition: 'slide',
+          allowToastClose: false,
+          hideAfter: 3000,
+          stack: 5,
+          position: 'top-center',
+          textAlign: 'left',
+          loader: true,
+          beforeShow: function() {},
+          afterShown: function() {},
+          beforeHide: function() {},
+          afterHidden: function() {}
+        });
+      });
+    }).on('core.form.invalid', function() {
+      $.toast({
+        text: "Please see red highlighted areas to fix form errors.",
+        heading: 'Error!',
+        icon: 'error',
+        showHideTransition: 'slide',
+        allowToastClose: false,
+        hideAfter: 3000,
+        stack: 5,
+        position: 'top-center',
+        textAlign: 'left',
+        loader: true,
+        beforeShow: function() {},
+        afterShown: function() {},
+        beforeHide: function() {},
+        afterHidden: function() {}
+      });
+    });
+  });
+
+
+
 
   document.addEventListener('DOMContentLoaded', function(e) {
     fv = FormValidation.formValidation(

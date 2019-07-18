@@ -25,6 +25,9 @@ from fitr_webapp.system.session import is_loggedin, get_current_user
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
+# datetime stuff
+import fitr_webapp.system.datetimetools as datetimetools
+
 # std for os env
 from os import environ
 
@@ -48,6 +51,7 @@ app.session_interface = MongoEngineSessionInterface(db)
 app.jinja_env.globals.update(is_loggedin=is_loggedin)
 app.jinja_env.globals.update(user=get_current_user)
 app.jinja_env.globals.update(has_permission=has_permission)
+app.jinja_env.globals.update(datetimetools=datetimetools)
 
 # register views
 register_views(app)

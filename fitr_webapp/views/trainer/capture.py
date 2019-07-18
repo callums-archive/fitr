@@ -53,6 +53,44 @@ class PTCaptureView(Base):
             abort(412, "Failed to add weight")
         return "OK"
 
+    @route('/<user>/fitness_test/<test>', methods=['POST'])
+    def fitness_test_post(self, user, test):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+
+        if test not in ['pushup', 'situp', 'stepper']:
+            abort(404)
+
+        if test == "pushup":
+            if user.capture_fitness_test(
+                    test,
+                    {
+                        "unit": "pushups",
+                        "value": int(self.data.get("value"))
+                    }
+                ):
+                    return "OK"
+
+        elif test == "situp":
+            if user.capture_fitness_test(
+                    test,
+                    {
+                        "unit": "situps",
+                        "value": int(self.data.get("value"))
+                    }
+                ):
+                    return "OK"
+        elif test == "stepper":
+            if user.capture_fitness_test(
+                    test,
+                    {
+                        "unit": "bpm",
+                        "value": int(self.data.get("value"))
+                    }
+                ):
+                    return "OK"
+
     @route('/<user>/measuremets', methods=['POST'])
     def measurements_post(self, user):
         user = Users.by_username(user)
