@@ -432,6 +432,10 @@ var fv = null
           textPosition: "bottom",
           fontSize: "2rem",
         });
+
+        setTimeout(function() {
+        $.busyLoadFull("hide")
+        }, 2500)
       }).fail(function(data, status, jqXHR) {
         $("button[type='submit']").attr("disabled", false);
 
