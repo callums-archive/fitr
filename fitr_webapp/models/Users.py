@@ -28,6 +28,7 @@ from fitr_webapp.system.ip import get_ip
 from .UserDocuments import (
     Measurements,
     Weight,
+    FitnessTests,
     AuthSessions
 )
 
@@ -56,6 +57,7 @@ class Users(db.Document):
 
     measurements = db.ListField(db.EmbeddedDocumentField(Measurements))
     weight = db.ListField(db.EmbeddedDocumentField(Weight))
+    fitness_tests = db.ListField(db.EmbeddedDocumentField(FitnessTests))
     auth_sessions = db.ListField(db.EmbeddedDocumentField(AuthSessions))
 
     @property
@@ -226,6 +228,18 @@ class Users(db.Document):
             weight.create_user = get_current_user()
 
         self.weight.append(weight)
+        self.save()
+
+        return True
+
+    def capture_fitness_test(self, test_name, data):
+        fitness_test = FitnessTests()
+        fitness_test.name = test_name
+        fitness_test.data = data
+        fitness_test.create_user = get_current_user()
+
+
+        self.fitness_tests.append(fitness_test)
         self.save()
 
         return True

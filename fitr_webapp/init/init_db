@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from fitr_webapp import create_app
+from fitr_webapp.app import app
 
 from flask_mongoengine import MongoEngine
 
@@ -10,7 +10,7 @@ from fitr_webapp.models import (
 )
 
 
-db = MongoEngine(create_app())
+db = MongoEngine(app)
 
 print("Creating everyone group...")
 Groups.create_group("everyone")
