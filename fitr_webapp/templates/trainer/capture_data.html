@@ -432,10 +432,6 @@ var fv = null
           textPosition: "bottom",
           fontSize: "2rem",
         });
-
-        setTimeout(function() {
-          window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 2500)
       }).fail(function(data, status, jqXHR) {
         $("button[type='submit']").attr("disabled", false);
 
