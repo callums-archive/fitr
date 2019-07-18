@@ -435,7 +435,13 @@ var fv = null
 
         setTimeout(function() {
         $.busyLoadFull("hide")
+
         }, 2500)
+
+        setTimeout(function() {
+        $("button[type='submit']").attr("disabled", false);
+
+      }, 7000)
       }).fail(function(data, status, jqXHR) {
         $("button[type='submit']").attr("disabled", false);
 
