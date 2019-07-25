@@ -7,7 +7,7 @@ install_requires = [
     "bcrypt",
     "flask_pymongo",
     "pytz",
-    "flask_classy",
+    "fitr_webapp.system.view_helpers.classy",
     "gunicorn",
     'sentry-sdk[flask]==0.10.1'
 ]

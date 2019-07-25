@@ -23,6 +23,7 @@ acls["trainer"] = [
 ]
 
 acls["admin"] = [
+    Permission([Allow, "zuck"]),
     acls["everyone"],
     acls["trainer"]
 ]

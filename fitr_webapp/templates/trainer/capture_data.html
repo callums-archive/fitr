@@ -39,7 +39,7 @@
                 <tr>
                   <td>{{ weight_obj.uid }}</td>
                   <td>{{ weight_obj.weight }} {{weight_obj.unit}}</td>
-                  <td>{{ '%.2f' % (weight_obj.weight - prev_weight['weight']) }} {{weight_obj.unit}}</td>
+                  <td>{{ '%.1f' % (weight_obj.weight - prev_weight['weight']) }} {{weight_obj.unit}}</td>
                   <td>{{ datetimetools.cast_string(weight_obj.create_stamp, "d") }}</td>
                 </tr>
 

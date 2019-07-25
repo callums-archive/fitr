@@ -72,6 +72,3 @@ def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
     return redirect(url_for('UserAuthenticationView:login_get'))
-
-if __name__ == "__main__":
-    app.run()

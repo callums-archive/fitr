@@ -17,11 +17,12 @@ from fitr_webapp.system.view_helpers import Base
 from fitr_webapp.system.permissions import permission, has_permission
 from fitr_webapp.system.session import clear_session
 
+from flask import current_app as app
+
 
 class DashboardView(Base):
 
-
     @route('/')
-    @permission('dashboard')
+    @permission("dashboard")
     def index(self):
         return render_template("dashboard/dashboard.html")
