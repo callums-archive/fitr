@@ -13,3 +13,13 @@ html, body {
       height: 54px;
   }
 }
+
+/* import font */
+@font-face {
+  font-family: roboto-mono;
+  src: url("http://localhost:5000/static/fonts/RobotoMono-Light.ttf");
+}
+
+.priamry_font {
+    font-family: roboto-mono;
+}

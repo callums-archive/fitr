@@ -47,7 +47,11 @@
       <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
     </a>
     <ul class="right">
-      <li><a class="btn {{ colours['secondary_btn'] }}">Register 💡</a></li>
+      <li><a class="btn {{ colours['primary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> primary</a></li>
+      <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+      <li><a class="btn {{ colours['success_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> success</a></li>
+      <li><a class="btn {{ colours['danger_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> fail</a></li>
+      <li><a class="btn {{ colours['warning_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> are you sure</a></li>
     </ul>
   </div>
 </nav>
@@ -57,7 +61,7 @@
     <div class="row">
 
       <div class="col s12">
-        <h5 class="center-align">🎉Login🔥</h5>
+        <h5 class="center-align"><i class="far fa-user"></i> Login</h5>
       </div>
 
       <div class="col s12 mobile-form">
@@ -79,7 +83,7 @@
             </div>
 
             <div class="row mb-0">
-              <a class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" href="#modal1">Login 🏃</a>
+              <a class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" href="#modal1">Login</a>
               <div class="col s12 mt-4 center-align">
                 <a class="black-text text-lighten-3" href="http://materializecss.com">Forgot password?</a>
               </div>
@@ -89,12 +93,21 @@
         </div>
       </div>
 
+      <ul class="right">
+        <li><a class="btn {{ colours['primary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> primary</a></li>
+        <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a class="btn {{ colours['success_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> success</a></li>
+        <li><a class="btn {{ colours['danger_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> fail</a></li>
+        <li><a class="btn {{ colours['warning_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> are you sure</a></li>
+      </ul>
+
       <div class="col s12">
         <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script></p>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- Modal Structure -->
 <div id="modal1" class="modal bottom-sheet">
@@ -113,18 +126,25 @@
 {% block scripts %}
 <script>
 
-  $(document).ready(function(){
-
-    $('.modal').modal();
-    decide_form_card(".mobile-form");
 
 
-    $(window).resize(function(e) {
-      decide_form_card(".mobile-form");
-    });
 
-
+$(document).ready(function() {
+  decide_form_card(".mobile-form");
+  $('.modal').modal();
 });
+
+//   $(document).ready(function(){
+//
+
+//
+//
+//     $(window).resize(function(e) {
+//       decide_form_card(".mobile-form");
+//     });
+//
+//
+// });
   // document.addEventListener("DOMContentLoaded', function(e) {
   //   FormValidation.formValidation(
   //     document.getElementById('login'), {

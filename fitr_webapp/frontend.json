@@ -1,13 +1,20 @@
 {
   "COLOURS" :{
     "background": "grey lighten-4",
-    "nav": "red",
-    "input": "purple",
+    "nav": "blue-grey darken-3",
+
+    "input": "#808080",
 
     "primary_btn": "waves-effect waves-light text-white indigo lighten-1",
     "primary_card": "white",
 
-    "secondary_btn": "waves-effect waves-light text-white pink accent-3"
+    "secondary_btn": "waves-effect waves-light text-white blue-grey darken-1",
+
+    "success_btn": "waves-effect waves-light text-white light-green darken-1",
+
+    "danger_btn": "waves-effect waves-light text-white red darken-3",
+
+    "warning_btn": "waves-effect waves-light text-white amber darken-2"
 
   }
 }

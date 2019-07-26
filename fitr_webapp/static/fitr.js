@@ -25,15 +25,30 @@ function castJson(arr) {
 
 // remove card if on small screen
 function decide_form_card(form_card) {
-  let window_width = $( window ).width();
-  if (window_width <= 600) {
-    let card = $(form_card).find(".card-panel");
-    if (window[`card_classes${form_card}`] == undefined) {
-      window[`card_classes${form_card}`] = card.attr("class");
+  function apply() {
+    var window_width = $( window ).width();
+    if (window_width <= 550) {
+      var card = $(form_card).find(".card-panel");
+      if (window[`card_classes${form_card}`] == undefined) {
+        window[`card_classes${form_card}`] = card.attr("class");
+      }
+      card.removeAttr('class').addClass("p-3");
+    } else {
+      var card = $(form_card).find(".p-3");
+      card.removeAttr('class').attr("class", window[`card_classes${form_card}`]);
     }
-    card.removeAttr('class').addClass("p-4");
-  } else {
-    let card = $(form_card).find(".p-4");
-    card.removeAttr('class').attr("class", window[`card_classes${form_card}`]);
-  }
+  };
+
+  // on change
+  window.addEventListener("resize", function() {
+    setTimeout(function() {
+      alert($( window ).width());
+      apply();
+    }, 120);
+  });
+
+  // init
+  setTimeout(function() {
+    apply();
+  }, 60);
 }
