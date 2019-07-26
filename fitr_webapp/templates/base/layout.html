@@ -13,6 +13,7 @@
         <!-- bootstrap -->
         <!-- <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}"> -->
         <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/bs4-helpers.css') }}">
 
         <!-- form validation -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fv/css/formValidation.min.css') }}">
@@ -55,7 +56,7 @@
         <title>Fitr</title>
     </head>
 
-    <body>
+    <body class="{{ colours['background'] }}">
         <div class="se-pre-con"></div>
 
         {% if is_loggedin() %}

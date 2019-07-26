@@ -36,9 +36,12 @@ app = Flask(__name__)
 
 # config
 if environ.get("FLASK_ENV", "") == "development":
-    app.config.from_json('development.json')
+    pass
+    # app.config.from_json('development.json')
 else:
     app.config.from_json('production.json')
+
+app.config.from_json('frontend.json')
 
 # mongo
 db = MongoEngine(app)
@@ -46,12 +49,13 @@ db = MongoEngine(app)
 # mongo for session
 app.session_interface = MongoEngineSessionInterface(db)
 
-
 # register jinja2 funtions
 app.jinja_env.globals.update(is_loggedin=is_loggedin)
 app.jinja_env.globals.update(user=get_current_user)
 app.jinja_env.globals.update(has_permission=has_permission)
 app.jinja_env.globals.update(datetimetools=datetimetools)
+app.jinja_env.globals.update(datetimetools=datetimetools)
+app.jinja_env.globals.update(colours=app.config['COLOURS'])
 
 # register views
 register_views(app)

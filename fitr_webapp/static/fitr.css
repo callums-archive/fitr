@@ -1,13 +1,15 @@
+/* basic stuff */
 html, body {
     height: 100%;
 }
 
+/* Logo stuff */
 .brand-logo img {
     height: 64px;
 }
 
 @media only screen and (max-width: 600px) {
   .brand-logo img {
-      height: 58px;
+      height: 54px;
   }
 }

@@ -22,3 +22,18 @@ function castJson(arr) {
     return JSON.stringify(jsonData);
   };
 })(jQuery);
+
+// remove card if on small screen
+function decide_form_card(form_card) {
+  let window_width = $( window ).width();
+  if (window_width <= 600) {
+    let card = $(form_card).find(".card-panel");
+    if (window[`card_classes${form_card}`] == undefined) {
+      window[`card_classes${form_card}`] = card.attr("class");
+    }
+    card.removeAttr('class').addClass("p-4");
+  } else {
+    let card = $(form_card).find(".p-4");
+    card.removeAttr('class').attr("class", window[`card_classes${form_card}`]);
+  }
+}

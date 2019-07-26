@@ -1,0 +1,12 @@
+{
+  "COLOURS" :{
+    "background": "grey lighten-4",
+    "nav": "red",
+
+    "primary_btn": "waves-effect waves-light text-white indigo lighten-1",
+    "primary_card": "white",
+
+    "secondary_btn": "waves-effect waves-light text-white pink accent-3"
+
+  }
+}

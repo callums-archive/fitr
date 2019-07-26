@@ -1,105 +1,14 @@
 {% extends  'base/layout.html'%}
 
 {% block styles %}
-<!-- <style>
-    img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-    }
-
-    ::-webkit-input-placeholder {
-        text-align: center;
-    }
-
-    :-moz-placeholder { /* Firefox 18- */
-        text-align: center;
-    }
-
-    ::-moz-placeholder {  /* Firefox 19+ */
-        text-align: center;
-    }
-
-    :-ms-input-placeholder {
-        text-align: center;
-    }
-</style> -->
-
 <style>
-  body {
-    background: #F8F8F8;
-    font-family: 'Muli', sans-serif;
+  .form-width {
+    width: 400px !important;
+    margin: auto;
   }
 
-  .input-field input[type=date]:focus+label,
-  .input-field input[type=text]:focus+label,
-  .input-field input[type=email]:focus+label,
-  .input-field input[type=password]:focus+label {
-    color: #3f50b5;
-  }
-
-  .input-field input[type=date]:focus,
-  .input-field input[type=text]:focus,
-  .input-field input[type=email]:focus,
-  .input-field input[type=password]:focus {
-    border-bottom: 2px solid #3f50b5;
-    box-shadow: none;
-  }
-
-  .input-field label {
-    left: 0;
-  }
-
-  form {
-    margin: 30px auto;
-    align-items: center;
-    justify-content: center;
-    width: 45%;
-  }
-
-  .btn-large {
-    height: 45px;
-    line-height: 45px;
-  }
-
-  .m-b-none {
-    margin-bottom: 0;
-  }
-
-  .padder-x {
-    padding: 0 !important;
-  }
-
-  .m-md {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-
-  .forgotpassword {
-    font-weight: bold;
-  }
-
-  h2 {
-    margin-top: 50px;
-    font-weight: 400 letter-spacing: 2px;
-    padding: 20px;
-  }
-
-  @media(max-width: 700px) {
-    form {
-      width: 60%;
-    }
-  }
-
-  @media(max-width: 530px) {
-    form {
-      width: 70%;
-    }
-  }
-
-  @media(max-width: 450px) {
-    form {
-      width: 80%;
-    }
+  .valign-wrapper {
+    height: 90% !important;
   }
 </style>
 {% endblock styles %}
@@ -131,106 +40,163 @@
 </div> -->
 
 <nav>
-  <div class="nav-wrapper">
+  <div class="nav-wrapper {{ colours['nav'] }}">
     <a href="{{ url_for('index') }}" class="left brand-logo">
       <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
     </a>
     <ul class="right">
-      <li><a class="waves-effect waves-light btn">Button</a></li>
+      <li><a class="btn {{ colours['secondary_btn'] }}">💡 Register</a></li>
     </ul>
   </div>
 </nav>
 
-<div class="container">
-  <div class="row m-b-none">
-    <form method="post">
-      <div class='input-field'>
-        <input class='validate' type='email' name='email' id='email' />
-        <label for='email'>Enter your email</label>
+<div class="valign-wrapper">
+  <div class="form-width">
+    <div class="row">
+
+      <div class="col s12">
+        <h5 class="center-align">🎉Login🔥</h5>
       </div>
-      <div class='input-field col s12 padder-x'>
-        <input class='validate' type='password' name='password' id='password' />
-        <label for='password'>Enter your password</label>
+
+      <div class="col s12 mobile-form">
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <form method="post">
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input class="validate text-indigo" type="email" name="email" id="email" />
+                <label for="email">Enter your email / username</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12 mt-0">
+                <input class="validate" type="password" name="password" id="password" />
+                <label for="password">Enter your password</label>
+              </div>
+            </div>
+
+            <div class="row mb-0">
+              <a class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" href="#modal1">🏃 Login</a>
+            </div>
+
+          </form>
+        </div>
       </div>
-      <a href="main.html" class='col s12 btn waves-effect waves-light btn btn-large m-md indigo'>Login</a>
-      <div>
-        <label>
-          <h6><a class="grey-text lighten-4 forgotpassword" href="main.html">Forgot Password?</a></h6>
-        </label>
+
+      <div class="col s12">
+        <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script></p>
       </div>
-    </form>
+    </div>
   </div>
 </div>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal bottom-sheet">
+  <div class="modal-content">
+    <h4>Modal Header</h4>
+    <p>A bunch of text</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
+
 {% endblock content %}
 
 {% block scripts %}
 <script>
-  document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-      document.getElementById('login'), {
-        fields: {
-          identifier: {
-            validators: {
-              notEmpty: {
-                message: 'field is required'
-              },
-              stringLength: {
-                min: 3,
-                max: 30,
-                message: 'Field must be between 3 and 30 characters'
-              }
-            }
-          },
-          password: {
-            validators: {
-              notEmpty: {
-                message: 'field is required'
-              }
-            }
-          },
-        },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-        },
-      }
-    ).on('core.form.valid', function() {
-      console.log($('#login').jsonString())
-      console.log($('#login').jsonString())
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('UserAuthenticationView:login_post') }}",
-        data: $('#login').jsonString()
-      }).done(function(data, status, jqXHR) {
-        window.location.replace(data.redirect);
-      }).fail(function(data, status, jqXHR) {
-        try {
-          var error = data.responseJSON.error_msg;
-        } catch (err) {
-          var error = "Server Error, Try again.";
-        }
 
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
+  $(document).ready(function(){
+
+    $('.modal').modal();
+    decide_form_card(".mobile-form");
+
+
+    $(window).resize(function(e) {
+      decide_form_card(".mobile-form");
     });
-  });
+
+
+});
+  // document.addEventListener("DOMContentLoaded', function(e) {
+  //   FormValidation.formValidation(
+  //     document.getElementById('login'), {
+  //       fields: {
+  //         identifier: {
+  //           validators: {
+  //             notEmpty: {
+  //               message: 'field is required'
+  //             },
+  //             stringLength: {
+  //               min: 3,
+  //               max: 30,
+  //               message: 'Field must be between 3 and 30 characters'
+  //             }
+  //           }
+  //         },
+  //         password: {
+  //           validators: {
+  //             notEmpty: {
+  //               message: 'field is required'
+  //             }
+  //           }
+  //         },
+  //       },
+  //       plugins: {
+  //         trigger: new FormValidation.plugins.Trigger(),
+  //         bootstrap: new FormValidation.plugins.Bootstrap(),
+  //         submitButton: new FormValidation.plugins.SubmitButton(),
+  //       },
+  //     }
+  //   ).on('core.form.valid', function() {
+  //     console.log($('#login').jsonString())
+  //     console.log($('#login').jsonString())
+  //     $.ajax({
+  //       accept: 'application/json',
+  //       contentType: 'application/json',
+  //       type: "POST",
+  //       url: "{{ url_for('UserAuthenticationView:login_post') }}",
+  //       data: $('#login').jsonString()
+  //     }).done(function(data, status, jqXHR) {
+  //       window.location.replace(data.redirect);
+  //     }).fail(function(data, status, jqXHR) {
+  //       try {
+  //         var error = data.responseJSON.error_msg;
+  //       } catch (err) {
+  //         var error = "Server Error, Try again.";
+  //       }
+  //
+  //       $.toast({
+  //         text: error,
+  //         heading: 'Error!',
+  //         icon: 'error',
+  //         showHideTransition: 'slide',
+  //         allowToastClose: false,
+  //         hideAfter: 3000,
+  //         stack: 5,
+  //         position: 'top-center',
+  //         textAlign: 'left',
+  //         loader: true,
+  //         beforeShow: function() {},
+  //         afterShown: function() {},
+  //         beforeHide: function() {},
+  //         afterHidden: function() {}
+  //       });
+  //     });
+  //   });
+  // });
+  //
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   var elems = document.querySelectorAll('.datepicker');
+  //   var instances = M.Datepicker.init(elems, options);
+  // });
+  //
+  // // Or with jQuery
+  //
+  // $(document).ready(function() {
+  //   $('.datepicker').datepicker();
+  // });
 </script>
 {% endblock scripts %}
