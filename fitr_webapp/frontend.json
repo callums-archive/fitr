@@ -2,6 +2,7 @@
   "COLOURS" :{
     "background": "grey lighten-4",
     "nav": "red",
+    "input": "purple",
 
     "primary_btn": "waves-effect waves-light text-white indigo lighten-1",
     "primary_card": "white",

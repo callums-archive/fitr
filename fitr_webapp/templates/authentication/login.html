@@ -10,6 +10,8 @@
   .valign-wrapper {
     height: 90% !important;
   }
+
+
 </style>
 {% endblock styles %}
 
@@ -45,7 +47,7 @@
       <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
     </a>
     <ul class="right">
-      <li><a class="btn {{ colours['secondary_btn'] }}">💡 Register</a></li>
+      <li><a class="btn {{ colours['secondary_btn'] }}">Register 💡</a></li>
     </ul>
   </div>
 </nav>
@@ -77,7 +79,10 @@
             </div>
 
             <div class="row mb-0">
-              <a class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" href="#modal1">🏃 Login</a>
+              <a class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" href="#modal1">Login 🏃</a>
+              <div class="col s12 mt-4 center-align">
+                <a class="black-text text-lighten-3" href="http://materializecss.com">Forgot password?</a>
+              </div>
             </div>
 
           </form>
