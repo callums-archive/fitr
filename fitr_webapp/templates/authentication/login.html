@@ -47,11 +47,7 @@
       <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
     </a>
     <ul class="right">
-      <li><a class="btn {{ colours['primary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> primary</a></li>
       <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
-      <li><a class="btn {{ colours['success_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> success</a></li>
-      <li><a class="btn {{ colours['danger_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> fail</a></li>
-      <li><a class="btn {{ colours['warning_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> are you sure</a></li>
     </ul>
   </div>
 </nav>
@@ -92,14 +88,6 @@
           </form>
         </div>
       </div>
-
-      <ul class="right">
-        <li><a class="btn {{ colours['primary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> primary</a></li>
-        <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
-        <li><a class="btn {{ colours['success_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> success</a></li>
-        <li><a class="btn {{ colours['danger_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> fail</a></li>
-        <li><a class="btn {{ colours['warning_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> are you sure</a></li>
-      </ul>
 
       <div class="col s12">
         <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script></p>

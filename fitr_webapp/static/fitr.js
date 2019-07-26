@@ -42,7 +42,6 @@ function decide_form_card(form_card) {
   // on change
   window.addEventListener("resize", function() {
     setTimeout(function() {
-      alert($( window ).width());
       apply();
     }, 120);
   });
