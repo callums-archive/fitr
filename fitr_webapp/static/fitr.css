@@ -23,12 +23,3 @@ html, body {
 .priamry_font {
     font-family: roboto-mono;
 }
-
-/* select width */
-.select-input-width {
-  padding: 0 !important;
-}
-
-.select-input-width label{
-  left: 0 !important;
-}

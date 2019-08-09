@@ -206,11 +206,13 @@ formGen.prototype = {
     }
 
     element = $(`
-      <div class="input-field col s12 select-input-width">
-        <select id="${name}">
-          ${options}
-        </select>
-        <label>${formField.placeholder}</label>
+      <div class="row">
+        <div class="input-field col s12">
+          <select id="${name}">
+            ${options}
+          </select>
+          <label>${formField.placeholder}</label>
+        </div>
       </div>
     `);
     return element
@@ -228,6 +230,7 @@ formGen.prototype = {
 
       if (e.target.id.split("_").pop() == "month" || e.target.id.split("_").pop() == "year") {
         $(`#${ref}_day`).val("");
+        $(`#${ref}_day`).children().remove().end().append('<option disabled selected value="">DD</option>') ;
         root.pullField(ref).value = "";
         var year = $(`#${ref}_year`).val();
 
