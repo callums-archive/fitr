@@ -16,30 +16,6 @@
 {% endblock styles %}
 
 {% block content %}
-<!-- <div class="d-flex justify-content-center" style="height: 100%;">
-    <div class="d-flex align-items-center p-2" style="max-width: 400px">
-        <form id="login">
-            <div class="d-flex justify-content-center">
-                <img class="mb-3" src="{{ url_for('static', filename='images/logo.png') }}" alt="" height="75">
-            </div>
-
-            <div class="form-group">
-                <input type="text" class="form-control form-control-lg" name="identifier" placeholder="Username / Email" required>
-            </div>
-
-            <div class="form-group">
-                <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required>
-            </div>
-
-            <button type="submit" class="mt-3 mb-3 btn btn-lg btn-primary btn-block">Sign in</button>
-
-            <hr>
-
-            <p class="mt-1 text-muted float-left">&copy; <script>document.write(new Date().getFullYear())</script></p>
-            <a class="mt-1 float-right btn btn-sm btn-secondary" href="{{ url_for('UserRegistrationView:register_get') }}"><b><i class="fas fa-info-circle"></i> Need an account?</b></a>
-        </form>
-    </div>
-</div> -->
 
 <nav>
   <div class="nav-wrapper {{ colours['nav'] }}">
@@ -62,7 +38,9 @@
 
       <div class="col s12 mobile-form">
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
-          <form method="post">
+          <form id="test" autocomplete="false">
+          </form>
+          <!-- <form method="post">
 
             <div class="row">
               <div class="input-field col s12">
@@ -85,12 +63,12 @@
               </div>
             </div>
 
-          </form>
+          </form> -->
         </div>
       </div>
 
       <div class="col s12">
-        <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script></p>
+        <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script> CatByte Software</p>
       </div>
     </div>
   </div>
@@ -120,7 +98,28 @@
 $(document).ready(function() {
   decide_form_card(".mobile-form");
   $('.modal').modal();
+
+  new formGen("#test", {
+    form: [
+    {type: "string", noHash: true,  name: "first_name", placeholder: "First Name(s)"},
+    {type: "string", name: "surname", placeholder: "Surname"},
+    {type: "float", name: "ft5", placeholder: "float"},
+    {type: "integer", name: "in5", placeholder: "integer"},
+
+    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}]},
+
+    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", min: "2001-01-01"},
+
+    {type: "string", name: "username", placeholder: "Username"},
+
+    {type: "string", name: "email", placeholder: "Email"},
+    {type: "password", name: "password", placeholder: "Password"},
+    {type: "confirm-password", name: "confirm", placeholder: "Confirm Password"},
+    ]
+  })
 });
+
+
 
 //   $(document).ready(function(){
 //

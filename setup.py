@@ -7,9 +7,9 @@ install_requires = [
     "bcrypt",
     "flask_pymongo",
     "pytz",
-    "fitr_webapp.system.view_helpers.classy",
     "gunicorn",
-    'sentry-sdk[flask]==0.10.1'
+    "sentry-sdk[flask]==0.10.1",
+    "flask_classy"
 ]
 
 setup(
@@ -26,5 +26,5 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     extras_require={"test": ["pytest", "coverage"]},
-    scripts=['./fitr_webapp/init/init_db']
+    scripts=['./fitr_webapp/scripts/init_db', './fitr_webapp/scripts/start_dev']
 )
