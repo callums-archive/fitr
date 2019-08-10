@@ -101,22 +101,26 @@ $(document).ready(function() {
 
   new formGen("#test", {
     form: [
-    {type: "string", noHash: true,  name: "first_name", placeholder: "First Name(s)"},
+    {type: "string", noHash: false,  name: "first_name", placeholder: "First Name(s)", validators:["strMin(5)"]},
     {type: "string", name: "surname", placeholder: "Surname"},
-    {type: "float", name: "ft5", placeholder: "float"},
+    {type: "float", name: "ft5", placeholder: "float", validators:["notEmpty()"]},
     {type: "integer", name: "in5", placeholder: "integer"},
 
-    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}]},
+    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}], validators:["notEmpty()"]},
 
-    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", min: "2001-01-01"},
+    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", value:"1994-09-16", validators:["notEmpty()"]},
 
     {type: "string", name: "username", placeholder: "Username"},
 
-    {type: "string", name: "email", placeholder: "Email"},
+    {type: "email", name: "email", placeholder: "Email"},
     {type: "password", name: "password", placeholder: "Password"},
     {type: "confirm-password", name: "confirm", placeholder: "Confirm Password"},
     ]
-  })
+  });
+
+  function validate_dob(val) {
+    return [0, "this is a test that there is data here"]
+  }
 });
 
 
