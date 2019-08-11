@@ -81,6 +81,6 @@ def index():
     return redirect(url_for('UserAuthenticationView:login_get'))
 
 #TODO XXX remove
-@app.route('/test', methods=['PUT', 'GET'])
+@app.route('/test', methods=['PUT', 'POST'])
 def tuneit():
-    return jsonify([0, "fuck off!"])
+    return jsonify([1, "fuck off!"])

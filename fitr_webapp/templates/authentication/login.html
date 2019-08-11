@@ -151,7 +151,16 @@ $(document).ready(function() {
   remote: {
     validate: {method: "PUT", url: "/test"},
     submit: {method: "POST", url: "/test"},
-  }
+  },
+  onSuccess(data, status, xhr) {
+    console.log(data);
+    console.log(xhr);
+    console.log(status);
+  },
+  onFail(xhr, status) {
+    console.log(xhr);
+    console.log(status);
+  },
   });
 
   function validate_dob(val) {

@@ -104,8 +104,6 @@ formGen.prototype = {
     });
   },
 
-
-
   createStringInput(formField, type) {
     element = $(`
       <div class="row">
@@ -257,22 +255,45 @@ formGen.prototype = {
       root.validateForm(ref);
 
       // try to unlock submit button
-      if (root.submitStatus == false && root.validateForm() == 0) {
-        root.unlockSubmit();
+      if (root.submitStatus == false && root.validateForm(ref) == 0) {
+        if (root.formEle.find(".invalid").length == 0) {
+          root.unlockSubmit();
+        }
       }
     })
 
     this.formEle.on("submit", function(e) {
       e.preventDefault();
       e.stopPropagation();
+      root.lockSubmit();
 
       if (root.validateForm() != 0) {
         $("html, body").animate({
           scrollTop: 0
         }, "slow");
-        root.lockSubmit();
       } else {
-        // this is where we can send run the submission routine!
+        root.unlockSubmit();
+        // get the data ready
+        formFields = {};
+        root.settings.form.forEach(function(field) {
+          formFields[field.name] = field.value;
+        });
+        formFields = JSON.stringify(formFields);
+
+        //run validation via ajax
+        $.ajax({
+          accept: 'application/json',
+          contentType: 'application/json',
+          type: root.settings.remote.submit.method,
+          url: root.settings.remote.submit.url,
+          data: formFields
+        }).done(function(data, status, jqXHR) {
+          root.settings.onSuccess(data, status, jqXHR);
+        }).fail(function(jqXHR, status) {
+          root.settings.onFail(jqXHR, status);
+        }).always(function() {
+          root.unlockSubmit();
+        })
       }
     })
   },
@@ -374,7 +395,7 @@ formGen.prototype = {
 
       if (field.hasOwnProperty("validators")) {
         field.validators.forEach(function(val_func) {
-          canContinue = ((fieldValidate != null && errors == 0) || (fieldValidate == null)) ? true : false;
+          canContinue = ((fieldValidate != null && errors == 0) || (fieldValidate == null && errors == 0)) ? true : false;
           if (canContinue) {
             if (typeof val_func === 'string') {
               // this is a default validator
@@ -402,7 +423,7 @@ formGen.prototype = {
     return total_errors;
   },
 
-  attachError: function(field, error) {
+  attachError(field, error) {
     switch (field.type) {
       case 'string':
       case 'password':
@@ -561,7 +582,8 @@ formGen.prototype = {
         local_root.root.attachError(currentField, "Server Error. Try again.");
       })
 
-      return [0, "Processing data..."];
+      // innocent till prouven guilty
+      return [1, ""];
     }
   }
 };
