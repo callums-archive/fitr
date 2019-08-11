@@ -51,3 +51,12 @@ function decide_form_card(form_card) {
     apply();
   }, 60);
 }
+
+// sidebar nav and dropdown
+$(document).ready(function(){
+  $('.sidenav').sidenav({
+    edge: 'right'
+  });
+  $(".dropdown-trigger").dropdown();
+  $('.collapsible').collapsible();
+});

@@ -6,23 +6,19 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
+        <meta name="theme-color" content="{{ colours['browser_theme'] }}">
 
         <!-- favicon -->
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ico.png') }}">
+        <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
 
-        <!-- bootstrap -->
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}"> -->
+        <!-- materialize -->
         <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/bs4-helpers.css') }}">
-
-        <!-- form validation -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='fv/css/formValidation.min.css') }}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <!-- fitr main css -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fitr.css') }}">
-
-        <!-- jquery toast -->
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='toast-manager/toast.min.css') }}"> -->
 
         <!-- font awesome -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.min.css') }}">
@@ -88,12 +84,6 @@
             line-height: 22px;
             padding: 14px 16px;
           }
-
-          {% if is_loggedin() %}
-          html, body {
-            padding-top: 35px;
-          }
-          {% endif %}
         </style>
 
         {% block styles %}
@@ -113,27 +103,14 @@
         {% endblock content %}
 
         <!-- core js -->
-        <!-- <script src="{{ url_for('static', filename='popper/popper.js') }}"></script> -->
         <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
         <script src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
-        <!-- <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script> -->
-
-        <!-- for validation -->
-        <script src="{{ url_for('static', filename='fv/js/FormValidation.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='fv/js/plugins/Materialize.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='fv/js/plugins/J.min.js') }}"></script>
 
         <!-- font awesome -->
         <script src="{{ url_for('static', filename='fa/js/all.min.js') }}"></script>
 
-        <!-- jquery toast -->
-        <!-- <script src="{{ url_for('static', filename='toast-manager/toast.min.js') }}"></script> -->
-
         <!-- fitr main js -->
         <script src="{{ url_for('static', filename='fitr.js') }}"></script>
-
-        <!-- date picker -->
-        <script src="{{ url_for('static', filename='jquery.date-dropdowns.js') }}"></script>
 
         <!-- busy loader js -->
         <script src="{{ url_for('static', filename='jquery-busy-load/busyloader.min.js') }}"></script>

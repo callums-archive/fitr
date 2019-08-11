@@ -122,7 +122,7 @@ class Users(db.Document):
             user = cls.objects(__raw__={identity: identifier}).first()
             if not user:
                 continue
-            if not user.check_password(password):
+            if not user or not user.check_password(password):
                 raise DBError("Invalid login credentials.")
             sid = set_session(user)
             auth_session = AuthSessions()

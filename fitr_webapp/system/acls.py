@@ -13,8 +13,7 @@ class Permission(list):
 acls = {}
 
 acls["everyone"] = [
-    Permission([Allow, "dashboard"]),
-    Permission([Allow, "profile"]),
+    Permission([Allow, "user"]),
 ]
 
 acls["trainer"] = [

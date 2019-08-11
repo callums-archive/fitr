@@ -272,7 +272,6 @@ formGen.prototype = {
           scrollTop: 0
         }, "slow");
       } else {
-        root.unlockSubmit();
         // get the data ready
         formFields = {};
         root.settings.form.forEach(function(field) {

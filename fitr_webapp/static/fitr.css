@@ -17,9 +17,27 @@ html, body {
 /* import font */
 @font-face {
   font-family: roboto-mono;
-  src: url("http://localhost:5000/static/fonts/RobotoMono-Light.ttf");
+  src: url("/static/fonts/RobotoMono-Light.ttf");
 }
 
 .priamry_font {
     font-family: roboto-mono;
+}
+
+.nav-fa {
+  float: left;
+  height: auto;
+  line-height: 48px;
+  margin: 0 32px 0 0;
+  width: 24px;
+  color: rgba(0,0,0,0.54);
+}
+
+.sidenav .nav-fa {
+  float: left;
+  height: 45px;
+  line-height: 48px;
+  margin: 0 32px 0 0;
+  width: 24px;
+  color: rgba(0,0,0,0.54);
 }

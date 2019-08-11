@@ -2,11 +2,14 @@
   "COLOURS" :{
     "background": "grey lighten-4",
     "nav": "blue-grey darken-3",
+    "browser_theme": "#37474f",
 
     "input": "#808080",
 
     "primary_btn": "waves-effect waves-light text-white indigo lighten-1",
     "primary_card": "white",
+
+    "primary_badge": "red",
 
     "secondary_btn": "waves-effect waves-light text-white blue-grey darken-1",
 

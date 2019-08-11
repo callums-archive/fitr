@@ -23,6 +23,6 @@ from flask import current_app as app
 class DashboardView(Base):
 
     @route('/')
-    @permission("dashboard")
+    @permission("user")
     def index(self):
         return render_template("dashboard/dashboard.html")

@@ -36,8 +36,7 @@ app = Flask(__name__)
 
 # config
 if environ.get("FLASK_ENV", "") == "development":
-    pass
-    # app.config.from_json('development.json')
+    app.config.from_json('development.json')
 else:
     app.config.from_json('production.json')
 
@@ -45,9 +44,6 @@ app.config.from_json('frontend.json')
 
 # mongo
 db = MongoEngine(app)
-
-#TODO XXX remove
-from flask import jsonify
 
 # mongo for session
 app.session_interface = MongoEngineSessionInterface(db)
@@ -79,8 +75,3 @@ def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
     return redirect(url_for('UserAuthenticationView:login_get'))
-
-#TODO XXX remove
-@app.route('/test', methods=['PUT', 'POST'])
-def tuneit():
-    return jsonify([1, "fuck off!"])

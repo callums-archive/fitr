@@ -10,8 +10,6 @@
   .valign-wrapper {
     height: 90% !important;
   }
-
-
 </style>
 {% endblock styles %}
 
@@ -28,236 +26,81 @@
   </div>
 </nav>
 
-<!-- <div class="valign-wrapper"> -->
-  <!-- <div class="form-width"> -->
-  <div class="container">
+<div class="valign-wrapper">
+  <div class="form-width">
     <div class="row">
 
       <div class="col s12">
         <h5 class="center-align"><i class="far fa-user"></i> Login</h5>
       </div>
 
-      <!-- <div class="col s12 mobile-form"> -->
-        <div class="col s12">
-          <form id="test" autocomplete="false">
-
-            <div class="row">
-              <div class="col s12 m6 mobile-form">
-                <div class="card-panel {{ colours['primary_card'] }}" id="user">
-                </div>
-              </div>
-              <div class="col s12 m6 mobile-form">
-                <div class="card-panel {{ colours['primary_card'] }}" id="email">
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col s12 m6 mobile-form">
-                <div class="card-panel {{ colours['primary_card'] }}" id="other1">
-                </div>
-              </div>
-              <div class="col s12 m6 mobile-form">
-                <div class="card-panel {{ colours['primary_card'] }}" id="other2">
-                </div>
-              </div>
-            </div>
-
+      <div class="col s12 mobile-form">
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <form id="login">
 
             <div class="row mb-0">
               <button class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" type="submit">Login</button>
               <div class="col s12 mt-4 center-align">
-                <a class="black-text text-lighten-3" href="http://materializecss.com">Forgot password?</a>
+                <a class="black-text text-lighten-3" href="./forgot">Forgot password?</a>
               </div>
             </div>
+
           </form>
-          </div>
-          <!-- <form method="post">
-
-            <div class="row">
-              <div class="input-field col s12">
-                <input class="validate text-indigo" type="email" name="email" id="email" />
-                <label for="email">Enter your email / username</label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s12 mt-0">
-                <input class="validate" type="password" name="password" id="password" />
-                <label for="password">Enter your password</label>
-              </div>
-            </div>
-
-            <div class="row mb-0">
-              <a class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" href="#modal1">Login</a>
-              <div class="col s12 mt-4 center-align">
-                <a class="black-text text-lighten-3" href="http://materializecss.com">Forgot password?</a>
-              </div>
-            </div>
-
-          </form> -->
-      <!-- </div> -->
+        </div>
+      </div>
 
       <div class="col s12">
-        <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script> CatByte Software</p>
+        <p class="mt-4 center-align text-darken-2">&copy; <script>
+            document.write(new Date().getFullYear())
+          </script>
+        </p>
       </div>
-    <!-- </div> -->
-  <!-- </div> -->
-</div>
-</div>
-
-
-<!-- Modal Structure -->
-<!-- <div id="modal1" class="modal bottom-sheet">
-  <div class="modal-content">
-    <h4>Modal Header</h4>
-    <p>A bunch of text</p>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-  </div>
-</div> -->
-
+</div>
 
 {% endblock content %}
 
 {% block scripts %}
 <script>
+  $(document).ready(function() {
+    decide_form_card(".mobile-form");
 
+    new formGen("#login", {
+      form: [{
+          type: "string",
+          name: "identifier",
+          placeholder: "Username/Email",
+          validators: ["strMin(5)"]
+        },
+        {
+          type: "password",
+          name: "password",
+          placeholder: "Password",
+          validators: ["notEmpty()"]
+        },
+      ],
 
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('UserAuthenticationView:login_post') }}"
+        },
+      },
 
+      onSuccess(data, status, xhr) {
+        window.location.replace(data.redirect)
+      },
 
-$(document).ready(function() {
-  decide_form_card(".mobile-form");
-  $('.modal').modal();
-
-  new formGen("#test", {
-    form: [
-    {type: "string", noHash: false,  name: "first_name", placeholder: "First Name(s)", validators:["strMin(5)", "remote()"], element: "#user"},
-    {type: "string", name: "surname", placeholder: "Surname", element: "#user"},
-    {type: "float", name: "ft5", placeholder: "float", validators:["notEmpty()"], element: "#other1"},
-    {type: "integer", name: "in5", placeholder: "integer", element: "#other1"},
-
-    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}], validators:["notEmpty()"], element: "#other2"},
-
-    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", validators:["notEmpty()"], element: "#other2"},
-
-    {type: "string", name: "username", placeholder: "Username", element: "#user"},
-
-    {type: "email", name: "email", placeholder: "Email", element: "#email"},
-    {type: "password", name: "password", placeholder: "Password", element: "#email"},
-    {type: "confirm-password", name: "confirm", placeholder: "Confirm Password", element: "#email"},
-  ],
-  remote: {
-    validate: {method: "PUT", url: "/test"},
-    submit: {method: "POST", url: "/test"},
-  },
-  onSuccess(data, status, xhr) {
-    console.log(data);
-    console.log(xhr);
-    console.log(status);
-  },
-  onFail(xhr, status) {
-    console.log(xhr);
-    console.log(status);
-  },
+      onFail(xhr, status) {
+        try {
+          var error = xhr.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+        M.toast({html: error});
+      }
+    });
   });
-
-  function validate_dob(val) {
-    return [0, "this is a test that there is data here"]
-  }
-});
-
-
-
-//   $(document).ready(function(){
-//
-
-//
-//
-//     $(window).resize(function(e) {
-//       decide_form_card(".mobile-form");
-//     });
-//
-//
-// });
-  // document.addEventListener("DOMContentLoaded', function(e) {
-  //   FormValidation.formValidation(
-  //     document.getElementById('login'), {
-  //       fields: {
-  //         identifier: {
-  //           validators: {
-  //             notEmpty: {
-  //               message: 'field is required'
-  //             },
-  //             stringLength: {
-  //               min: 3,
-  //               max: 30,
-  //               message: 'Field must be between 3 and 30 characters'
-  //             }
-  //           }
-  //         },
-  //         password: {
-  //           validators: {
-  //             notEmpty: {
-  //               message: 'field is required'
-  //             }
-  //           }
-  //         },
-  //       },
-  //       plugins: {
-  //         trigger: new FormValidation.plugins.Trigger(),
-  //         bootstrap: new FormValidation.plugins.Bootstrap(),
-  //         submitButton: new FormValidation.plugins.SubmitButton(),
-  //       },
-  //     }
-  //   ).on('core.form.valid', function() {
-  //     console.log($('#login').jsonString())
-  //     console.log($('#login').jsonString())
-  //     $.ajax({
-  //       accept: 'application/json',
-  //       contentType: 'application/json',
-  //       type: "POST",
-  //       url: "{{ url_for('UserAuthenticationView:login_post') }}",
-  //       data: $('#login').jsonString()
-  //     }).done(function(data, status, jqXHR) {
-  //       window.location.replace(data.redirect);
-  //     }).fail(function(data, status, jqXHR) {
-  //       try {
-  //         var error = data.responseJSON.error_msg;
-  //       } catch (err) {
-  //         var error = "Server Error, Try again.";
-  //       }
-  //
-  //       $.toast({
-  //         text: error,
-  //         heading: 'Error!',
-  //         icon: 'error',
-  //         showHideTransition: 'slide',
-  //         allowToastClose: false,
-  //         hideAfter: 3000,
-  //         stack: 5,
-  //         position: 'top-center',
-  //         textAlign: 'left',
-  //         loader: true,
-  //         beforeShow: function() {},
-  //         afterShown: function() {},
-  //         beforeHide: function() {},
-  //         afterHidden: function() {}
-  //       });
-  //     });
-  //   });
-  // });
-  //
-  // document.addEventListener('DOMContentLoaded', function() {
-  //   var elems = document.querySelectorAll('.datepicker');
-  //   var instances = M.Datepicker.init(elems, options);
-  // });
-  //
-  // // Or with jQuery
-  //
-  // $(document).ready(function() {
-  //   $('.datepicker').datepicker();
-  // });
 </script>
 {% endblock scripts %}
