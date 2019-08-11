@@ -13,20 +13,18 @@ var formGen = function(formId, settings) {
   this.init();
 }
 
-// formGen.prototype = function () {
-//
-// };
-
 formGen.prototype = {
   init() {
     this.formEle = $(this.formId);
     this.generateForm();
     this.registerEvents();
+    this.validationMethods.root = this;
   },
 
   generateForm() {
     var root = this;
     this.settings.form.forEach(function(formField) {
+
       // assign random id (screw you auto correct!)
       if (formField.hasOwnProperty("noHash") && formField.noHash == true) {
         formField.id = formField.name;
@@ -39,27 +37,31 @@ formGen.prototype = {
       switch (formField.type) {
         case "string":
           formField.html = root.createStringInput(formField, "text");
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           break;
         case "password":
           formField.html = root.createStringInput(formField, "password");
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
+          break;
+        case "confirm-password":
+          formField.html = root.createStringInput(formField, "password");
+          root.addToForm(formField);
           break;
         case "email":
           formField.html = root.createStringInput(formField, "text");
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           break;
         case "integer":
           formField.html = root.createIntegerInput(formField);
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           break;
         case "float":
           formField.html = root.createFloatInput(formField);
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           break;
         case "date":
           formField.html = root.createDateInput(formField);
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           if (formField.hasOwnProperty("value")) {
             set_date = new Date(formField.value);
             $(`#${formField.id}_year`).val(set_date.getFullYear());
@@ -74,13 +76,25 @@ formGen.prototype = {
           break;
         case "select":
           formField.html = root.createSelectInput(formField);
-          root.formEle.append(formField.html);
+          root.addToForm(formField);
           $(`#${formField.id}`).formSelect();
           break;
         default:
           console.error(`field type not defined ${formField.type}`);
       }
     });
+  },
+
+  addToForm(field) {
+    if (field.hasOwnProperty("element")) {
+      $(field.element).append(field.html);
+    } else {
+      if (!$("#formElements").length) {
+        this.formEle.prepend($("<div id='formElements'></div>"));
+      }
+      console.log(field.html);
+      $("#formElements").append(field.html);
+    }
   },
 
   generateUUID() {
@@ -94,11 +108,10 @@ formGen.prototype = {
 
 
   createStringInput(formField, type) {
-    console.log(formField)
     element = $(`
       <div class="row">
         <div class="input-field col s12">
-          <input id="${formField.id}" autocomplete="${formField.autocomplete}" type="${type}">
+          <input id="${formField.id}" autocomplete="${formField.autocomplete}" type="${type}" autocorrect="off" autocapitalize="off">
           <label for="${formField.id}">${formField.placeholder}</label>
         </div>
       </div>
@@ -128,8 +141,8 @@ formGen.prototype = {
 
     // generate months
     var months = "";
-    for (var i = 1; i != 13; i++) {
-      month = new Date(`${i}-01-1970`).toLocaleString('default', {
+    for (var i = 1; i < 13; i++) {
+      month = new Date(`1970-${i}-02`).toLocaleString('default', {
         month: 'long'
       });
       months += `<option value="${i}">${month}</option>`
@@ -175,7 +188,6 @@ formGen.prototype = {
   },
 
   createFloatInput(formField) {
-    console.log(formField)
     element = $(`
       <div class="row">
         <div class="input-field col s12">
@@ -239,8 +251,22 @@ formGen.prototype = {
       }
 
       // validate form
-      root.validateForm();
+      root.validateForm(ref);
     })
+
+    this.formEle.on("submit", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (root.validateForm() != 0) {
+        root.lockSubmit();
+      }
+
+      console.log(root.settings.form);
+    })
+  },
+
+  lockSubmit() {
+    this.formEle.find("button[type='submit']").attr("disabled", "");
   },
 
   dateAddDays(ref, month = undefined) {
@@ -267,11 +293,12 @@ formGen.prototype = {
     this.pullField(ref).value = `${year}-${month}-${day}`;
   },
 
-  pullField(field) {
+  pullField(field, strict=true) {
     // this should be a promise
     var res = undefined;
     this.settings.form.forEach(function(formField) {
-      if (formField.name == field && ((formField.hasOwnProperty("noHash") && formField.noHash == true))) {
+      passName  = strict ? ((formField.hasOwnProperty("noHash") && formField.noHash == true)) : true;
+      if (formField.name == field && passName) {
         res = formField
       } else if (formField.id == field) {
         res = formField
@@ -280,55 +307,52 @@ formGen.prototype = {
     return res;
   },
 
-  validateForm() {
+  validateForm(field=null) {
     var root = this;
-    this.settings.form.forEach(function(field) {
+    var total_errors = 0;
+    var fieldArray = [];
+
+    if (field == null) {
+      fieldArray = this.settings.form;
+    } else {
+      fieldArray.push(root.pullField(field));
+      console.log(fieldArray)
+    }
+
+    fieldArray.forEach(function(field) {
       if($(`#${field.id}`).attr("id") === undefined && field.type != "date") {
         console.error(`(${field.name})#${field.id} has not been created!`);
       } else if(field.type == "date" && $(`#${field.id}_year`).attr("id") === undefined) {
         console.error(`(${field.name})#${field.id} has not been created!`);
       }
 
-      // set value for validators
+      // set value for validators and scoped global
+      var res = true;
+      var errors = 0;
       root.validationMethods.value = field.value;
 
       // general validation for types
-      var errors = 0;
-
       switch (field.type) {
         case 'float':
-          res = root.validationMethods.isFloat()
-          if (res[0] == 0) {
-            errors++;
-            root.attachError(field, res[1]);
-          }
+          res = root.validationMethods.isFloat();
           break;
         case 'integer':
-          res = root.validationMethods.isInteger()
-          if (res[0] == 0) {
-            errors++;
-            root.attachError(field, res[1]);
-          }
+          res = root.validationMethods.isInteger();
           break;
         case 'email':
-        console.log("we get in here here here");
-          res = root.validationMethods.isEmail()
-          if (res[0] == 0) {
-            errors++;
-            root.attachError(field, res[1]);
-          }
+          res = root.validationMethods.isEmail();
           break;
-
+        case 'confirm-password':
+          res = root.validationMethods.sameAs("password");
+          break;
       }
 
-      if (errors == 0) {
-        root.validField(field);
+      if (res != true && res[0] == 0) {
+        errors++;
+        root.attachError(field, res[1]);
       }
 
-      // user defined validators
       if (field.hasOwnProperty("validators")) {
-        var res = undefined;
-
         field.validators.forEach(function(val_func) {
           if (typeof val_func === 'string') {
             // this is a default validator
@@ -337,18 +361,22 @@ formGen.prototype = {
             res = val_func.call(field.value);
           }
 
-          if (res[0] == 0 && errors == 0) {
+          if (res[0] == 0) {
             errors++;
             root.attachError(field, res[1]);
           }
         });
       }
 
-      // clear erros if needed
+      // clear errors if needed
       if (errors == 0) {
         root.validField(field);
+      } else {
+        total_errors+=errors;
       }
     })
+
+    return total_errors;
   },
 
   attachError(field, error) {
@@ -358,6 +386,7 @@ formGen.prototype = {
       case 'integer':
       case 'float':
       case 'email':
+      case 'confirm-password':
         $(`#${field.id}`).parent().find("span[class='helper-text']").remove();
         $(`label[for="${field.id}"]`).after(`<span class="helper-text" data-error="${error}"></span>`);
         $(`#${field.id}`).removeClass("valid").addClass("invalid");
@@ -370,7 +399,6 @@ formGen.prototype = {
         break;
 
       case 'date':
-        console.log(field);
         $(`#${field.id}_year`).parentsUntil(".row").find("span[class='helper-text']").remove();
         $(`label[for="${field.id}_year"]`).after(`<span class="helper-text" style="position: relative; overflow: auto; width: calc(100% * 4);" data-error="${error}"></span>`);
         $(`#${field.id}_year`).parentsUntil(".row").removeClass("valid").addClass("invalid");
@@ -387,6 +415,7 @@ formGen.prototype = {
       case 'integer':
       case 'float':
       case 'email':
+      case 'confirm-password':
         $(`#${field.id}`).parent().find("span[class='helper-text']").remove();
         $(`#${field.id}`).removeClass("invalid").addClass("valid");
         break;
@@ -468,6 +497,17 @@ formGen.prototype = {
       }
       if (/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i.test(this.value) == false) {
         return [0, "Email is invalid."];
+      }
+      return [1, ""];
+    },
+    sameAs(field) {
+      notEmptyRes = this.notEmpty();
+      if (notEmptyRes[0] == 0) {
+        return notEmptyRes;
+      }
+      compairField = this.root.pullField(field, false);
+      if (compairField.value != this.value) {
+        return [0, `This field doesn't match the ${compairField.name} field.`];
       }
       return [1, ""];
     }

@@ -39,6 +39,12 @@
       <div class="col s12 mobile-form">
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <form id="test" autocomplete="false">
+            <div class="row mb-0">
+              <button class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" type="submit">Login</button>
+              <div class="col s12 mt-4 center-align">
+                <a class="black-text text-lighten-3" href="http://materializecss.com">Forgot password?</a>
+              </div>
+            </div>
           </form>
           <!-- <form method="post">
 
@@ -76,7 +82,7 @@
 
 
 <!-- Modal Structure -->
-<div id="modal1" class="modal bottom-sheet">
+<!-- <div id="modal1" class="modal bottom-sheet">
   <div class="modal-content">
     <h4>Modal Header</h4>
     <p>A bunch of text</p>
@@ -84,7 +90,7 @@
   <div class="modal-footer">
     <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
   </div>
-</div>
+</div> -->
 
 
 {% endblock content %}
@@ -108,7 +114,7 @@ $(document).ready(function() {
 
     {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}], validators:["notEmpty()"]},
 
-    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", value:"1994-09-16", validators:["notEmpty()"]},
+    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", validators:["notEmpty()"]},
 
     {type: "string", name: "username", placeholder: "Username"},
 
