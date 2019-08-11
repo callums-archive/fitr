@@ -92,7 +92,6 @@ formGen.prototype = {
       if (!$("#formElements").length) {
         this.formEle.prepend($("<div id='formElements'></div>"));
       }
-      console.log(field.html);
       $("#formElements").append(field.html);
     }
   },
@@ -235,9 +234,13 @@ formGen.prototype = {
     var ignored = ["year", "month", "day"];
 
     this.formEle.on("change keyup", function(e) {
+      // ref for date
       var ref = e.target.id.substring(0, (e.target.id.length - e.target.id.split("_").pop().length) - 1);
+
       if (!ignored.includes(e.target.id.split("_").pop())) {
+        // set the valus and the "basic ref" for other fields (this is mainly for validation)
         root.pullField(e.target.id).value = e.target.value
+        ref = e.target.id;
       }
 
       // add days to day select
@@ -252,21 +255,36 @@ formGen.prototype = {
 
       // validate form
       root.validateForm(ref);
+
+      // try to unlock submit button
+      if (root.submitStatus == false && root.validateForm() == 0) {
+        root.unlockSubmit();
+      }
     })
 
     this.formEle.on("submit", function(e) {
       e.preventDefault();
       e.stopPropagation();
-      if (root.validateForm() != 0) {
-        root.lockSubmit();
-      }
 
-      console.log(root.settings.form);
+      if (root.validateForm() != 0) {
+        $("html, body").animate({
+          scrollTop: 0
+        }, "slow");
+        root.lockSubmit();
+      } else {
+        // this is where we can send run the submission routine!
+      }
     })
   },
 
   lockSubmit() {
+    this.submitStatus = false;
     this.formEle.find("button[type='submit']").attr("disabled", "");
+  },
+
+  unlockSubmit() {
+    this.submitStatus = true;
+    this.formEle.find("button[type='submit']").removeAttr("disabled");
   },
 
   dateAddDays(ref, month = undefined) {
@@ -293,11 +311,11 @@ formGen.prototype = {
     this.pullField(ref).value = `${year}-${month}-${day}`;
   },
 
-  pullField(field, strict=true) {
+  pullField(field, strict = true) {
     // this should be a promise
     var res = undefined;
     this.settings.form.forEach(function(formField) {
-      passName  = strict ? ((formField.hasOwnProperty("noHash") && formField.noHash == true)) : true;
+      passName = strict ? ((formField.hasOwnProperty("noHash") && formField.noHash == true)) : true;
       if (formField.name == field && passName) {
         res = formField
       } else if (formField.id == field) {
@@ -307,29 +325,31 @@ formGen.prototype = {
     return res;
   },
 
-  validateForm(field=null) {
+  validateForm(fieldValidate = null) {
     var root = this;
     var total_errors = 0;
     var fieldArray = [];
 
-    if (field == null) {
+    if (fieldValidate == null) {
       fieldArray = this.settings.form;
     } else {
-      fieldArray.push(root.pullField(field));
-      console.log(fieldArray)
+      fieldArray.push(root.pullField(fieldValidate));
     }
 
     fieldArray.forEach(function(field) {
-      if($(`#${field.id}`).attr("id") === undefined && field.type != "date") {
+      if ($(`#${field.id}`).attr("id") === undefined && field.type != "date") {
         console.error(`(${field.name})#${field.id} has not been created!`);
-      } else if(field.type == "date" && $(`#${field.id}_year`).attr("id") === undefined) {
+      } else if (field.type == "date" && $(`#${field.id}_year`).attr("id") === undefined) {
         console.error(`(${field.name})#${field.id} has not been created!`);
       }
 
       // set value for validators and scoped global
       var res = true;
       var errors = 0;
+
       root.validationMethods.value = field.value;
+      root.validationMethods.id = field.id;
+      root.validationMethods.name = field.name;
 
       // general validation for types
       switch (field.type) {
@@ -354,11 +374,14 @@ formGen.prototype = {
 
       if (field.hasOwnProperty("validators")) {
         field.validators.forEach(function(val_func) {
-          if (typeof val_func === 'string') {
-            // this is a default validator
-            res = eval(`root.validationMethods.${val_func}`);
-          } else {
-            res = val_func.call(field.value);
+          canContinue = ((fieldValidate != null && errors == 0) || (fieldValidate == null)) ? true : false;
+          if (canContinue) {
+            if (typeof val_func === 'string') {
+              // this is a default validator
+              res = eval(`root.validationMethods.${val_func}`);
+            } else {
+              res = val_func.call(field.value);
+            }
           }
 
           if (res[0] == 0) {
@@ -372,14 +395,14 @@ formGen.prototype = {
       if (errors == 0) {
         root.validField(field);
       } else {
-        total_errors+=errors;
+        total_errors += errors;
       }
     })
 
     return total_errors;
   },
 
-  attachError(field, error) {
+  attachError: function(field, error) {
     switch (field.type) {
       case 'string':
       case 'password':
@@ -510,6 +533,35 @@ formGen.prototype = {
         return [0, `This field doesn't match the ${compairField.name} field.`];
       }
       return [1, ""];
+    },
+    remote() {
+      var request_method = this.root.settings.remote.validate.method;
+      var validate_url = this.root.settings.remote.validate.url
+
+      var formData = {}
+      formData[this.name] = this.value;
+
+      var currentField = this.root.pullField(this.id, false);
+
+      var local_root = this;
+
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: request_method,
+        url: validate_url,
+        data: JSON.stringify(formData),
+      }).done(function(data, status, jqXHR) {
+        if (data[0] == 0) {
+          local_root.root.attachError(currentField, data[1]);
+        } else if(data[0] == 1) {
+          local_root.root.validField(currentField)
+        }
+      }).fail(function(data, status, jqXHR) {
+        local_root.root.attachError(currentField, "Server Error. Try again.");
+      })
+
+      return [0, "Processing data..."];
     }
   }
 };

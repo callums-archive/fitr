@@ -46,6 +46,9 @@ app.config.from_json('frontend.json')
 # mongo
 db = MongoEngine(app)
 
+#TODO XXX remove
+from flask import jsonify
+
 # mongo for session
 app.session_interface = MongoEngineSessionInterface(db)
 
@@ -76,3 +79,8 @@ def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
     return redirect(url_for('UserAuthenticationView:login_get'))
+
+#TODO XXX remove
+@app.route('/test', methods=['PUT', 'GET'])
+def tuneit():
+    return jsonify([0, "fuck off!"])

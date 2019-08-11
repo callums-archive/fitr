@@ -28,17 +28,42 @@
   </div>
 </nav>
 
-<div class="valign-wrapper">
-  <div class="form-width">
+<!-- <div class="valign-wrapper"> -->
+  <!-- <div class="form-width"> -->
+  <div class="container">
     <div class="row">
 
       <div class="col s12">
         <h5 class="center-align"><i class="far fa-user"></i> Login</h5>
       </div>
 
-      <div class="col s12 mobile-form">
-        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+      <!-- <div class="col s12 mobile-form"> -->
+        <div class="col s12">
           <form id="test" autocomplete="false">
+
+            <div class="row">
+              <div class="col s12 m6 mobile-form">
+                <div class="card-panel {{ colours['primary_card'] }}" id="user">
+                </div>
+              </div>
+              <div class="col s12 m6 mobile-form">
+                <div class="card-panel {{ colours['primary_card'] }}" id="email">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 m6 mobile-form">
+                <div class="card-panel {{ colours['primary_card'] }}" id="other1">
+                </div>
+              </div>
+              <div class="col s12 m6 mobile-form">
+                <div class="card-panel {{ colours['primary_card'] }}" id="other2">
+                </div>
+              </div>
+            </div>
+
+
             <div class="row mb-0">
               <button class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" type="submit">Login</button>
               <div class="col s12 mt-4 center-align">
@@ -46,6 +71,7 @@
               </div>
             </div>
           </form>
+          </div>
           <!-- <form method="post">
 
             <div class="row">
@@ -70,14 +96,14 @@
             </div>
 
           </form> -->
-        </div>
-      </div>
+      <!-- </div> -->
 
       <div class="col s12">
         <p class="mt-4 center-align text-darken-2">&copy; <script>document.write(new Date().getFullYear())</script> CatByte Software</p>
       </div>
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
+</div>
 </div>
 
 
@@ -107,21 +133,25 @@ $(document).ready(function() {
 
   new formGen("#test", {
     form: [
-    {type: "string", noHash: false,  name: "first_name", placeholder: "First Name(s)", validators:["strMin(5)"]},
-    {type: "string", name: "surname", placeholder: "Surname"},
-    {type: "float", name: "ft5", placeholder: "float", validators:["notEmpty()"]},
-    {type: "integer", name: "in5", placeholder: "integer"},
+    {type: "string", noHash: false,  name: "first_name", placeholder: "First Name(s)", validators:["strMin(5)", "remote()"], element: "#user"},
+    {type: "string", name: "surname", placeholder: "Surname", element: "#user"},
+    {type: "float", name: "ft5", placeholder: "float", validators:["notEmpty()"], element: "#other1"},
+    {type: "integer", name: "in5", placeholder: "integer", element: "#other1"},
 
-    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}], validators:["notEmpty()"]},
+    {type: "select", name: "gender", placeholder: "Gender", options: [{name: "Female", value: "female"}, {name: "Male", value: "male"}], validators:["notEmpty()"], element: "#other2"},
 
-    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", validators:["notEmpty()"]},
+    {type: "date", name: "date_of_birth", placeholder: "Date of Birth", validators:["notEmpty()"], element: "#other2"},
 
-    {type: "string", name: "username", placeholder: "Username"},
+    {type: "string", name: "username", placeholder: "Username", element: "#user"},
 
-    {type: "email", name: "email", placeholder: "Email"},
-    {type: "password", name: "password", placeholder: "Password"},
-    {type: "confirm-password", name: "confirm", placeholder: "Confirm Password"},
-    ]
+    {type: "email", name: "email", placeholder: "Email", element: "#email"},
+    {type: "password", name: "password", placeholder: "Password", element: "#email"},
+    {type: "confirm-password", name: "confirm", placeholder: "Confirm Password", element: "#email"},
+  ],
+  remote: {
+    validate: {method: "PUT", url: "/test"},
+    submit: {method: "POST", url: "/test"},
+  }
   });
 
   function validate_dob(val) {
