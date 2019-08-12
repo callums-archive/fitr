@@ -18,13 +18,16 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <!-- fitr main css -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='fitr.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}">
 
         <!-- font awesome -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
 
         <!-- busy loader js css -->
         <link rel="stylesheet" href="{{ url_for('static', filename='jquery-busy-load/busyloader.min.css') }}">
+
+        <!-- morris js -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='morrisjs/morris.css') }}">
 
         <style>
           .no-js #loader { display: none;  }
@@ -52,9 +55,9 @@
           input[type=number]:not(.browser-default):focus:not([readonly]),
           input[type=search]:not(.browser-default):focus:not([readonly]),
           textarea.materialize-textarea:focus:not([readonly]) {
-            border-bottom: 1px solid {{ colours['input'] }};
-            -webkit-box-shadow: 0 1px 0 0 {{ colours['input'] }};
-                    box-shadow: 0 1px 0 0 {{ colours['input'] }};
+            border-bottom: 1px solid "{{ colours['input'] }}";
+            -webkit-box-shadow: 0 1px 0 0 "{{ colours['input'] }}";
+                    box-shadow: 0 1px 0 0 "{{ colours['input'] }}";
           }
 
           input:not([type]):focus:not([readonly]):not(.invalid):not(.valid) + label,
@@ -70,16 +73,16 @@
           input[type=number]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
           input[type=search]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
           textarea.materialize-textarea:focus:not([readonly]):not(.invalid):not(.valid) + label {
-            color: {{ colours['input'] }};
+            color: "{{ colours['input'] }}";
           }
 
           .select-wrapper input.select-dropdown:focus {
-            border-bottom: 1px solid {{ colours['input'] }};
+            border-bottom: 1px solid "{{ colours['input'] }}";
           }
 
           .dropdown-content li > a, .dropdown-content li > span {
             font-size: 16px;
-            color: {{ colours['input'] }};
+            color: "{{ colours['input'] }}";
             display: block;
             line-height: 22px;
             padding: 14px 16px;
@@ -107,16 +110,20 @@
         <script src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
 
         <!-- font awesome -->
-        <script src="{{ url_for('static', filename='fa/js/all.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='fontawesome/js/all.min.js') }}"></script>
 
         <!-- fitr main js -->
-        <script src="{{ url_for('static', filename='fitr.js') }}"></script>
+        <script src="{{ url_for('static', filename='app/fitr.js') }}"></script>
 
         <!-- busy loader js -->
         <script src="{{ url_for('static', filename='jquery-busy-load/busyloader.min.js') }}"></script>
 
         <!-- form generator -->
         <script src="{{ url_for('static', filename='materializeFormMapper/materializeFormMapper.js') }}"></script>
+
+        <!-- morris js -->
+        <script src="{{ url_for('static', filename='raphaeljs/raphael.js') }}"></script>
+        <script src="{{ url_for('static', filename='morrisjs/morris.min.js') }}"></script>
 
         <script>
         $(window).on('load', function() {

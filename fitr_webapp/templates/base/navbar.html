@@ -48,21 +48,23 @@
   {% endfor %}
 {%- endmacro %}
 
-<nav>
-  <div class="nav-wrapper {{ colours['nav'] }}">
-    <a href="{{ url_for('DashboardView:index') }}" class="left brand-logo">
-      <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
-    </a>
+<ul id="mobile-nav" class="sidenav">
+  {{ gen_mobile_main() }}
+</ul>
 
-    <ul id="mobile-nav" class="sidenav">
-      {{ gen_mobile_main() }}
-    </ul>
-    <ul class="right">
-      <li><a href="#" data-target="mobile-nav" class="right sidenav-trigger"><i class="material-icons">menu</i></a></li>
-    </ul>
-    <ul class="right hide-on-med-and-down">
-      {{ gen_menu_main() }}
-    </ul>
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper {{ colours['nav'] }}">
+      <a href="{{ url_for('DashboardView:index') }}" class="left brand-logo">
+        <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
+      </a>
+      <ul class="right">
+        <li><a href="#" data-target="mobile-nav" class="right sidenav-trigger"><i class="material-icons">menu</i></a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        {{ gen_menu_main() }}
+      </ul>
 
-  </div>
-</nav>
+    </div>
+  </nav>
+</div>

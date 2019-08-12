@@ -1,0 +1,67 @@
+/* basic stuff */
+html, body {
+    height: 100%;
+}
+
+/* Logo stuff */
+.brand-logo img {
+    height: 64px;
+}
+
+@media only screen and (max-width: 600px) {
+  .brand-logo img {
+      height: 54px;
+  }
+}
+
+/* import font */
+@font-face {
+  font-family: roboto-mono;
+  src: url("/static/fonts/RobotoMono-Light.ttf");
+}
+
+.priamry_font {
+    font-family: roboto-mono;
+}
+
+/* nav stuff */
+.nav-fa {
+  float: left;
+  height: auto;
+  line-height: 48px;
+  margin: 0 32px 0 0;
+  width: 24px;
+  color: rgba(0,0,0,0.54);
+}
+
+.sidenav .nav-fa {
+  float: left;
+  height: 45px;
+  line-height: 48px;
+  margin: 0 32px 0 0;
+  width: 24px;
+  color: rgba(0,0,0,0.54);
+}
+
+/* card same height */
+@media screen and (min-width: 600px) {
+  .row-flex { display: flex; }
+  .row-flex .card-panel {
+    min-height: 100%
+  }
+}
+
+/* contaier and row stuff */
+.cont-margin {
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+
+.row {
+  margin-bottom: 0 !important;
+}
+@media screen and (min-width: 600px) {
+  .row {
+    margin-bottom: 20px !important;
+  }
+}
