@@ -2,6 +2,7 @@
   "DEBUG" : true,
   "TESTING" : false,
   "SECRET_KEY":"waggaChugga123",
+  "SEND_FILE_MAX_AGE_DEFAULT": 0,
   "MONGODB_SETTINGS": {
     "MONGODB_DB": "fitr"
   }

@@ -6,11 +6,13 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
+        <meta name="apple-mobile-web-app-status-bar-style" content="{{ colours['browser_theme'] }}">
         <meta name="theme-color" content="{{ colours['browser_theme'] }}">
 
         <!-- favicon -->
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ico.png') }}">
         <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
+        <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
 
         <!-- materialize -->
         <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
@@ -28,6 +30,9 @@
 
         <!-- morris js -->
         <link rel="stylesheet" href="{{ url_for('static', filename='morrisjs/morris.css') }}">
+
+        <!-- datatables -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}">
 
         <style>
           .no-js #loader { display: none;  }
@@ -124,6 +129,10 @@
         <!-- morris js -->
         <script src="{{ url_for('static', filename='raphaeljs/raphael.js') }}"></script>
         <script src="{{ url_for('static', filename='morrisjs/morris.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='morrisjs/dynamicCharts.js') }}"></script>
+
+        <!-- datatables -->
+        <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
 
         <script>
         $(window).on('load', function() {

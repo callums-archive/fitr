@@ -43,6 +43,17 @@ html, body {
   color: rgba(0,0,0,0.54);
 }
 
+
+/* sidenav fixes */
+.sidenav .collapsible-header, .sidenav.fixed .collapsible-header {
+  height: auto !important;
+}
+
+.sidenav li>a {
+  display: inline-block !important;
+  width: 100% !important;
+}
+
 /* card same height */
 @media screen and (min-width: 600px) {
   .row-flex { display: flex; }

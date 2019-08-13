@@ -1,4 +1,9 @@
 {% set menu_items = [
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+
   {"name": '<i class="material-icons left">group</i>Clients', "ref": "clients", "permission": "pt_clients", "children": [
     {"name":'<i class="fas fa-weight nav-fa fa-lg left"></i> Capture', "url": url_for('PTCaptureView:index')},
   ]},
@@ -6,7 +11,8 @@
   {"name": '<i class="material-icons left">account_circle</i>' + user().first_name, "ref": "user", "permission": "user", "children": [
     {"name": '<i class="fas fa-user-ninja nav-fa fa-lg left"></i> Profile', "url": "#"},
     {"name": '<i class="fas fa-power-off nav-fa fa-lg left"></i>Logout', "url": url_for('UserAuthenticationView:logout')},
-  ]}
+  ]},
+
 
 ] %}
 
@@ -48,23 +54,27 @@
   {% endfor %}
 {%- endmacro %}
 
-<ul id="mobile-nav" class="sidenav">
-  {{ gen_mobile_main() }}
-</ul>
-
 <div class="navbar-fixed">
   <nav>
     <div class="nav-wrapper {{ colours['nav'] }}">
+
       <a href="{{ url_for('DashboardView:index') }}" class="left brand-logo">
         <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
       </a>
+
       <ul class="right">
         <li><a href="#" data-target="mobile-nav" class="right sidenav-trigger"><i class="material-icons">menu</i></a></li>
-      </ul>
-      <ul class="right hide-on-med-and-down">
-        {{ gen_menu_main() }}
+        <div class="hide-on-med-and-down">
+          {{ gen_menu_main() }}
+        </div>
       </ul>
 
     </div>
   </nav>
 </div>
+
+<aside>
+  <ul id="mobile-nav" class="sidenav">
+    {{ gen_mobile_main() }}
+  </ul>
+</aside>

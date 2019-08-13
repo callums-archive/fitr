@@ -15,49 +15,111 @@
       <div class="card-panel {{ colours['primary_card'] }} p-2">
         <h6 class="center">Weight Table (Latest 5)</h6>
         <div class="divider"></div>
-        <table class="responsive-table highlight" style="height: 100%">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Item Name</th>
-              <th>Item Price</th>
-              <th>Item Prsdfsdfice</th>
-            </tr>
-          </thead>
+        <div class="encase_datatable">
+          <table id="example" class="display" style="width:100%; height: 100%">
+                  <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Position</th>
+                          <th>Office</th>
+                          <th>Age</th>
+                          <th>Start date</th>
+                          <th>Salary</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Tiger Nixon</td>
+                          <td>System Architect</td>
+                          <td>Edinburgh</td>
+                          <td>61</td>
+                          <td>2011/04/25</td>
+                          <td>$320,800</td>
+                      </tr>
+                      <tr>
+                          <td>Garrett Winters</td>
+                          <td>Accountant</td>
+                          <td>Tokyo</td>
+                          <td>63</td>
+                          <td>2011/07/25</td>
+                          <td>$170,750</td>
+                      </tr>
+                      <tr>
+                          <td>Ashton Cox</td>
+                          <td>Junior Technical Author</td>
+                          <td>San Francisco</td>
+                          <td>66</td>
+                          <td>2009/01/12</td>
+                          <td>$86,000</td>
+                      </tr>
+                      <tr>
+                          <td>Cedric Kelly</td>
+                          <td>Senior Javascript Developer</td>
+                          <td>Edinburgh</td>
+                          <td>22</td>
+                          <td>2012/03/29</td>
+                          <td>$433,060</td>
+                      </tr>
+                      <tr>
+                          <td>Cedric Kelly</td>
+                          <td>Senior Javascript Developer</td>
+                          <td>Edinburgh</td>
+                          <td>22</td>
+                          <td>2012/03/29</td>
+                          <td>$433,060</td>
+                      </tr>
+                  </tbody>
+              </table>
+          <!-- <table class="responsive-table highlight" style="height: 100%">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Item Name</th>
+                <th>Item Price</th>
+                <th>Item Prsdfsdfice</th>
+                <th>Item Prsdfsdfice</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr>
-              <td>Alvin</td>
-              <td>Eclair</td>
-              <td>$0.87</td>
-              <td>$0.87</td>
-            </tr>
-            <tr>
-              <td>Alan</td>
-              <td>Jellybean</td>
-              <td>$0.87</td>
-              <td>$3.76</td>
-            </tr>
-            <tr>
-              <td>Jonathan</td>
-              <td>Lollipop</td>
-              <td>$0.87</td>
-              <td>$7.00</td>
-            </tr>
-            <tr>
-              <td>Jonathan</td>
-              <td>Lollipop</td>
-              <td>$0.87</td>
-              <td>$7.00</td>
-            </tr>
-            <tr>
-              <td>Jonathan</td>
-              <td>Lollipop</td>
-              <td>$0.87</td>
-              <td>$7.00</td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr>
+                <td>Alvin</td>
+                <td>Eclair</td>
+                <td>$0.87</td>
+                <td>$0.87</td>
+                <td>$0.87</td>
+              </tr>
+              <tr>
+                <td>Alan</td>
+                <td>Jellybean</td>
+                <td>$0.87</td>
+                <td>$0.87</td>
+                <td>$3.76</td>
+              </tr>
+              <tr>
+                <td>Jonathan</td>
+                <td>$0.87</td>
+                <td>Lollipop</td>
+                <td>$0.87</td>
+                <td>$7.00</td>
+              </tr>
+              <tr>
+                <td>Jonathan</td>
+                <td>Lollipop</td>
+                <td>$0.87</td>
+                <td>$0.87</td>
+                <td>$7.00</td>
+              </tr>
+              <tr>
+                <td>Jonathan</td>
+                <td>Lollipop</td>
+                <td>$0.87</td>
+                <td>$0.87</td>
+                <td>$7.00</td>
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
       </div>
     </div>
 
@@ -132,7 +194,17 @@
 {% block scripts %}
 <script>
   $(document).ready(function() {
-    new Morris.Bar({
+
+    $('#example').DataTable( {
+      "paging": false,
+      "info": false,
+      "responsive": true,
+      "lengthChange": false,
+      "filter":false,
+        "order": [[ 3, "desc" ]]
+    } );
+    $("select[name='example_length']").formSelect();
+    bar = new Morris.Bar({
       // ID of the element in which to draw the chart.
       element: 'myfirstchart',
       // Chart data records -- each entry in this array corresponds to a point on
@@ -169,10 +241,13 @@
       resize: true,
       redraw: true,
       hideHover: 'auto',
+    //   hoverCallback: function(index, options, content) {
+    //     alert(content);
+    // },
 
     });
 
-    Morris.Area({
+    area = new Morris.Area({
       element: 'hero-area',
       data: [{
           period: '2010 Q1',
@@ -244,8 +319,8 @@
       redraw: true,
     });
 
-    $("#hero-area").find("svg").css("maxHeight", `${(parseInt($("#hero-area").css("height")) - 10)}px`)
-    $("#myfirstchart").find("svg").css("maxHeight", `${(parseInt($("#myfirstchart").css("height")) - 10)}px`)
-  })
+    dynamicChart(bar, ".encase_datatable");
+    dynamicChart(area, "#hero-area");
+  });
 </script>
 {% endblock scripts %}
