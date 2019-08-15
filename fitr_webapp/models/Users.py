@@ -3,7 +3,8 @@ from flask_mongoengine import MongoEngine
 from mongoengine.queryset.visitor import Q
 from flask import (
     request,
-    session
+    session,
+    abort,
 )
 
 # std
@@ -23,6 +24,7 @@ from fitr_webapp.system.session import set_session, is_loggedin, get_current_use
 import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
 from fitr_webapp.system.ip import get_ip
+from fitr_webapp.system.acls import decide_context_acl
 
 # Docuements
 from .UserDocuments import (
@@ -59,6 +61,8 @@ class Users(db.Document):
     weight = db.ListField(db.EmbeddedDocumentField(Weight))
     fitness_tests = db.ListField(db.EmbeddedDocumentField(FitnessTests))
     auth_sessions = db.ListField(db.EmbeddedDocumentField(AuthSessions))
+
+    trainers = db.ListField(db.ReferenceField("Users"))
 
     @property
     def full_name(self):
@@ -139,6 +143,15 @@ class Users(db.Document):
             user.save()
             return True
         raise DBError("Invalid login credentials.")
+
+    @classmethod
+    def serve_context(cls, username):
+        user = cls.by_username(username)
+        if user is None:
+            abort(404)
+        if decide_context_acl([user, user.trainers], True):
+            return user
+        return abort(403)
 
     def logout(self):
         for auth_session in self.auth_sessions:

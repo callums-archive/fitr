@@ -3,7 +3,8 @@ from flask import (
     Flask,
     render_template,
     redirect,
-    url_for
+    url_for,
+    request
 )
 
 # mongo
@@ -75,3 +76,10 @@ def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
     return redirect(url_for('UserAuthenticationView:login_get'))
+
+@app.before_request
+def before_req():
+    if is_loggedin():
+        request.user = get_current_user()
+    else:
+        request.user = None

@@ -89,7 +89,8 @@
       },
 
       onSuccess(data, status, xhr) {
-        window.location.replace(data.redirect)
+        $("#login").find("button[type='submit']").attr("disabled", "");
+        window.location.replace(data.redirect);
       },
 
       onFail(xhr, status) {

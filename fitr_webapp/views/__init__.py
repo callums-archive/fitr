@@ -1,6 +1,7 @@
 from .authentication import register_views as auth_views
 from .dashboard import register_views as dash_views
 from .trainer import register_views as trainer_views
+from .user import register_views as user_views
 
 
 def register_views(app):
@@ -10,5 +11,8 @@ def register_views(app):
     # register Dash views
     dash_views(app, '/dashboard/')
 
-    # register Dash views
+    # register trainer views
     trainer_views(app, '/trainer/')
+
+    # register user views
+    user_views(app, '/users/')

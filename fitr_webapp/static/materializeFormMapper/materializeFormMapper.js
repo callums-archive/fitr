@@ -287,12 +287,13 @@ formGen.prototype = {
           url: root.settings.remote.submit.url,
           data: formFields
         }).done(function(data, status, jqXHR) {
+          // cant use always() for unlock submit
+          root.unlockSubmit();
           root.settings.onSuccess(data, status, jqXHR);
         }).fail(function(jqXHR, status) {
-          root.settings.onFail(jqXHR, status);
-        }).always(function() {
           root.unlockSubmit();
-        })
+          root.settings.onFail(jqXHR, status);
+        });
       }
     })
   },

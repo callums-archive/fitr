@@ -34,65 +34,8 @@
         <!-- datatables -->
         <link rel="stylesheet" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}">
 
-        <style>
-          .no-js #loader { display: none;  }
-          .js #loader { display: block; position: absolute; left: 100px; top: 0; }
-          .se-pre-con {
-          	position: fixed;
-          	left: 0px;
-          	top: 0px;
-          	width: 100%;
-          	height: 100%;
-          	z-index: 9999;
-          	background: url("{{ url_for('static', filename='images/preload.gif') }}") center no-repeat #fff;
-          }
-
-          input:not([type]):focus:not([readonly]),
-          input[type=text]:not(.browser-default):focus:not([readonly]),
-          input[type=password]:not(.browser-default):focus:not([readonly]),
-          input[type=email]:not(.browser-default):focus:not([readonly]),
-          input[type=url]:not(.browser-default):focus:not([readonly]),
-          input[type=time]:not(.browser-default):focus:not([readonly]),
-          input[type=date]:not(.browser-default):focus:not([readonly]),
-          input[type=datetime]:not(.browser-default):focus:not([readonly]),
-          input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
-          input[type=tel]:not(.browser-default):focus:not([readonly]),
-          input[type=number]:not(.browser-default):focus:not([readonly]),
-          input[type=search]:not(.browser-default):focus:not([readonly]),
-          textarea.materialize-textarea:focus:not([readonly]) {
-            border-bottom: 1px solid "{{ colours['input'] }}";
-            -webkit-box-shadow: 0 1px 0 0 "{{ colours['input'] }}";
-                    box-shadow: 0 1px 0 0 "{{ colours['input'] }}";
-          }
-
-          input:not([type]):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=text]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=password]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=email]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=url]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=time]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=date]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=datetime]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=datetime-local]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=tel]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=number]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          input[type=search]:not(.browser-default):focus:not([readonly]):not(.invalid):not(.valid) + label,
-          textarea.materialize-textarea:focus:not([readonly]):not(.invalid):not(.valid) + label {
-            color: "{{ colours['input'] }}";
-          }
-
-          .select-wrapper input.select-dropdown:focus {
-            border-bottom: 1px solid "{{ colours['input'] }}";
-          }
-
-          .dropdown-content li > a, .dropdown-content li > span {
-            font-size: 16px;
-            color: "{{ colours['input'] }}";
-            display: block;
-            line-height: 22px;
-            padding: 14px 16px;
-          }
-        </style>
+        <!-- init styles -->
+        {% include 'base/styles.html' %}
 
         {% block styles %}
         {% endblock styles %}

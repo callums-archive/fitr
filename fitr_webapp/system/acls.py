@@ -48,3 +48,21 @@ def generate_acl(levels):
                     permissions.extend(process_permissions_obj(permission))
 
     return permissions
+
+def decide_context_acl(user_obj, with_admin=False):
+    from flask import request
+    from mongoengine.base.datastructures import BaseList
+
+    if "admin" in request.user.groups:
+        return True
+
+    users = []
+    for user in user_obj:
+        if type(user) == BaseList:
+            users.extend(user)
+        else:
+            users.append(user)
+
+    if request.user in users:
+        return True
+    return False

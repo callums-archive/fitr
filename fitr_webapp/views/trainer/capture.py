@@ -20,7 +20,7 @@ from flask import jsonify
 
 
 class PTCaptureView(Base):
-    route_prefix="/trainer/"
+    # route_prefix="/trainer/"
 
     @route('/')
     @permission('pt_clients')
