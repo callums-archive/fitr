@@ -8,10 +8,11 @@ def set_session(user_obj):
     session['username'] = user_obj.username
     session['email'] = user_obj.email
     session['groups'] = user_obj.groups
+    return session.sid
 
 def clear_session():
     user = get_current_user()
-    user.logout()
+    user.logout(session.sid)
     DBSession.destroy_session(session.sid)
     session.clear()
 

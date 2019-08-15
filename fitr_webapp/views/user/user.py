@@ -19,6 +19,10 @@ from fitr_webapp.system.permissions import permission, has_permission
 from flask import jsonify
 
 
+# datetime and string tools
+import fitr_webapp.system.datetimetools as datetimetools
+import fitr_webapp.system.stringtools as stringtools
+
 class User(Base):
     # route_prefix="/<user>/"
 
@@ -32,4 +36,39 @@ class User(Base):
     @permission('user')
     @route("/<user>/get/measurements/")
     def get_measurements(self, user):
-        return jsonify(self.context.measurements)
+        from fitr_webapp.models import Users, Measurements, Weight, FitnessTests, Logins
+
+        # iter = 1
+        # for x in Users.objects.all():
+        #     x.uid = iter
+        #     iter+=1
+        #     x.save()
+        #
+        # print(f"user {iter}")
+        #
+        # iter = 1
+        # for x in Measurements.objects.all():
+        #     x.uid = iter
+        #     iter+=1
+        #     x.save()
+        #
+        # print(f"measure {iter}")
+        #
+        # iter = 1
+        # for x in Weight.objects.all():
+        #     x.uid = iter
+        #     iter+=1
+        #     x.save()
+        #
+        # print(f"we {iter}")
+
+        # iter = 1
+        # for x in FitnessTests.objects.all():
+        #     x.uid = iter
+        #     iter+=1
+        #     x.save()
+        #
+        # print(f"ft {iter}")
+
+        return ""
+        # return jsonify(self.context.measurements.order_by('-create_stamp'))

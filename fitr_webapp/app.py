@@ -26,8 +26,9 @@ from fitr_webapp.system.session import is_loggedin, get_current_user
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-# datetime stuff
+# datetime and string tools
 import fitr_webapp.system.datetimetools as datetimetools
+import fitr_webapp.system.stringtools as stringtools
 
 # std for os env
 from os import environ

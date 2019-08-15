@@ -53,7 +53,7 @@ def decide_context_acl(user_obj, with_admin=False):
     from flask import request
     from mongoengine.base.datastructures import BaseList
 
-    if "admin" in request.user.groups:
+    if request.user is not None and "admin" in request.user.groups:
         return True
 
     users = []
