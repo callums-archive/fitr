@@ -23,6 +23,12 @@ from flask import jsonify
 import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
 
+# models
+from fitr_webapp.models import (
+    Measurements,
+    Weight
+)
+
 class User(Base):
     # route_prefix="/<user>/"
 
@@ -34,41 +40,13 @@ class User(Base):
         return abort(410)
 
     @permission('user')
-    @route("/<user>/get/measurements/")
+    @route("/<user>/get/latest_measurements/")
     def get_measurements(self, user):
-        from fitr_webapp.models import Users, Measurements, Weight, FitnessTests, Logins
+        measurements = Measurements.objects(user=self.context).order_by("+create_stamp").limit(5)
+        return jsonify({"data": [record.show_measurements for record in measurements]})
 
-        # iter = 1
-        # for x in Users.objects.all():
-        #     x.uid = iter
-        #     iter+=1
-        #     x.save()
-        #
-        # print(f"user {iter}")
-        #
-        # iter = 1
-        # for x in Measurements.objects.all():
-        #     x.uid = iter
-        #     iter+=1
-        #     x.save()
-        #
-        # print(f"measure {iter}")
-        #
-        # iter = 1
-        # for x in Weight.objects.all():
-        #     x.uid = iter
-        #     iter+=1
-        #     x.save()
-        #
-        # print(f"we {iter}")
-
-        # iter = 1
-        # for x in FitnessTests.objects.all():
-        #     x.uid = iter
-        #     iter+=1
-        #     x.save()
-        #
-        # print(f"ft {iter}")
-
-        return ""
-        # return jsonify(self.context.measurements.order_by('-create_stamp'))
+    @permission('user')
+    @route("/<user>/get/latest_weights/")
+    def get_weights(self, user):
+        weights = Weight.objects(user=self.context.to_dbref()).order_by("+create_stamp").limit(5)
+        return jsonify({"data": [record.show_weights for record in weights], "initial_weight": Weight.objects(user=self.context.to_dbref()).first().weight})

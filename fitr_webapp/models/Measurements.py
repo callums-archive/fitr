@@ -7,6 +7,8 @@ from datetime import datetime
 # exceptions
 from fitr_webapp.system.exceptions import DBError
 
+# system
+import fitr_webapp.system.datetimetools as datetimetools
 
 db = MongoEngine()
 
@@ -38,3 +40,23 @@ class Measurements(db.Document):
 
     modified_user = db.ReferenceField("Users")
     modified_stamp = db.DateTimeField()
+
+    @property
+    def show_measurements(self):
+        return {
+            "unit": self.unit,
+            "create_user": self.create_user.__str__(),
+            "create_stamp": datetimetools.cast_string(self.create_stamp, "dt"),
+            "neck": self.neck,
+            "bicep": self.bicep,
+            "chest": self.chest,
+            "abs1": self.abs1,
+            "abs1_comment": self.abs1_comment,
+            "abs2": self.abs2,
+            "abs2_comment": self.abs2_comment,
+            "abs3": self.abs3,
+            "abs3_comment": self.abs3_comment,
+            "upperthigh": self.upperthigh,
+            "midthigh": self.midthigh,
+            "calf": self.calf,
+        }

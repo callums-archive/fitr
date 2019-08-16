@@ -137,7 +137,7 @@ class Users(db.Document):
         Logins.conclude(sid=sid)
 
     def __str__(self):
-        return f"{self.username}:{self.groups}"
+        return f"{self.full_name}(@{self.username})"
 
     def add_group(self, group):
         if not Groups.by_name(group):

@@ -34,6 +34,10 @@
         <!-- datatables -->
         <link rel="stylesheet" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}">
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='chartist/chartist.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='chartist/plugins/chartist-plugin-tooltip/chartist-plugin-tooltip.css') }}">
+
+
         <!-- init styles -->
         {% include 'base/styles.html' %}
 
@@ -76,6 +80,10 @@
 
         <!-- datatables -->
         <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='chartist/chartist.js') }}"></script>
+        <script src="{{ url_for('static', filename='chartist/plugins/chartist-plugin-tooltip/chartist-plugin-tooltip.min.js') }}"></script>
+
 
         <script>
         $(window).on('load', function() {

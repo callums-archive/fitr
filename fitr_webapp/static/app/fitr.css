@@ -76,3 +76,10 @@ html, body {
     margin-bottom: 20px !important;
   }
 }
+
+/* chatrist label */
+@media screen and (max-width: 600px) {
+  .ct-label {
+      font-size: 7.5px !important;
+  }
+}
