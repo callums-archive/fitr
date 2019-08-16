@@ -1,5 +1,6 @@
-# flask
+# flask and std
 from flask import abort, session
+from functools import wraps
 
 # acls
 from .acls import generate_acl, Allow, Deny
@@ -18,13 +19,14 @@ def has_permission(permission):
             return True
     return False
 
-class permission():
-    def __init__(self, permission):
-        self.permission = permission
 
-    def __call__(self, f):
-        def wrapped_f(*args, **kwargs):
-            if has_permission(self.permission):
+def permission(permission_name):
+    def check_perm(f):
+        @wraps(f)
+        def wrap(*args, **kwargs):
+            if has_permission(permission_name):
+                print(f"Permission {permission_name} granted")
                 return f(*args, **kwargs)
             abort(403)
-        return wrapped_f
+        return wrap
+    return check_perm

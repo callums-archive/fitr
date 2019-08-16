@@ -13,8 +13,7 @@ class Permission(list):
 acls = {}
 
 acls["everyone"] = [
-    Permission([Allow, "dashboard"]),
-    Permission([Allow, "profile"]),
+    Permission([Allow, "user"]),
 ]
 
 acls["trainer"] = [
@@ -23,6 +22,7 @@ acls["trainer"] = [
 ]
 
 acls["admin"] = [
+    Permission([Allow, "zuck"]),
     acls["everyone"],
     acls["trainer"]
 ]
@@ -48,3 +48,21 @@ def generate_acl(levels):
                     permissions.extend(process_permissions_obj(permission))
 
     return permissions
+
+def decide_context_acl(user_obj, with_admin=False):
+    from flask import request
+    from mongoengine.base.datastructures import BaseList
+
+    if request.user is not None and "admin" in request.user.groups:
+        return True
+
+    users = []
+    for user in user_obj:
+        if type(user) == BaseList:
+            users.extend(user)
+        else:
+            users.append(user)
+
+    if request.user in users:
+        return True
+    return False

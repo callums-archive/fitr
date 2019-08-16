@@ -3,7 +3,8 @@ from flask_mongoengine import MongoEngine
 from mongoengine.queryset.visitor import Q
 from flask import (
     request,
-    session
+    session,
+    abort,
 )
 
 # std
@@ -20,17 +21,12 @@ from .Groups import Groups
 # system
 from fitr_webapp.system.exceptions import DBError
 from fitr_webapp.system.session import set_session, is_loggedin, get_current_user
+from fitr_webapp.system.acls import decide_context_acl
 import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
-from fitr_webapp.system.ip import get_ip
 
 # Docuements
-from .UserDocuments import (
-    Measurements,
-    Weight,
-    FitnessTests,
-    AuthSessions
-)
+from fitr_webapp.models.Logins import Logins
 
 
 db = MongoEngine()
@@ -55,10 +51,7 @@ class Users(db.Document):
     modified_user = db.ReferenceField("Users")
     modified_stamp = db.DateTimeField()
 
-    measurements = db.ListField(db.EmbeddedDocumentField(Measurements))
-    weight = db.ListField(db.EmbeddedDocumentField(Weight))
-    fitness_tests = db.ListField(db.EmbeddedDocumentField(FitnessTests))
-    auth_sessions = db.ListField(db.EmbeddedDocumentField(AuthSessions))
+    trainers = db.ListField(db.ReferenceField("Users"))
 
     @property
     def full_name(self):
@@ -122,38 +115,29 @@ class Users(db.Document):
             user = cls.objects(__raw__={identity: identifier}).first()
             if not user:
                 continue
-            if not user.check_password(password):
+            if not user or not user.check_password(password):
                 raise DBError("Invalid login credentials.")
             sid = set_session(user)
-            auth_session = AuthSessions()
 
-            auth_session.login_ip = get_ip()
-            auth_session.login_platform = request.user_agent.platform
-            auth_session.login_browser = request.user_agent.browser
-            auth_session.login_version = request.user_agent.version
-            auth_session.login_language = request.user_agent.language
-            auth_session.login_user_agent_string = request.user_agent.string
-            auth_session.session_id = session.sid
-
-            user.auth_sessions.append(auth_session)
-            user.save()
+            # log the authentication with Login
+            Logins.new_login(user, sid)
             return True
         raise DBError("Invalid login credentials.")
 
-    def logout(self):
-        for auth_session in self.auth_sessions:
-            if auth_session.session_id == session.sid:
-                auth_session.logout_platform = request.user_agent.platform
-                auth_session.logout_browser = request.user_agent.browser
-                auth_session.logout_version = request.user_agent.version
-                auth_session.logout_language = request.user_agent.language
-                auth_session.logout_user_agent_string = request.user_agent.string
-                auth_session.logout_stamp = datetime.utcnow()
-                auth_session.logout_ip = get_ip()
-        self.save()
+    @classmethod
+    def serve_context(cls, username):
+        user = cls.by_username(username)
+        if user is None:
+            abort(404)
+        if decide_context_acl([user, user.trainers], True):
+            return user
+        return abort(403)
+
+    def logout(self, sid):
+        Logins.conclude(sid=sid)
 
     def __str__(self):
-        return f"{self.username}:{self.groups}"
+        return f"{self.full_name}(@{self.username})"
 
     def add_group(self, group):
         if not Groups.by_name(group):
@@ -179,67 +163,3 @@ class Users(db.Document):
         if checkpw(password.encode("utf-8"), self.password.encode("utf-8")):
             return True
         return False
-
-    def capture_mesaurements(
-        self,
-        neck,
-        bicep,
-        chest,
-        abs1,
-        abs1_comment,
-        abs2,
-        abs2_comment,
-        abs3,
-        abs3_comment,
-        upperthigh,
-        midthigh,
-        calf
-    ):
-        measurements = Measurements()
-
-        measurements.neck = float(neck)
-        measurements.bicep = float(bicep)
-        measurements.chest = float(chest)
-        measurements.abs1 = float(abs1)
-        measurements.abs1_comment = abs1_comment
-        measurements.abs2 = float(abs2)
-        measurements.abs2_comment = abs2_comment
-        measurements.abs3 = float(abs3)
-        measurements.abs3_comment = abs3_comment
-        if upperthigh != "":
-            measurements.upperthigh = float(upperthigh)
-        measurements.midthigh = float(midthigh)
-        measurements.calf = float(calf)
-
-        if is_loggedin():
-            measurements.create_user = get_current_user()
-
-        self.measurements.append(measurements)
-        self.save()
-
-        return True
-
-    def capture_weight(self, submitted_weight):
-        weight = Weight()
-
-        weight.weight = float(submitted_weight)
-
-        if is_loggedin():
-            weight.create_user = get_current_user()
-
-        self.weight.append(weight)
-        self.save()
-
-        return True
-
-    def capture_fitness_test(self, test_name, data):
-        fitness_test = FitnessTests()
-        fitness_test.name = test_name
-        fitness_test.data = data
-        fitness_test.create_user = get_current_user()
-
-
-        self.fitness_tests.append(fitness_test)
-        self.save()
-
-        return True

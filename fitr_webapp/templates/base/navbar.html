@@ -1,41 +1,80 @@
-<nav class="navbar pl-4 pr-4 navbar-expand-md bg-dark navbar-dark fixed-top">
+{% set menu_items = [
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
+  {"name": 'test', "permission": "zuck", "url": "//test"},
 
-  <a class="navbar-brand" href="{{ url_for('DashboardView:index') }}">
-    <img src="{{ url_for('static', filename='images/logo_white.png') }}" alt="Logo" style="height: 40px;">
-  </a>
+  {"name": '<i class="material-icons left">group</i>Clients', "ref": "clients", "permission": "pt_clients", "children": [
+    {"name":'<i class="fas fa-weight nav-fa fa-lg left"></i> Capture', "url": url_for('PTCaptureView:index')},
+  ]},
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  {"name": '<i class="material-icons left">account_circle</i>' + user().first_name, "ref": "user", "permission": "user", "children": [
+    {"name": '<i class="fas fa-user-ninja nav-fa fa-lg left"></i> Profile', "url": "#"},
+    {"name": '<i class="fas fa-power-off nav-fa fa-lg left"></i>Logout', "url": url_for('UserAuthenticationView:logout')},
+  ]},
 
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav ml-auto">
 
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li> -->
+] %}
 
-      {% if has_permission('pt_clients') %}
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-          <i class="fas fa-users"></i> Clients
-        </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="{{ url_for('PTCaptureView:index') }}"><i class="fas fa-weight"></i> Capture</a>
-        </div>
+{% macro gen_menu_main() -%}
+  {% for menu_item in menu_items %}
+    {% if menu_item.children | length > 0 and has_permission(menu_item.permission) %}
+      <li><a class="dropdown-trigger" href="#!" data-target="{{ menu_item.ref }}">{{ menu_item.name | safe }}<i class="material-icons right">arrow_drop_down</i></a></li>
+      <ul id="{{ menu_item.ref }}" class="dropdown-content">
+        {% for child in menu_item.children %}
+          <li><a href="{{ child.url }}">{{ child.name | safe }}</a></li>
+        {% endfor %}
+      </ul>
+    {% elif has_permission(menu_item.permission) %}
+      <li><a href="{{ menu_item.url }}">{{ menu_item.name | safe }}</a></li>
+    {% endif %}
+  {% endfor %}
+{%- endmacro %}
+
+{% macro gen_mobile_main() -%}
+  {% for menu_item in menu_items %}
+    {% if menu_item.children | length > 0 and has_permission(menu_item.permission) %}
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li>
+            <a class="collapsible-header">{{ menu_item.name | safe }}<i class="material-icons">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                {% for child in menu_item.children %}
+                  <li><a href="{{ child.url }}">{{ child.name | safe }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </li>
+        </ul>
       </li>
-      {% endif %}
+    {% elif has_permission(menu_item.permission) %}
+      <li><a href="{{ menu_item.url }}">{{ menu_item.name | safe }}</a></li>
+    {% endif %}
+  {% endfor %}
+{%- endmacro %}
 
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-          <i class="far fa-user-circle"></i> {{ user().first_name }}
-        </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#"><i class="far fa-user"></i> Profile</a>
-          <a class="dropdown-item" href="{{ url_for('UserAuthenticationView:logout') }}"><i class="fas fa-power-off"></i> Logout</a>
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper {{ colours['nav'] }}">
+
+      <a href="{{ url_for('DashboardView:index') }}" class="left brand-logo">
+        <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
+      </a>
+
+      <ul class="right">
+        <li><a href="#" data-target="mobile-nav" class="right sidenav-trigger"><i class="material-icons">menu</i></a></li>
+        <div class="hide-on-med-and-down">
+          {{ gen_menu_main() }}
         </div>
-      </li>
+      </ul>
 
-    </ul>
-  </div>
-</nav>
+    </div>
+  </nav>
+</div>
+
+<aside>
+  <ul id="mobile-nav" class="sidenav">
+    {{ gen_mobile_main() }}
+  </ul>
+</aside>

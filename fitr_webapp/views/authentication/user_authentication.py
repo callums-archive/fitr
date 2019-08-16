@@ -28,7 +28,6 @@ class UserAuthenticationView(Base):
     @route('/login', methods=['POST'])
     def login_post(self):
         identifier, password = sanitize_lower(self.data.get('identifier')), self.data.get('password')
-
         try:
             Users.login(identifier, password)
             return {"redirect": url_for("DashboardView:index")}

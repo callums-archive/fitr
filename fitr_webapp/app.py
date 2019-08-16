@@ -3,7 +3,8 @@ from flask import (
     Flask,
     render_template,
     redirect,
-    url_for
+    url_for,
+    request
 )
 
 # mongo
@@ -25,8 +26,9 @@ from fitr_webapp.system.session import is_loggedin, get_current_user
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-# datetime stuff
+# datetime and string tools
 import fitr_webapp.system.datetimetools as datetimetools
+import fitr_webapp.system.stringtools as stringtools
 
 # std for os env
 from os import environ
@@ -40,18 +42,21 @@ if environ.get("FLASK_ENV", "") == "development":
 else:
     app.config.from_json('production.json')
 
+app.config.from_json('frontend.json')
+
 # mongo
 db = MongoEngine(app)
 
 # mongo for session
 app.session_interface = MongoEngineSessionInterface(db)
 
-
 # register jinja2 funtions
 app.jinja_env.globals.update(is_loggedin=is_loggedin)
 app.jinja_env.globals.update(user=get_current_user)
 app.jinja_env.globals.update(has_permission=has_permission)
 app.jinja_env.globals.update(datetimetools=datetimetools)
+app.jinja_env.globals.update(datetimetools=datetimetools)
+app.jinja_env.globals.update(colours=app.config['COLOURS'])
 
 # register views
 register_views(app)
@@ -73,5 +78,9 @@ def index():
         return redirect(url_for('DashboardView:index'))
     return redirect(url_for('UserAuthenticationView:login_get'))
 
-if __name__ == "__main__":
-    app.run()
+@app.before_request
+def before_req():
+    if is_loggedin():
+        request.user = get_current_user()
+    else:
+        request.user = None

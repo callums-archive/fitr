@@ -2,126 +2,106 @@
 
 {% block styles %}
 <style>
-    img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-    }
+  .form-width {
+    width: 400px !important;
+    margin: auto;
+  }
 
-    ::-webkit-input-placeholder {
-        text-align: center;
-    }
-
-    :-moz-placeholder { /* Firefox 18- */
-        text-align: center;
-    }
-
-    ::-moz-placeholder {  /* Firefox 19+ */
-        text-align: center;
-    }
-
-    :-ms-input-placeholder {
-        text-align: center;
-    }
+  .valign-wrapper {
+    height: 90% !important;
+  }
 </style>
 {% endblock styles %}
 
 {% block content %}
-<div class="d-flex justify-content-center" style="height: 100%;">
-    <div class="d-flex align-items-center p-2" style="max-width: 400px">
-        <form id="login">
-            <div class="d-flex justify-content-center">
-                <img class="mb-3" src="{{ url_for('static', filename='images/logo.png') }}" alt="" height="75">
+
+<nav>
+  <div class="nav-wrapper {{ colours['nav'] }}">
+    <a href="{{ url_for('index') }}" class="left brand-logo">
+      <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
+    </a>
+    <ul class="right">
+      <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="valign-wrapper">
+  <div class="form-width">
+    <div class="row">
+
+      <div class="col s12">
+        <h5 class="center-align"><i class="far fa-user"></i> Login</h5>
+      </div>
+
+      <div class="col s12 mobile-form">
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <form id="login">
+
+            <div class="row mb-0">
+              <button class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" type="submit">Login</button>
+              <div class="col s12 mt-4 center-align">
+                <a class="black-text text-lighten-3" href="./forgot">Forgot password?</a>
+              </div>
             </div>
 
-            <div class="form-group">
-                <input type="text" class="form-control form-control-lg" name="identifier" placeholder="Username / Email" required>
-            </div>
+          </form>
+        </div>
+      </div>
 
-            <div class="form-group">
-                <input type="password" class="form-control form-control-lg" name="password" placeholder="Password" required>
-            </div>
-
-            <button type="submit" class="mt-3 mb-3 btn btn-lg btn-primary btn-block">Sign in</button>
-
-            <hr>
-
-            <p class="mt-1 text-muted float-left">&copy; <script>document.write(new Date().getFullYear())</script></p>
-            <a class="mt-1 float-right btn btn-sm btn-secondary" href="{{ url_for('UserRegistrationView:register_get') }}"><b><i class="fas fa-info-circle"></i> Need an account?</b></a>
-        </form>
+      <div class="col s12">
+        <p class="mt-4 center-align text-darken-2">&copy; <script>
+            document.write(new Date().getFullYear())
+          </script>
+        </p>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock content %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-        document.getElementById('login'),
-        {
-            fields: {
-                identifier: {
-                    validators: {
-                        notEmpty: {
-                            message: 'field is required'
-                        },
-                        stringLength: {
-                            min: 3,
-                            max: 30,
-                            message: 'Field must be between 3 and 30 characters'
-                        }
-                    }
-                },
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: 'field is required'
-                        }
-                    }
-                },
-            },
-            plugins: {
-                trigger: new FormValidation.plugins.Trigger(),
-                bootstrap: new FormValidation.plugins.Bootstrap(),
-                submitButton: new FormValidation.plugins.SubmitButton(),
-            },
-        }
-    ).on('core.form.valid', function() {
-      console.log($('#login').jsonString())
-        console.log($('#login').jsonString())
-        $.ajax({
-          accept: 'application/json',
-          contentType: 'application/json',
-          type: "POST",
-          url: "{{ url_for('UserAuthenticationView:login_post') }}",
-          data: $('#login').jsonString()
-        }).done(function(data, status, jqXHR) {
-          window.location.replace(data.redirect);
-        }).fail(function(data, status, jqXHR) {
-            try {
-                var error = data.responseJSON.error_msg;
-            } catch (err) {
-                var error = "Server Error, Try again.";
-            }
+  $(document).ready(function() {
+    decide_form_card(".mobile-form");
 
-            $.toast({
-                text: error,
-                heading: 'Error!',
-                icon: 'error',
-                showHideTransition: 'slide',
-                allowToastClose: false,
-                hideAfter: 3000,
-                stack: 5,
-                position: 'top-center',
-                textAlign: 'left',
-                loader: true,
-                beforeShow: function () {},
-                afterShown: function () {},
-                beforeHide: function () {},
-                afterHidden: function () {}
-            });
-        });
+    new formGen("#login", {
+      form: [{
+          type: "string",
+          name: "identifier",
+          placeholder: "Username/Email",
+          validators: ["strMin(5)"]
+        },
+        {
+          type: "password",
+          name: "password",
+          placeholder: "Password",
+          validators: ["notEmpty()"]
+        },
+      ],
+
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('UserAuthenticationView:login_post') }}"
+        },
+      },
+
+      onSuccess(data, status, xhr) {
+        $("#login").find("button[type='submit']").attr("disabled", "");
+        window.location.replace(data.redirect);
+      },
+
+      onFail(xhr, status) {
+        try {
+          var error = xhr.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+        M.toast({html: error});
+      }
     });
-});
+  });
 </script>
 {% endblock scripts %}
