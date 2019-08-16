@@ -2,6 +2,10 @@
 
 {% block styles %}
 <style>
+  #measurements_chart .ct-series-b .ct-bar{
+    stroke: #07ebff !important;
+  }
+
   @media screen and (max-width: 600px) {
     #measurements_chart .ct-bar {
       stroke-width: 3px !important;
@@ -124,7 +128,7 @@
         chart_lables = []
         for (var i = 0; i != data_len; i++) {
           data = json.data[i]
-          chart_datasets.push(data["weight"]);
+          chart_datasets.push({meta: data["create_stamp"].split(" ")[0], value: data["weight"]});
           chart_lables.push(data["create_stamp"].split(" ")[0]);
         }
 
@@ -269,17 +273,13 @@
         {
           title: "Diff.",
           render: function(data, type, row, meta) {
-            prev = meta.row - 1;
-            if (prev != -1) {
-              var total_curr = 0;
+            var prev = meta.row - 1;
+            var total_curr = 0;
+            var total_prev = 0;
+            if (prev != -1 & prev != meta.row) {
               for (measure in row) {
                 if (!measure.includes("_") & measure != "unit") {
                   total_curr += row[measure];
-                }
-              }
-              var total_prev = 0;
-              for (measure in measurements_datatable.rows().data()[prev]) {
-                if (!measure.includes("_") & measure != "unit") {
                   total_prev += measurements_datatable.rows().data()[prev][measure];
                 }
               }
@@ -296,7 +296,7 @@
       ],
       ajax: "{{ url_for('User:get_measurements', user=request.user.username) }}",
       order: [
-        [0, "desc"]
+        [11, "desc"]
       ],
       "fnInitComplete": function(oSettings, json) {
         var data_len = json.data.length;
