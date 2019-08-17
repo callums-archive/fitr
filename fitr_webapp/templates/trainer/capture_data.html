@@ -69,52 +69,85 @@
       </div>
       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
+
+
+
           <form id="measurements">
             <div class="form-group">
               <label for="neck">Neck <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.neck }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="neck" name="neck" placeholder="CM's">
             </div>
 
             <div class="form-group">
               <label for="bicep">Bicep <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.bicep }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="bicep" name="bicep" placeholder="CM's">
             </div>
 
             <div class="form-group">
               <label for="chest">Bust/Chest <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.chest }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="chest" name="chest" placeholder="CM's">
             </div>
 
             <div class="form-group">
               <label for="abs1">Abs 1 <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.abs1 }}</b>
+              <b style="color: red">{{ mts.abs1_comment }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs1" name="abs1" placeholder="CM's">
               <input type="text" class="form-control form-control-lg mt-1" id="abs1_comment" name="abs1_comment" placeholder="Comment">
             </div>
 
             <div class="form-group">
               <label for="abs2">Abs 2 <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.abs2 }}</b>
+              <b style="color: red">{{ mts.abs2_comment }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs2" name="abs2" placeholder="CM's">
               <input type="text" class="form-control form-control-lg mt-1" id="abs2_comment" name="abs2_comment" placeholder="Comment">
             </div>
 
             <div class="form-group">
               <label for="abs3">Abs 3 <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.abs3 }}</b>
+              <b style="color: red">{{ mts.abs3_comment }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs3" name="abs3" placeholder="CM's">
               <input type="text" class="form-control form-control-lg mt-1" id="abs3_comment" name="abs3_comment" placeholder="Comment">
             </div>
 
             <div class="form-group">
               <label for="upperthigh">Upper Thigh <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.upperthigh }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="upperthigh" name="upperthigh" placeholder="CM's">
             </div>
 
             <div class="form-group">
               <label for="midthigh">Mid thigh <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.midthigh }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="midthigh" name="midthigh" placeholder="CM's">
             </div>
 
             <div class="form-group">
               <label for="calf">Calf <i class="fas fa-level-down-alt"></i></label>
+              {% for mts in client.measurements %}
+              <b style="color: red">{{ mts.calf }}</b>
+              {% endfor %}
               <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="calf" name="calf" placeholder="CM's">
             </div>
 

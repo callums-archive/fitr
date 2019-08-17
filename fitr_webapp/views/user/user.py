@@ -26,7 +26,8 @@ import fitr_webapp.system.stringtools as stringtools
 # models
 from fitr_webapp.models import (
     Measurements,
-    Weight
+    Weight,
+    Users
 )
 
 class User(Base):
@@ -50,3 +51,16 @@ class User(Base):
     def get_weights(self, user):
         weights = Weight.objects(user=self.context.to_dbref()).order_by("+create_stamp").limit(5)
         return jsonify({"data": [record.show_weights for record in weights], "initial_weight": Weight.objects(user=self.context.to_dbref()).first().weight})
+
+    @permission('zuck')
+    @route("/<user>/get")
+    def get_all(self, user):
+        res = []
+        all = Users.objects.all();
+        for x in all:
+            wht = Weight.objects(user=x).order_by('-create_stamp').first()
+            try:
+                res.append({x.full_name: wht.weight})
+            except:
+                pass
+        return jsonify(res)
