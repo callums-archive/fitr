@@ -130,7 +130,9 @@ class Users(db.Document):
         if user is None:
             abort(404)
         if decide_context_acl([user, user.trainers], True):
+            print('here hereh here here here here')
             return user
+        print("fail fail fail failfail")
         return abort(403)
 
     def logout(self, sid):
