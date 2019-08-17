@@ -24,5 +24,5 @@ class DashboardView(Base):
     @route('/')
     @permission("user")
     def index(self):
-        send_simple_message()
+        print(send_simple_message())
         return render_template("dashboard/dashboard.html")
