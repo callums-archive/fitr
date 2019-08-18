@@ -17,12 +17,9 @@ from fitr_webapp.system.view_helpers import Base
 from fitr_webapp.system.permissions import permission, has_permission
 from fitr_webapp.system.session import clear_session
 
-from fitr_webapp.system.mailer import *
-
 class DashboardView(Base):
 
     @route('/')
     @permission("user")
     def index(self):
-        print(send_simple_message())
         return render_template("dashboard/dashboard.html")

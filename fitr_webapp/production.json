@@ -2,6 +2,7 @@
   "DEBUG" : false,
   "TESTING" : false,
   "SECRET_KEY":"hDCglwzIYEAsBRVCrRu4XtazgRY1XbGkebH3fKbKrc8ipyneQBXZz9U4m7cc2XwmFvcf4vcLxi0z2w6oE+S9qQ==",
+  "SERVER_NAME": "https://fitr.gq",
   "MG_DOMAIN_NAME": "msgs.gq",
   "MG_DOMAIN_NAME_API": "mg.msgs.gq",
   "MG_API_KEY": "key-c69043beaa06e55d8b1ca53234ece03e",
