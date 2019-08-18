@@ -5,6 +5,7 @@ from flask import (
     request,
     session,
     abort,
+    url_for
 )
 
 # std
@@ -14,9 +15,7 @@ from bcrypt import (
     checkpw
 )
 from datetime import datetime
-
-# models
-from .Groups import Groups
+import uuid
 
 # system
 from fitr_webapp.system.exceptions import DBError
@@ -26,7 +25,9 @@ import fitr_webapp.system.datetimetools as datetimetools
 import fitr_webapp.system.stringtools as stringtools
 
 # Docuements
-from fitr_webapp.models.Logins import Logins
+from fitr_webapp.models.AccountRecovery import *
+from fitr_webapp.models.Groups import *
+from fitr_webapp.models.Logins import *
 
 
 db = MongoEngine()
@@ -108,21 +109,26 @@ class Users(db.Document):
             raise(DBError(e))
 
     @classmethod
-    def login(cls, identifier, password):
+    def by_identifier(cls, identifier):
         identifiers = ['username', 'email']
-
         for identity in identifiers:
-            user = cls.objects(__raw__={identity: identifier}).first()
-            if not user:
-                continue
-            if not user or not user.check_password(password):
-                raise DBError("Invalid login credentials.")
-            sid = set_session(user)
+            res = cls.objects(__raw__={identity: identifier}).first()
+            if res is not None:
+                return res
+        return None
 
-            # log the authentication with Login
-            Logins.new_login(user, sid)
-            return True
-        raise DBError("Invalid login credentials.")
+    @classmethod
+    def login(cls, identifier, password):
+        user = cls.by_identifier(identifier)
+        if not user:
+            raise DBError("Invalid login credentials.")
+        if not user or not user.check_password(password):
+            raise DBError("Invalid login credentials.")
+        sid = set_session(user)
+
+        # log the authentication with Login
+        Logins.new_login(user, sid)
+        return True
 
     @classmethod
     def serve_context(cls, username):
@@ -130,9 +136,7 @@ class Users(db.Document):
         if user is None:
             abort(404)
         if decide_context_acl([user, user.trainers], True):
-            print('here hereh here here here here')
             return user
-        print("fail fail fail failfail")
         return abort(403)
 
     def logout(self, sid):
@@ -165,3 +169,7 @@ class Users(db.Document):
         if checkpw(password.encode("utf-8"), self.password.encode("utf-8")):
             return True
         return False
+
+    def recover_account(self):
+        if AccountRecovery.log_recovery(self):
+            return True

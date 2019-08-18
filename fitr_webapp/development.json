@@ -4,6 +4,7 @@
   "SECRET_KEY":"waggaChugga123",
   "SEND_FILE_MAX_AGE_DEFAULT": 0,
   "MG_DOMAIN_NAME": "dev.msgs.gq",
+  "MG_DOMAIN_NAME_API": "mg.msgs.gq",
   "MG_API_KEY": "key-c69043beaa06e55d8b1ca53234ece03e",
   "MONGODB_SETTINGS": {
     "MONGODB_DB": "fitr"
