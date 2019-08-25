@@ -29,7 +29,7 @@
       contentType: 'application/json',
       type: "POST",
       url: "{{ url_for('PTCaptureView:clients_post') }}",
-      data: $("#clients").jsonString()
+      data: JSON.stringify({term: $("#client_name").val()})
     }).done(function(data, status, jqXHR) {
       new_results(data);
     }).fail(function(data, status, jqXHR) {
@@ -47,7 +47,20 @@
     if (data.constructor === Array) {
       data.forEach(function(user) {
         $('#results').append($(`
-          <a href="${user.username}" class="btn-lg btn btn-primary btn-block mt-2">🏋️ ${user.full_name}</a>
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title"><i class="far fa-user"></i> ${user.full_name}</span>
+                  <p>@${user.username}</p>
+                </div>
+                <div class="card-action">
+                  <a href="${user.username}/weights">Weights</a>
+                  <a href="${user.username}/measurements">Measurements</a>
+                </div>
+              </div>
+            </div>
+          </div>
         `))
       })
     }

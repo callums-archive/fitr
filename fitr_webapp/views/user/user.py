@@ -33,8 +33,11 @@ from fitr_webapp.models import (
 class User(Base):
     # route_prefix="/<user>/"
 
-    def before_request(self, name, user):
-        self.context = Users.serve_context(user)
+    def before_request(self, name, **user):
+        print("here here here")
+        print("here here here")
+        print("here here here")
+        self.context = Users.serve_context(user.get("user"))
 
     @permission('user')
     def index(self):
@@ -43,24 +46,36 @@ class User(Base):
     @permission('user')
     @route("/<user>/get/latest_measurements/")
     def get_measurements(self, user):
-        measurements = Measurements.objects(user=self.context).order_by("+create_stamp").limit(5)
+        measurements = Measurements.objects(user=self.context).order_by("+create_stamp")
         return jsonify({"data": [record.show_measurements for record in measurements]})
 
     @permission('user')
     @route("/<user>/get/latest_weights/")
     def get_weights(self, user):
-        weights = Weight.objects(user=self.context.to_dbref()).order_by("+create_stamp").limit(5)
-        return jsonify({"data": [record.show_weights for record in weights], "initial_weight": Weight.objects(user=self.context.to_dbref()).first().weight})
+        weights = Weight.objects(user=self.context.to_dbref()).order_by("+create_stamp")
+        return jsonify({"data": [record.show_weights for record in weights], "initial_weight": Weight.objects(user=self.context.to_dbref()).order_by("+create_stamp").first().weight})
 
-    @permission('zuck')
-    @route("/<user>/get")
-    def get_all(self, user):
-        res = []
-        all = Users.objects.all();
-        for x in all:
-            wht = Weight.objects(user=x).order_by('-create_stamp').first()
-            try:
-                res.append({x.full_name: wht.weight})
-            except:
-                pass
-        return jsonify(res)
+    @permission('user')
+    @route("/<user>/get/measurements/<measure>/")
+    def get_measure(self, user, measure):
+        measurements = Measurements.objects(user=self.context).order_by("+create_stamp")
+        return jsonify({"data": [{
+            "value": record.show_measurements.get(measure),
+            "unit": record.unit,
+            "create_user": record.create_user,
+            "create_stamp": datetimetools.cast_string(record.create_stamp, "dt"),
+            "comment": record.show_measurements.get(f"{measure}_comment"),
+            "initial":Measurements.objects(user=self.context.to_dbref()).order_by("+create_stamp").first().show_measurements.get(measure)} for record in measurements]})
+
+    # @permission('zuck')
+    # @route("/<user>/get")
+    # def get_all(self, user):
+    #     res = []
+    #     all = Users.objects.all();
+    #     for x in all:
+    #         wht = Weight.objects(user=x).order_by('-create_stamp').first()
+    #         try:
+    #             res.append({x.full_name: wht.weight})
+    #         except:
+    #             pass
+    #     return jsonify(res)

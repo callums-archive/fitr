@@ -1,0 +1,133 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+  input {
+    text-align: center;
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container">
+
+
+
+  <div class="col s12 mobile-form">
+    <div class="card-panel {{ colours['primary_card'] }} mt-4">
+      <table id="weight_dt" class="display" style="width:100%; height: 100%"></table>
+      <form id="weight">
+
+        <div class="row mb-0">
+          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Weight</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function() {
+
+    var weights_datatable = $('#weight_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Weight",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Prev. Diff",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            prev = meta.row - 1;
+            if (prev != -1) {
+              diff_prev = data - weights_datatable.rows().data()[prev].weight;
+              return `${diff_prev.toFixed(1)}${row.unit}`;
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            init = weights_datatable.ajax.json().initial_weight;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_weights', user=client.username) }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='weights_datatable_length']").formSelect();
+    // decide_form_card(".mobile-form");
+
+    new formGen("#weight", {
+      form: [{
+          type: "float",
+          name: "weight",
+          placeholder: "Weight",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "date",
+          name: "date",
+          placeholder: "Back Capture",
+          validators: []
+        },
+      ],
+
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('PTCaptureView:weight_post', user=client.username) }}"
+        },
+      },
+
+      onSuccess(data, status, xhr) {
+        $("#weight").find("button[type='submit']").attr("disabled", "");
+        M.toast({
+          html: `Weight Diff: ${data}`
+        });
+        setTimeout(function() {
+          window.location.replace("{{ url_for('PTCaptureView:index') }}");
+        }, 4000)
+      },
+
+      onFail(xhr, status) {
+        try {
+          var error = xhr.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+        M.toast({
+          html: error
+        });
+      }
+    });
+  });
+</script>
+{% endblock scripts %}
