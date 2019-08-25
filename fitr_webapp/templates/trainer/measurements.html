@@ -1,0 +1,565 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+  input {
+    text-align: center;
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container">
+
+
+  <div class="col s12 mobile-form">
+      <form id="measuremets">
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="neck">
+            <h6 class="center">Neck</h6>
+            <table id="neck_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="bicep">
+            <h6 class="center">Bicep</h6>
+            <table id="bicep_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="chest">
+            <h6 class="center">Chest</h6>
+            <table id="chest_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="abs1">
+            <h6 class="center">Abs 1</h6>
+            <table id="abs1_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="abs2">
+            <h6 class="center">Abs 2</h6>
+            <table id="abs2_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="abs3">
+            <h6 class="center">Abs 3</h6>
+            <table id="abs3_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="upperthigh">
+            <h6 class="center">Upper Thigh</h6>
+            <table id="upperthigh_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="midthigh">
+            <h6 class="center">Mid Thigh</h6>
+            <table id="midthigh_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+        <div class="card-panel {{ colours['primary_card'] }} mt-4">
+          <div id="calf">
+            <h6 class="center">Calf</h6>
+            <table id="calf_dt" class="display" style="width:100%; height: 100%"></table>
+          </div>
+        </div>
+
+
+
+        <div class="row mb-0">
+          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Measurement</button>
+        </div>
+
+      </form>
+    </div>
+</div>
+
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function() {
+
+    var neck_datatable = $('#neck_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = neck_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="neck") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='neck_datatable_length']").formSelect();
+
+
+    var bicep_datatable = $('#bicep_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = bicep_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="bicep") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='bicep_datatable_length']").formSelect();
+
+    var chest_datatable = $('#chest_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = chest_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="chest") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='chest_datatable_length']").formSelect();
+
+
+    var abs1_datatable = $('#abs1_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = abs1_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+        {
+          data: "comment",
+          title: "Comment."
+        }
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="abs1") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='abs1_datatable_length']").formSelect();
+
+    var abs2_datatable = $('#abs2_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = abs2_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+        {
+          data: "comment",
+          title: "Comment."
+        }
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="abs2") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='abs2_datatable_length']").formSelect();
+
+    var abs3_datatable = $('#abs3_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = abs3_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+        {
+          data: "comment",
+          title: "Comment."
+        }
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="abs3") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='abs3_datatable_length']").formSelect();
+
+    var upperthigh_datatable = $('#upperthigh_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = upperthigh_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="upperthigh") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='upperthigh_datatable_length']").formSelect();
+
+    var midthigh_datatable = $('#midthigh_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = midthigh_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="midthigh") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='midthigh_datatable_length']").formSelect();
+
+    var calf_datatable = $('#calf_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
+        },
+        {
+          title: "Measurement",
+          data: "value",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
+            }
+            return "-"
+          }
+        },
+        {
+          title: "Diff Init.",
+          data: "value",
+          render: function(data, type, row, meta) {
+            init = calf_datatable.ajax.json().data[0].initial;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
+          }
+        },
+      ],
+      ajax: "{{ url_for('User:get_measure', user=client.username, measure="calf") }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='calf_datatable_length']").formSelect();
+
+
+    new formGen("#measuremets", {
+      form: [{
+          type: "float",
+          name: "neck",
+          element: "#neck",
+          placeholder: "Neck",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "bicep",
+          element: "#bicep",
+          placeholder: "Bicep",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "chest",
+          element: "#chest",
+          placeholder: "Chest/Bust",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "abs1",
+          element: "#abs1",
+          placeholder: "ABS 1",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs1_comment",
+          element: "#abs1",
+          placeholder: "ABS 1 Comment",
+          validators: []
+        },
+        {
+          type: "float",
+          name: "abs2",
+          element: "#abs2",
+          placeholder: "ABS 2",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs2_comment",
+          element: "#abs2",
+          placeholder: "ABS 2 Comment",
+          validators: []
+        },
+        {
+          type: "float",
+          name: "abs3",
+          placeholder: "ABS 3",
+          element: "#abs3",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs3_comment",
+          element: "#abs3",
+          placeholder: "ABS 3 Comment",
+          validators: []
+        },
+        {
+          type: "float",
+          name: "upperthigh",
+          element: "#upperthigh",
+          placeholder: "Upper Thigh",
+          validators: []
+        },
+        {
+          type: "float",
+          name: "midthigh",
+          placeholder: "Mid Thigh",
+          element: "#midthigh",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "calf",
+          element: "#calf",
+          placeholder: "Calf",
+          validators: ["notEmpty()"]
+        },
+      ],
+
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('PTCaptureView:measurements_post', user=client.username) }}"
+        },
+      },
+
+      onSuccess(data, status, xhr) {
+        $("#measuremets").find("button[type='submit']").attr("disabled", "");
+        M.toast({
+          html: `Measure Status: ${data}`
+        });
+        setTimeout(function() {
+          window.location.replace("{{ url_for('PTCaptureView:index') }}");
+        }, 4000)
+      },
+
+      onFail(xhr, status) {
+        try {
+          var error = xhr.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+        M.toast({
+          html: error
+        });
+      }
+    });
+  });
+</script>
+{% endblock scripts %}

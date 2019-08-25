@@ -35,3 +35,15 @@ class Weight(db.Document):
             "create_stamp": datetimetools.cast_string(self.create_stamp, "dt"),
             "weight": self.weight,
         }
+
+    @classmethod
+    def add_weight(cls, user, weight, date=False):
+        row = cls()
+        row.user = user
+        row.weight = float(weight)
+        try:
+            row.create_stamp = datetimetools.parse_date(date)
+        except:
+            row.create_stamp = datetime.utcnow()
+        row.save()
+        return True

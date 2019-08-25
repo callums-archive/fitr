@@ -18,6 +18,10 @@ from fitr_webapp.system.permissions import permission, has_permission
 
 from flask import jsonify
 
+from fitr_webapp.models import (
+    Weight, Measurements
+)
+
 
 class PTCaptureView(Base):
     # route_prefix="/trainer/"
@@ -37,13 +41,21 @@ class PTCaptureView(Base):
                 return jsonify([{"username": user.username, "full_name": user.full_name} for user in users])
         return {}
 
-    @route('/<user>', methods=['GET'])
+    @route('/<user>/weights', methods=['GET'])
     @permission('pt_clients')
-    def clients_get(self, user):
+    def clients_get_weight(self, user):
         user = Users.by_username(user)
         if user is None:
             abort(404)
-        return render_template("trainer/capture_data.html", client=user)
+        return render_template("trainer/weights.html", client=user)
+
+    @route('/<user>/measurements', methods=['GET'])
+    @permission('pt_clients')
+    def clients_get_measurements(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+        return render_template("trainer/measurements.html", client=user)
 
     @route('/<user>/weight', methods=['POST'])
     @permission('pt_clients')
@@ -52,9 +64,15 @@ class PTCaptureView(Base):
         if user is None:
             abort(404)
 
-        if not user.capture_weight(str(self.data.get('weight')).replace(",", ".")):
+        if not Weight.add_weight(user, self.data.get("weight"), self.data.get("date", False)):
             abort(412, "Failed to add weight")
-        return "OK"
+
+        weights = Weight.objects(user=user).order_by("-create_stamp").limit(2)
+        diff = weights[0].weight - weights[1].weight
+        sign = ""
+        if diff > 0:
+            sign="+"
+        return f"{sign}{diff}KG's"
 
     @route('/<user>/fitness_test/<test>', methods=['POST'])
     @permission('pt_clients')
@@ -102,19 +120,20 @@ class PTCaptureView(Base):
         if user is None:
             abort(404)
 
-        if not user.capture_mesaurements(
-            str(self.data.get('neck')).replace(",", "."),
-            str(self.data.get('bicep')).replace(",", "."),
-            str(self.data.get('chest')).replace(",", "."),
-            str(self.data.get('abs1')).replace(",", "."),
+        if not Measurements.add_measurement(
+            user,
+            self.data.get('neck'),
+            self.data.get('bicep'),
+            self.data.get('chest'),
+            self.data.get('abs1'),
             self.data.get('abs1_comment'),
-            str(self.data.get('abs2')).replace(",", "."),
+            self.data.get('abs2'),
             self.data.get('abs2_comment'),
-            str(self.data.get('abs3')).replace(",", "."),
+            self.data.get('abs3'),
             self.data.get('abs3_comment'),
-            str(self.data.get('upperthigh')).replace(",", "."),
-            str(self.data.get('midthigh')).replace(",", "."),
-            str(self.data.get('calf')).replace(",", "."),
+            self.data.get('upperthigh', ""),
+            self.data.get('midthigh'),
+            self.data.get('calf'),
         ):
             abort(412, "Failed to add measurements")
         return "OK"

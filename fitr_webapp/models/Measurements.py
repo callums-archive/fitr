@@ -60,3 +60,24 @@ class Measurements(db.Document):
             "midthigh": self.midthigh,
             "calf": self.calf,
         }
+
+    @classmethod
+    def add_measurement(cls, user, neck, bicep, chest, abs1, abs1_comment, abs2, abs2_comment, abs3, abs3_comment, upperthigh, midthigh, calf):
+        row = cls(
+            user = user,
+            neck=float(neck),
+            bicep=float(bicep),
+            chest=float(chest),
+            abs1=float(abs1),
+            abs1_comment=str(abs1_comment),
+            abs2=float(abs2),
+            abs2_comment=str(abs2_comment),
+            abs3=float(abs3),
+            abs3_comment=str(abs3_comment),
+            upperthigh=float(upperthigh),
+            midthigh=float(midthigh),
+            calf=float(calf),
+        )
+
+        row.save()
+        return True

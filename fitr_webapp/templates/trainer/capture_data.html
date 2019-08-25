@@ -11,153 +11,40 @@
 {% block content %}
 <div class="container">
 
-  <div class="accordion mb-4 mt-4" id="accordionExample">
-    <div class="card">
-      <div class="card-header" id="headingOne">
-        <h2 class="mb-0">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="" aria-controls="collapseOne">
-            <i class="fas fa-weight"></i> Weight
-          </button>
-        </h2>
-      </div>
 
-      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Weight</th>
-                <th scope="col">Diff</th>
-                <th scope="col">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% set prev_weight = {'weight':0} %}
-              {% for weight_obj in client.weight %}
+  <div class="col s12 mobile-form">
+    <div class="card-panel {{ colours['primary_card'] }} mt-4">
+      <table id="measuremets_dt" class="display" style="width:100%; height: 100%"></table>
+      <form id="msr">
 
-                <tr>
-                  <td>{{ weight_obj.uid }}</td>
-                  <td>{{ weight_obj.weight }} {{weight_obj.unit}}</td>
-                  <td>{{ '%.1f' % (weight_obj.weight - prev_weight['weight']) }} {{weight_obj.unit}}</td>
-                  <td>{{ datetimetools.cast_string(weight_obj.create_stamp, "d") }}</td>
-                </tr>
-
-                {% if prev_weight.update({"weight": weight_obj.weight}) %} {% endif %}
-              {% endfor %}
-            </tbody>
-          </table>
-
-          <form id="weight">
-            <div class="form-group">
-              <label for="weight">Weight <i class="fas fa-level-down-alt"></i></label>
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="weight" name="weight" placeholder="KG's">
-            </div>
-            <button type="submit" class="btn btn-lg btn-success btn-block mt-3">Submit Stats! 🎉🎉🎉</button>
-          </form>
+        <div class="row mb-0">
+          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Measurement</button>
         </div>
-      </div>
+
+      </form>
     </div>
-
-    <div class="card">
-      <div class="card-header" id="headingTwo">
-        <h2 class="mb-0">
-          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            <i class="fas fa-ruler-vertical"></i> Measurements
-          </button>
-        </h2>
-      </div>
-      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-        <div class="card-body">
+  </div>
 
 
 
-          <form id="measurements">
-            <div class="form-group">
-              <label for="neck">Neck <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.neck }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="neck" name="neck" placeholder="CM's">
-            </div>
+  <div class="col s12 mobile-form">
+    <div class="card-panel {{ colours['primary_card'] }} mt-4">
+      <table id="weight_dt" class="display" style="width:100%; height: 100%"></table>
+      <form id="weight">
 
-            <div class="form-group">
-              <label for="bicep">Bicep <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.bicep }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="bicep" name="bicep" placeholder="CM's">
-            </div>
-
-            <div class="form-group">
-              <label for="chest">Bust/Chest <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.chest }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="chest" name="chest" placeholder="CM's">
-            </div>
-
-            <div class="form-group">
-              <label for="abs1">Abs 1 <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.abs1 }}</b>
-              <b style="color: red">{{ mts.abs1_comment }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs1" name="abs1" placeholder="CM's">
-              <input type="text" class="form-control form-control-lg mt-1" id="abs1_comment" name="abs1_comment" placeholder="Comment">
-            </div>
-
-            <div class="form-group">
-              <label for="abs2">Abs 2 <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.abs2 }}</b>
-              <b style="color: red">{{ mts.abs2_comment }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs2" name="abs2" placeholder="CM's">
-              <input type="text" class="form-control form-control-lg mt-1" id="abs2_comment" name="abs2_comment" placeholder="Comment">
-            </div>
-
-            <div class="form-group">
-              <label for="abs3">Abs 3 <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.abs3 }}</b>
-              <b style="color: red">{{ mts.abs3_comment }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="abs3" name="abs3" placeholder="CM's">
-              <input type="text" class="form-control form-control-lg mt-1" id="abs3_comment" name="abs3_comment" placeholder="Comment">
-            </div>
-
-            <div class="form-group">
-              <label for="upperthigh">Upper Thigh <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.upperthigh }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="upperthigh" name="upperthigh" placeholder="CM's">
-            </div>
-
-            <div class="form-group">
-              <label for="midthigh">Mid thigh <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.midthigh }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="midthigh" name="midthigh" placeholder="CM's">
-            </div>
-
-            <div class="form-group">
-              <label for="calf">Calf <i class="fas fa-level-down-alt"></i></label>
-              {% for mts in client.measurements %}
-              <b style="color: red">{{ mts.calf }}</b>
-              {% endfor %}
-              <input type="text" pattern="[0-9]*" inputmode="numeric" step="0.01" class="form-control form-control-lg" id="calf" name="calf" placeholder="CM's">
-            </div>
-
-            <button type="submit" class="btn btn-lg btn-success btn-block mt-3">Submit Stats! 🎉🎉🎉</button>
-          </form>
+        <div class="row mb-0">
+          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Weight</button>
         </div>
-      </div>
-    </div>
 
-    <div class="card">
+      </form>
+    </div>
+  </div>
+
+
+</div>
+
+
+    <!-- <div class="card">
       <div class="card-header" id="heading3">
         <h2 class="mb-0">
           <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="" aria-controls="collapse3">
@@ -224,7 +111,7 @@
           </form>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>
@@ -232,577 +119,771 @@
 
 {% block scripts %}
 <script>
-  // validation
-var fv = null
-  document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-      document.getElementById('weight'), {
-        fields: {
-          weight: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
+
+  $(document).ready(function() {
+
+    var weights_datatable = $('#weight_dt').DataTable({
+      paging: false,
+      info: false,
+      responsive: true,
+      lengthChange: false,
+      filter: false,
+      columns: [{
+          title: "Date",
+          data: "create_stamp"
         },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-        },
-      }
-    ).on('core.form.valid', function() {
-
-      $("button[type='submit']").attr("disabled", true);
-
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('PTCaptureView:weight_post', user=client.username) }}",
-        data: $('#weight').jsonString()
-      }).done(function(data, status, jqXHR) {
-        $.busyLoadFull("show", {
-          spinner: false,
-          image: false,
-          fontawesome: false,
-          custom: false,
-          color: "#fff",
-          background: "rgba(0, 0, 0, 0.80)",
-          animation: 'fade',
-          text: `🎉 Success`,
-          textPosition: "bottom",
-          fontSize: "2rem",
-        });
-
-        setTimeout(function() {
-          window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 2500)
-      }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", false);
-
-        try {
-          var error = data.responseJSON.error_msg;
-        } catch (err) {
-          var error = "Server Error, Try again.";
-        }
-
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
-    }).on('core.form.invalid', function() {
-      $.toast({
-        text: "Please see red highlighted areas to fix form errors.",
-        heading: 'Error!',
-        icon: 'error',
-        showHideTransition: 'slide',
-        allowToastClose: false,
-        hideAfter: 3000,
-        stack: 5,
-        position: 'top-center',
-        textAlign: 'left',
-        loader: true,
-        beforeShow: function() {},
-        afterShown: function() {},
-        beforeHide: function() {},
-        afterHidden: function() {}
-      });
-    });
-  });
-
-
-
-  document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-      document.getElementById('situp'), {
-        fields: {
-          value: {
-            validators:{
-              regexp: {
-                regexp: /^\d+$/,
-                message: 'Input wrong only numbers'
-              },
+        {
+          title: "Weight",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            if (data > 0) {
+              return `${data}${row.unit}`
             }
+            return "-"
           }
         },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-        },
-      }
-    ).on('core.form.valid', function() {
-
-      $("button[type='submit']").attr("disabled", true);
-
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='situp') }}",
-        data: $('#situp').jsonString()
-      }).done(function(data, status, jqXHR) {
-        $.busyLoadFull("show", {
-          spinner: false,
-          image: false,
-          fontawesome: false,
-          custom: false,
-          color: "#fff",
-          background: "rgba(0, 0, 0, 0.80)",
-          animation: 'fade',
-          text: `🎉 Success`,
-          textPosition: "bottom",
-          fontSize: "2rem",
-        });
-
-        setTimeout(function() {
-          window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 2500)
-      }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", false);
-
-        try {
-          var error = data.responseJSON.error_msg;
-        } catch (err) {
-          var error = "Server Error, Try again.";
-        }
-
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
-    }).on('core.form.invalid', function() {
-      $.toast({
-        text: "Please see red highlighted areas to fix form errors.",
-        heading: 'Error!',
-        icon: 'error',
-        showHideTransition: 'slide',
-        allowToastClose: false,
-        hideAfter: 3000,
-        stack: 5,
-        position: 'top-center',
-        textAlign: 'left',
-        loader: true,
-        beforeShow: function() {},
-        afterShown: function() {},
-        beforeHide: function() {},
-        afterHidden: function() {}
-      });
-    });
-  });
-
-  document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-      document.getElementById('pushup'), {
-        fields: {
-          value: {
-            validators:{
-              regexp: {
-                regexp: /^\d+$/,
-                message: 'Input wrong only numbers'
-              },
+        {
+          title: "Prev. Diff",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            prev = meta.row - 1;
+            if (prev != -1) {
+              diff_prev = data - weights_datatable.rows().data()[prev].weight;
+              return `${diff_prev.toFixed(1)}${row.unit}`;
             }
+            return "-"
           }
         },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-        },
-      }
-    ).on('core.form.valid', function() {
-
-      $("button[type='submit']").attr("disabled", true);
-
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='pushup') }}",
-        data: $('#pushup').jsonString()
-      }).done(function(data, status, jqXHR) {
-        $.busyLoadFull("show", {
-          spinner: false,
-          image: false,
-          fontawesome: false,
-          custom: false,
-          color: "#fff",
-          background: "rgba(0, 0, 0, 0.80)",
-          animation: 'fade',
-          text: `🎉 Success`,
-          textPosition: "bottom",
-          fontSize: "2rem",
-        });
-
-        setTimeout(function() {
-        $.busyLoadFull("hide")
-
-        }, 2500)
-
-        setTimeout(function() {
-        $("button[type='submit']").attr("disabled", false);
-
-      }, 7000)
-      }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", false);
-
-        try {
-          var error = data.responseJSON.error_msg;
-        } catch (err) {
-          var error = "Server Error, Try again.";
-        }
-
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
-    }).on('core.form.invalid', function() {
-      $.toast({
-        text: "Please see red highlighted areas to fix form errors.",
-        heading: 'Error!',
-        icon: 'error',
-        showHideTransition: 'slide',
-        allowToastClose: false,
-        hideAfter: 3000,
-        stack: 5,
-        position: 'top-center',
-        textAlign: 'left',
-        loader: true,
-        beforeShow: function() {},
-        afterShown: function() {},
-        beforeHide: function() {},
-        afterHidden: function() {}
-      });
-    });
-  });
-
-
-  document.addEventListener('DOMContentLoaded', function(e) {
-    FormValidation.formValidation(
-      document.getElementById('stepper'), {
-        fields: {
-          value: {
-            validators:{
-              regexp: {
-                regexp: /^\d+$/,
-                message: 'Input wrong only numbers'
-              },
-            }
+        {
+          title: "Diff Init.",
+          data: "weight",
+          render: function(data, type, row, meta) {
+            init = weights_datatable.ajax.json().initial_weight;
+            diff_init = data - init
+            return `${diff_init.toFixed(1)}${row.unit}`;
           }
         },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
+      ],
+      ajax: "{{ url_for('User:get_weights', user=client.username) }}",
+      order: [
+        [0, "desc"]
+      ]
+    });
+    $("select[name='weights_datatable_length']").formSelect();
+    // decide_form_card(".mobile-form");
+
+    new formGen("#weight", {
+      form: [{
+          type: "float",
+          name: "weight",
+          placeholder: "Weight",
+          validators: ["notEmpty()"]
         },
-      }
-    ).on('core.form.valid', function() {
+        {
+            type: "date",
+            name: "date",
+            placeholder: "Back Capture",
+            validators: []
+          },
+      ],
 
-      $("button[type='submit']").attr("disabled", true);
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('PTCaptureView:weight_post', user=client.username) }}"
+        },
+      },
 
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='stepper') }}",
-        data: $('#stepper').jsonString()
-      }).done(function(data, status, jqXHR) {
-        $.busyLoadFull("show", {
-          spinner: false,
-          image: false,
-          fontawesome: false,
-          custom: false,
-          color: "#fff",
-          background: "rgba(0, 0, 0, 0.80)",
-          animation: 'fade',
-          text: `🎉 Success`,
-          textPosition: "bottom",
-          fontSize: "2rem",
-        });
-
+      onSuccess(data, status, xhr) {
+        $("#weight").find("button[type='submit']").attr("disabled", "");
+        M.toast({html: `Weight Diff: ${data}`});
         setTimeout(function() {
           window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 2500)
-      }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", false);
+        }, 4000)
+      },
 
+      onFail(xhr, status) {
         try {
-          var error = data.responseJSON.error_msg;
+          var error = xhr.responseJSON.error_msg;
         } catch (err) {
           var error = "Server Error, Try again.";
         }
-
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
-    }).on('core.form.invalid', function() {
-      $.toast({
-        text: "Please see red highlighted areas to fix form errors.",
-        heading: 'Error!',
-        icon: 'error',
-        showHideTransition: 'slide',
-        allowToastClose: false,
-        hideAfter: 3000,
-        stack: 5,
-        position: 'top-center',
-        textAlign: 'left',
-        loader: true,
-        beforeShow: function() {},
-        afterShown: function() {},
-        beforeHide: function() {},
-        afterHidden: function() {}
-      });
-    });
-  });
-
-
-
-
-  document.addEventListener('DOMContentLoaded', function(e) {
-    fv = FormValidation.formValidation(
-      document.getElementById('measurements'), {
-        fields: {
-          neck: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          bicep: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          chest: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          abs1: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          abs2: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          abs3: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          midthigh: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          upperthigh: {
-            validators: {
-              regexp: {
-                  regexp:   /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-          calf: {
-            validators: {
-              notEmpty: {
-                message: 'field is required check decimal point',
-              },
-              regexp: {
-                  regexp: /^(\d+\.?\d*|\.\d+)$/,
-                  message: 'Input wrong only (.) and (,) accepted as decimal places'
-              },
-            }
-          },
-        },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap: new FormValidation.plugins.Bootstrap(),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-        },
+        M.toast({html: error});
       }
-    ).on('core.form.valid', function() {
+    });
 
-      $("button[type='submit']").attr("disabled", true);
+    new formGen("#msr", {
+      form: [
+        {
+          type: "float",
+          name: "neck",
+          placeholder: "Neck",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "bicep",
+          placeholder: "Bicep",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "chest",
+          placeholder: "Chest/Bust",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "ABS 1",
+          placeholder: "abs1",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs1_comment",
+          placeholder: "ABS 1 Comment",
+          validators: [""]
+        },
+        {
+          type: "float",
+          name: "ABS 2",
+          placeholder: "abs2",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs2_comment",
+          placeholder: "ABS 2 Comment",
+          validators: [""]
+        },
+        {
+          type: "float",
+          name: "ABS 3",
+          placeholder: "abs3",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "string",
+          name: "abs3_comment",
+          placeholder: "ABS 3 Comment",
+          validators: [""]
+        },
+        {
+          type: "float",
+          name: "upperthigh",
+          placeholder: "Upper Thigh",
+          validators: [""]
+        },
+        {
+          type: "float",
+          name: "midthigh",
+          placeholder: "Mid Thigh",
+          validators: ["notEmpty()"]
+        },
+        {
+          type: "float",
+          name: "calf",
+          placeholder: "Calf",
+          validators: ["notEmpty()"]
+        },
+      ],
 
-      $.ajax({
-        accept: 'application/json',
-        contentType: 'application/json',
-        type: "POST",
-        url: "{{ url_for('PTCaptureView:measurements_post', user=client.username) }}",
-        data: $('#measurements').jsonString()
-      }).done(function(data, status, jqXHR) {
-        $.busyLoadFull("show", {
-          spinner: false,
-          image: false,
-          fontawesome: false,
-          custom: false,
-          color: "#fff",
-          background: "rgba(0, 0, 0, 0.80)",
-          animation: 'fade',
-          text: `🎉 Success`,
-          textPosition: "bottom",
-          fontSize: "2rem",
-        });
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('PTCaptureView:measurements_post', user=client.username) }}"
+        },
+      },
 
+      onSuccess(data, status, xhr) {
+        $("#weight").find("button[type='submit']").attr("disabled", "");
+        M.toast({html: `Weight Diff: ${data}`});
         setTimeout(function() {
           window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 2500)
-      }).fail(function(data, status, jqXHR) {
-        $("button[type='submit']").attr("disabled", false);
+        }, 4000)
+      },
 
+      onFail(xhr, status) {
         try {
-          var error = data.responseJSON.error_msg;
+          var error = xhr.responseJSON.error_msg;
         } catch (err) {
           var error = "Server Error, Try again.";
         }
-
-        $.toast({
-          text: error,
-          heading: 'Error!',
-          icon: 'error',
-          showHideTransition: 'slide',
-          allowToastClose: false,
-          hideAfter: 3000,
-          stack: 5,
-          position: 'top-center',
-          textAlign: 'left',
-          loader: true,
-          beforeShow: function() {},
-          afterShown: function() {},
-          beforeHide: function() {},
-          afterHidden: function() {}
-        });
-      });
-    }).on('core.form.invalid', function() {
-      $.toast({
-        text: "Please see red highlighted areas to fix form errors.",
-        heading: 'Error!',
-        icon: 'error',
-        showHideTransition: 'slide',
-        allowToastClose: false,
-        hideAfter: 3000,
-        stack: 5,
-        position: 'top-center',
-        textAlign: 'left',
-        loader: true,
-        beforeShow: function() {},
-        afterShown: function() {},
-        beforeHide: function() {},
-        afterHidden: function() {}
-      });
+        M.toast({html: error});
+      }
     });
   });
-
-  $('#stats').on('keyup keypress', function(e) {
-    var keyCode = e.keyCode || e.which;
-    if (keyCode === 13) {
-      e.preventDefault();
-      return false;
-    }
-  });
+//   // validation
+// var fv = null
+//   document.addEventListener('DOMContentLoaded', function(e) {
+//     FormValidation.formValidation(
+//       document.getElementById('weight'), {
+//         fields: {
+//           weight: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//         },
+//         plugins: {
+//           trigger: new FormValidation.plugins.Trigger(),
+//           bootstrap: new FormValidation.plugins.Bootstrap(),
+//           submitButton: new FormValidation.plugins.SubmitButton(),
+//         },
+//       }
+//     ).on('core.form.valid', function() {
+//
+//       $("button[type='submit']").attr("disabled", true);
+//
+//       $.ajax({
+//         accept: 'application/json',
+//         contentType: 'application/json',
+//         type: "POST",
+//         url: "{{ url_for('PTCaptureView:weight_post', user=client.username) }}",
+//         data: $('#weight').jsonString()
+//       }).done(function(data, status, jqXHR) {
+//         $.busyLoadFull("show", {
+//           spinner: false,
+//           image: false,
+//           fontawesome: false,
+//           custom: false,
+//           color: "#fff",
+//           background: "rgba(0, 0, 0, 0.80)",
+//           animation: 'fade',
+//           text: `🎉 Success`,
+//           textPosition: "bottom",
+//           fontSize: "2rem",
+//         });
+//
+//         setTimeout(function() {
+//           window.location.replace("{{ url_for('PTCaptureView:index') }}");
+//         }, 2500)
+//       }).fail(function(data, status, jqXHR) {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//         try {
+//           var error = data.responseJSON.error_msg;
+//         } catch (err) {
+//           var error = "Server Error, Try again.";
+//         }
+//
+//         $.toast({
+//           text: error,
+//           heading: 'Error!',
+//           icon: 'error',
+//           showHideTransition: 'slide',
+//           allowToastClose: false,
+//           hideAfter: 3000,
+//           stack: 5,
+//           position: 'top-center',
+//           textAlign: 'left',
+//           loader: true,
+//           beforeShow: function() {},
+//           afterShown: function() {},
+//           beforeHide: function() {},
+//           afterHidden: function() {}
+//         });
+//       });
+//     }).on('core.form.invalid', function() {
+//       $.toast({
+//         text: "Please see red highlighted areas to fix form errors.",
+//         heading: 'Error!',
+//         icon: 'error',
+//         showHideTransition: 'slide',
+//         allowToastClose: false,
+//         hideAfter: 3000,
+//         stack: 5,
+//         position: 'top-center',
+//         textAlign: 'left',
+//         loader: true,
+//         beforeShow: function() {},
+//         afterShown: function() {},
+//         beforeHide: function() {},
+//         afterHidden: function() {}
+//       });
+//     });
+//   });
+//
+//
+//
+//   document.addEventListener('DOMContentLoaded', function(e) {
+//     FormValidation.formValidation(
+//       document.getElementById('situp'), {
+//         fields: {
+//           value: {
+//             validators:{
+//               regexp: {
+//                 regexp: /^\d+$/,
+//                 message: 'Input wrong only numbers'
+//               },
+//             }
+//           }
+//         },
+//         plugins: {
+//           trigger: new FormValidation.plugins.Trigger(),
+//           bootstrap: new FormValidation.plugins.Bootstrap(),
+//           submitButton: new FormValidation.plugins.SubmitButton(),
+//         },
+//       }
+//     ).on('core.form.valid', function() {
+//
+//       $("button[type='submit']").attr("disabled", true);
+//
+//       $.ajax({
+//         accept: 'application/json',
+//         contentType: 'application/json',
+//         type: "POST",
+//         url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='situp') }}",
+//         data: $('#situp').jsonString()
+//       }).done(function(data, status, jqXHR) {
+//         $.busyLoadFull("show", {
+//           spinner: false,
+//           image: false,
+//           fontawesome: false,
+//           custom: false,
+//           color: "#fff",
+//           background: "rgba(0, 0, 0, 0.80)",
+//           animation: 'fade',
+//           text: `🎉 Success`,
+//           textPosition: "bottom",
+//           fontSize: "2rem",
+//         });
+//
+//         setTimeout(function() {
+//           window.location.replace("{{ url_for('PTCaptureView:index') }}");
+//         }, 2500)
+//       }).fail(function(data, status, jqXHR) {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//         try {
+//           var error = data.responseJSON.error_msg;
+//         } catch (err) {
+//           var error = "Server Error, Try again.";
+//         }
+//
+//         $.toast({
+//           text: error,
+//           heading: 'Error!',
+//           icon: 'error',
+//           showHideTransition: 'slide',
+//           allowToastClose: false,
+//           hideAfter: 3000,
+//           stack: 5,
+//           position: 'top-center',
+//           textAlign: 'left',
+//           loader: true,
+//           beforeShow: function() {},
+//           afterShown: function() {},
+//           beforeHide: function() {},
+//           afterHidden: function() {}
+//         });
+//       });
+//     }).on('core.form.invalid', function() {
+//       $.toast({
+//         text: "Please see red highlighted areas to fix form errors.",
+//         heading: 'Error!',
+//         icon: 'error',
+//         showHideTransition: 'slide',
+//         allowToastClose: false,
+//         hideAfter: 3000,
+//         stack: 5,
+//         position: 'top-center',
+//         textAlign: 'left',
+//         loader: true,
+//         beforeShow: function() {},
+//         afterShown: function() {},
+//         beforeHide: function() {},
+//         afterHidden: function() {}
+//       });
+//     });
+//   });
+//
+//   document.addEventListener('DOMContentLoaded', function(e) {
+//     FormValidation.formValidation(
+//       document.getElementById('pushup'), {
+//         fields: {
+//           value: {
+//             validators:{
+//               regexp: {
+//                 regexp: /^\d+$/,
+//                 message: 'Input wrong only numbers'
+//               },
+//             }
+//           }
+//         },
+//         plugins: {
+//           trigger: new FormValidation.plugins.Trigger(),
+//           bootstrap: new FormValidation.plugins.Bootstrap(),
+//           submitButton: new FormValidation.plugins.SubmitButton(),
+//         },
+//       }
+//     ).on('core.form.valid', function() {
+//
+//       $("button[type='submit']").attr("disabled", true);
+//
+//       $.ajax({
+//         accept: 'application/json',
+//         contentType: 'application/json',
+//         type: "POST",
+//         url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='pushup') }}",
+//         data: $('#pushup').jsonString()
+//       }).done(function(data, status, jqXHR) {
+//         $.busyLoadFull("show", {
+//           spinner: false,
+//           image: false,
+//           fontawesome: false,
+//           custom: false,
+//           color: "#fff",
+//           background: "rgba(0, 0, 0, 0.80)",
+//           animation: 'fade',
+//           text: `🎉 Success`,
+//           textPosition: "bottom",
+//           fontSize: "2rem",
+//         });
+//
+//         setTimeout(function() {
+//         $.busyLoadFull("hide")
+//
+//         }, 2500)
+//
+//         setTimeout(function() {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//       }, 7000)
+//       }).fail(function(data, status, jqXHR) {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//         try {
+//           var error = data.responseJSON.error_msg;
+//         } catch (err) {
+//           var error = "Server Error, Try again.";
+//         }
+//
+//         $.toast({
+//           text: error,
+//           heading: 'Error!',
+//           icon: 'error',
+//           showHideTransition: 'slide',
+//           allowToastClose: false,
+//           hideAfter: 3000,
+//           stack: 5,
+//           position: 'top-center',
+//           textAlign: 'left',
+//           loader: true,
+//           beforeShow: function() {},
+//           afterShown: function() {},
+//           beforeHide: function() {},
+//           afterHidden: function() {}
+//         });
+//       });
+//     }).on('core.form.invalid', function() {
+//       $.toast({
+//         text: "Please see red highlighted areas to fix form errors.",
+//         heading: 'Error!',
+//         icon: 'error',
+//         showHideTransition: 'slide',
+//         allowToastClose: false,
+//         hideAfter: 3000,
+//         stack: 5,
+//         position: 'top-center',
+//         textAlign: 'left',
+//         loader: true,
+//         beforeShow: function() {},
+//         afterShown: function() {},
+//         beforeHide: function() {},
+//         afterHidden: function() {}
+//       });
+//     });
+//   });
+//
+//
+//   document.addEventListener('DOMContentLoaded', function(e) {
+//     FormValidation.formValidation(
+//       document.getElementById('stepper'), {
+//         fields: {
+//           value: {
+//             validators:{
+//               regexp: {
+//                 regexp: /^\d+$/,
+//                 message: 'Input wrong only numbers'
+//               },
+//             }
+//           }
+//         },
+//         plugins: {
+//           trigger: new FormValidation.plugins.Trigger(),
+//           bootstrap: new FormValidation.plugins.Bootstrap(),
+//           submitButton: new FormValidation.plugins.SubmitButton(),
+//         },
+//       }
+//     ).on('core.form.valid', function() {
+//
+//       $("button[type='submit']").attr("disabled", true);
+//
+//       $.ajax({
+//         accept: 'application/json',
+//         contentType: 'application/json',
+//         type: "POST",
+//         url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='stepper') }}",
+//         data: $('#stepper').jsonString()
+//       }).done(function(data, status, jqXHR) {
+//         $.busyLoadFull("show", {
+//           spinner: false,
+//           image: false,
+//           fontawesome: false,
+//           custom: false,
+//           color: "#fff",
+//           background: "rgba(0, 0, 0, 0.80)",
+//           animation: 'fade',
+//           text: `🎉 Success`,
+//           textPosition: "bottom",
+//           fontSize: "2rem",
+//         });
+//
+//         setTimeout(function() {
+//           window.location.replace("{{ url_for('PTCaptureView:index') }}");
+//         }, 2500)
+//       }).fail(function(data, status, jqXHR) {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//         try {
+//           var error = data.responseJSON.error_msg;
+//         } catch (err) {
+//           var error = "Server Error, Try again.";
+//         }
+//
+//         $.toast({
+//           text: error,
+//           heading: 'Error!',
+//           icon: 'error',
+//           showHideTransition: 'slide',
+//           allowToastClose: false,
+//           hideAfter: 3000,
+//           stack: 5,
+//           position: 'top-center',
+//           textAlign: 'left',
+//           loader: true,
+//           beforeShow: function() {},
+//           afterShown: function() {},
+//           beforeHide: function() {},
+//           afterHidden: function() {}
+//         });
+//       });
+//     }).on('core.form.invalid', function() {
+//       $.toast({
+//         text: "Please see red highlighted areas to fix form errors.",
+//         heading: 'Error!',
+//         icon: 'error',
+//         showHideTransition: 'slide',
+//         allowToastClose: false,
+//         hideAfter: 3000,
+//         stack: 5,
+//         position: 'top-center',
+//         textAlign: 'left',
+//         loader: true,
+//         beforeShow: function() {},
+//         afterShown: function() {},
+//         beforeHide: function() {},
+//         afterHidden: function() {}
+//       });
+//     });
+//   });
+//
+//
+//
+//
+//   document.addEventListener('DOMContentLoaded', function(e) {
+//     fv = FormValidation.formValidation(
+//       document.getElementById('measurements'), {
+//         fields: {
+//           neck: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           bicep: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           chest: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           abs1: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           abs2: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           abs3: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           midthigh: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           upperthigh: {
+//             validators: {
+//               regexp: {
+//                   regexp:   /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//           calf: {
+//             validators: {
+//               notEmpty: {
+//                 message: 'field is required check decimal point',
+//               },
+//               regexp: {
+//                   regexp: /^(\d+\.?\d*|\.\d+)$/,
+//                   message: 'Input wrong only (.) and (,) accepted as decimal places'
+//               },
+//             }
+//           },
+//         },
+//         plugins: {
+//           trigger: new FormValidation.plugins.Trigger(),
+//           bootstrap: new FormValidation.plugins.Bootstrap(),
+//           submitButton: new FormValidation.plugins.SubmitButton(),
+//         },
+//       }
+//     ).on('core.form.valid', function() {
+//
+//       $("button[type='submit']").attr("disabled", true);
+//
+//       $.ajax({
+//         accept: 'application/json',
+//         contentType: 'application/json',
+//         type: "POST",
+//         url: "{{ url_for('PTCaptureView:measurements_post', user=client.username) }}",
+//         data: $('#measurements').jsonString()
+//       }).done(function(data, status, jqXHR) {
+//         $.busyLoadFull("show", {
+//           spinner: false,
+//           image: false,
+//           fontawesome: false,
+//           custom: false,
+//           color: "#fff",
+//           background: "rgba(0, 0, 0, 0.80)",
+//           animation: 'fade',
+//           text: `🎉 Success`,
+//           textPosition: "bottom",
+//           fontSize: "2rem",
+//         });
+//
+//         setTimeout(function() {
+//           window.location.replace("{{ url_for('PTCaptureView:index') }}");
+//         }, 2500)
+//       }).fail(function(data, status, jqXHR) {
+//         $("button[type='submit']").attr("disabled", false);
+//
+//         try {
+//           var error = data.responseJSON.error_msg;
+//         } catch (err) {
+//           var error = "Server Error, Try again.";
+//         }
+//
+//         $.toast({
+//           text: error,
+//           heading: 'Error!',
+//           icon: 'error',
+//           showHideTransition: 'slide',
+//           allowToastClose: false,
+//           hideAfter: 3000,
+//           stack: 5,
+//           position: 'top-center',
+//           textAlign: 'left',
+//           loader: true,
+//           beforeShow: function() {},
+//           afterShown: function() {},
+//           beforeHide: function() {},
+//           afterHidden: function() {}
+//         });
+//       });
+//     }).on('core.form.invalid', function() {
+//       $.toast({
+//         text: "Please see red highlighted areas to fix form errors.",
+//         heading: 'Error!',
+//         icon: 'error',
+//         showHideTransition: 'slide',
+//         allowToastClose: false,
+//         hideAfter: 3000,
+//         stack: 5,
+//         position: 'top-center',
+//         textAlign: 'left',
+//         loader: true,
+//         beforeShow: function() {},
+//         afterShown: function() {},
+//         beforeHide: function() {},
+//         afterHidden: function() {}
+//       });
+//     });
+//   });
+//
+//   $('#stats').on('keyup keypress', function(e) {
+//     var keyCode = e.keyCode || e.which;
+//     if (keyCode === 13) {
+//       e.preventDefault();
+//       return false;
+//     }
+//   });
 </script>
 {% endblock scripts %}
