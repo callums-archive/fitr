@@ -22,6 +22,8 @@ from fitr_webapp.models import (
     Weight, Measurements
 )
 
+from fitr_webapp.system import mailer
+
 
 class PTCaptureView(Base):
     # route_prefix="/trainer/"
@@ -72,6 +74,8 @@ class PTCaptureView(Base):
         sign = ""
         if diff > 0:
             sign="+"
+
+        mailer.send_short_message(user.email, "New Weight Submitted", f"Hey {user.full_name}\n\n{request.user.full_name} has submitted a new weight for you!\n\nCheck it out at https://fitr.gq")
         return f"{sign}{diff}KG's"
 
     @route('/<user>/fitness_test/<test>', methods=['POST'])
@@ -136,4 +140,5 @@ class PTCaptureView(Base):
             self.data.get('calf'),
         ):
             abort(412, "Failed to add measurements")
+        mailer.send_short_message(user.email, "New Measurements Submitted", f"Hey {user.full_name}\n\n{request.user.full_name} has submitted new measurements for you!\n\nCheck it out at https://fitr.gq")
         return "OK"
