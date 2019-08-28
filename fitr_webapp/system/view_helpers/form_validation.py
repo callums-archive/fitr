@@ -40,7 +40,7 @@ class FormValidation(Base):
             # validate the one field
             opfield = process_x(self.data)
             if opfield[0] == 0:
-                return {'field': self.key, 'message': opfield[1], 'valid':False}
+                return 0, opfield[1]
             return {'field': self.key, 'valid': True}
 
         elif len(self.data) > 1:
