@@ -2,106 +2,127 @@
 
 {% block styles %}
 <style>
-  .form-width {
-    width: 400px !important;
-    margin: auto;
-  }
-
-  .valign-wrapper {
-    height: 90% !important;
+  .va-center {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
   }
 </style>
 {% endblock styles %}
 
 {% block content %}
 
-<nav>
-  <div class="nav-wrapper {{ colours['nav'] }}">
-    <a href="{{ url_for('index') }}" class="left brand-logo">
-      <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
-    </a>
-    <ul class="right">
-      <li><a class="btn {{ colours['secondary_btn'] }}" href="{{ url_for('UserRegistrationView:register_get') }}"><i class="fas fa-user-plus"></i> Register</a></li>
-    </ul>
-  </div>
-</nav>
 
-<div class="valign-wrapper">
-  <div class="form-width">
+<div style="height: 100vh;">
+  <div class="container va-center">
+
     <div class="row">
-
-      <div class="col s12">
-        <h5 class="center-align"><i class="far fa-user"></i> Login</h5>
+      <div class="col"></div>
+      <div class="col">
+        <img class="mx-auto d-block" width="200" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
       </div>
+      <div class="col"></div>
+    </div>
 
-      <div class="col s12 mobile-form">
-        <div class="card-panel {{ colours['primary_card'] }} mt-4">
-          <form id="login">
 
-            <div class="row mb-0">
-              <button class="col s12 btn btn-large {{ colours['primary_btn'] }} modal-trigger" type="submit">Login</button>
-              <div class="col s12 mt-4 center-align">
-                <a class="black-text text-lighten-3" href="./forgot">Forgot password?</a>
+    <div class="row">
+      <div class="col-md"></div>
+      <div class="col-md">
+        <form id="login">
+          <div class="card border-primary mb-3">
+            <div class="card-header text-center">Login</div>
+            <div class="card-body">
+              <div id="identifiers"></div>
+              <div class="text-center">
+                <small><a href="{{ url_for('UserAuthenticationView:forgot_get') }}">forgot password?</a></small>
               </div>
             </div>
-
-          </form>
-        </div>
+            <div class="card-footer bg-primary">
+              <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+                </div>
+                <div class="col"></div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
-
-      <div class="col s12">
-        <p class="mt-4 center-align text-darken-2">&copy; <script>
-            document.write(new Date().getFullYear())
-          </script>
-        </p>
-      </div>
+      <div class="col-md"></div>
     </div>
+
+    <div class="text-center">
+      <a class="badge badge-info mb-1" href="{{ url_for('UserRegistrationView:register_get') }}"><b><i class="fas fa-info-circle"></i> Need an account?</b></a>
+      <p class="mt-1">&copy; <script>
+          document.write(new Date().getFullYear())
+        </script>
+      </p>
+    </div>
+
   </div>
-</div>
 
-{% endblock content %}
 
-{% block scripts %}
-<script>
-  $(document).ready(function() {
-    decide_form_card(".mobile-form");
+  {% endblock content %}
 
-    new formGen("#login", {
-      form: [{
-          type: "string",
-          name: "identifier",
-          placeholder: "Username/Email",
-          validators: ["strMin(5)"]
+  {% block scripts %}
+  <script>
+    $(document).ready(function() {
+
+      new formGen("#login", {
+        form: [{
+            type: "string",
+            name: "identifier",
+            placeholder: "Username/Email",
+            validators: ["strMin(3)"],
+            element: "#identifiers"
+          },
+          {
+            type: "password",
+            name: "password",
+            placeholder: "Password",
+            validators: ["notEmpty()", "strMin(5)"],
+            element: "#identifiers"
+          },
+        ],
+
+        remote: {
+          submit: {
+            method: "POST",
+            url: "{{ url_for('UserAuthenticationView:login_post') }}"
+          },
         },
-        {
-          type: "password",
-          name: "password",
-          placeholder: "Password",
-          validators: ["notEmpty()"]
+
+        onSuccess(data, status, xhr) {
+          $("#login").find("button[type='submit']").attr("disabled", "");
+          Swal.fire({
+            type: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+            title: 'Authentication Complete',
+            text: "You have been successfully authenticated. Please wait...",
+            onClose: () => {
+              window.location.replace(data.redirect);
+            }
+          });
         },
-      ],
 
-      remote: {
-        submit: {
-          method: "POST",
-          url: "{{ url_for('UserAuthenticationView:login_post') }}"
-        },
-      },
+        onFail(xhr, status) {
+          try {
+            var error = xhr.responseJSON.error_msg;
+          } catch (err) {
+            var error = "Server Error, Try again.";
+          }
 
-      onSuccess(data, status, xhr) {
-        $("#login").find("button[type='submit']").attr("disabled", "");
-        window.location.replace(data.redirect);
-      },
-
-      onFail(xhr, status) {
-        try {
-          var error = xhr.responseJSON.error_msg;
-        } catch (err) {
-          var error = "Server Error, Try again.";
+          iziToast.error({
+            position: "bottomLeft",
+            title: 'Error',
+            message: error
+          });
         }
-        M.toast({html: error});
-      }
+      });
     });
-  });
-</script>
-{% endblock scripts %}
+  </script>
+  {% endblock scripts %}

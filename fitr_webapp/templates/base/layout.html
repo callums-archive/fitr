@@ -15,12 +15,14 @@
         <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
 
         <!-- materialize -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/bs4-helpers.css') }}">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/css/custom/bootstrap.min.css') }}">
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/css/bootstrap.css') }}"> -->
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}"> -->
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/bs4-helpers.css') }}"> -->
+        <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 
         <!-- fitr main css -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}">
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}"> -->
 
         <!-- font awesome -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
@@ -35,9 +37,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='chartist/chartist.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='chartist/plugins/chartist-plugin-tooltip/chartist-plugin-tooltip.css') }}">
 
+        <!-- iziToast -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='iziToast/css/iziToast.min.css') }}">
+
+        <!-- sweet altert 2 -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='sweetAlert/sweetalert2.min.css') }}">
 
         <!-- init styles -->
-        {% include 'base/styles.html' %}
+      {#  {% include 'base/styles.html' %}#}
 
         {% block styles %}
         {% endblock styles %}
@@ -45,7 +52,7 @@
         <title>Fitr</title>
     </head>
 
-    <body class="{{ colours['background'] }}">
+    <body>
         <div class="se-pre-con"></div>
 
         {% if is_loggedin() %}
@@ -57,19 +64,21 @@
 
         <!-- core js -->
         <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='bootstrap4/js/bootstrap.min.js') }}"></script>
 
         <!-- font awesome -->
         <script src="{{ url_for('static', filename='fontawesome/js/all.min.js') }}"></script>
 
         <!-- fitr main js -->
-        <script src="{{ url_for('static', filename='app/fitr.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='app/fitr.js') }}"></script> -->
 
         <!-- busy loader js -->
         <script src="{{ url_for('static', filename='jquery-busy-load/busyloader.min.js') }}"></script>
 
         <!-- form generator -->
-        <script src="{{ url_for('static', filename='materializeFormMapper/materializeFormMapper.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='materializeFormMapper/materializeFormMapper.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='BSFormMapper/BS4FormMapper.js') }}"></script>
 
         <!-- datatables -->
         <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
@@ -77,6 +86,14 @@
         <!-- chartist -->
         <script src="{{ url_for('static', filename='chartist/chartist.js') }}"></script>
         <script src="{{ url_for('static', filename='chartist/plugins/chartist-plugin-tooltip/chartist-plugin-tooltip.min.js') }}"></script>
+
+        <!-- izitoast -->
+        <script src="{{ url_for('static', filename='iziToast/js/iziToast.min.js') }}"></script>
+
+        <!-- sweert altert 2 -->
+        <script src="{{ url_for('static', filename='sweetAlert/sweetalert2.all.min.js') }}"></script>
+
+
 
 
         <script>
