@@ -53,13 +53,13 @@ function decide_form_card(form_card) {
 }
 
 // sidebar nav and dropdown
-$(document).ready(function(){
-  $('.sidenav').sidenav({
-    edge: 'right'
-  });
-  $(".dropdown-trigger").dropdown();
-  $('.collapsible').collapsible();
-});
+// $(document).ready(function(){
+//   $('.sidenav').sidenav({
+//     edge: 'right'
+//   });
+//   $(".dropdown-trigger").dropdown();
+//   $('.collapsible').collapsible();
+// });
 
 // for chartjs
 var stringToColour = function(str) {

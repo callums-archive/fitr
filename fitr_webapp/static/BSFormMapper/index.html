@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>BS4 Form Mapper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <div class="card mt-4">
+      <div class="card-body">
+        <!-- <div class="form-row"> -->
+        <form id="register"></form>
+        <!-- <div class="invalid-feedback">${error}</div> -->
+        <!-- </div> -->
+
+        <!-- <div class="input-group">
+          <input type="text" style="display: contents" class="form-control is-invalid" id="validationServerUsername">
+          <div class="invalid-feedback">
+            Please choose a username.
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="BS4FormMapper.js"></script>
+
+  <script>
+    $(document).ready(function() {
+
+      new formGen("#register", {
+        form: [{
+            type: "string",
+            name: "first_name",
+            placeholder: "First Name",
+            validators: ["strMin(5)"]
+          },
+          {
+            type: "string",
+            name: "surname",
+            placeholder: "Surname",
+            validators: ["strMin(5)"]
+          },
+          {
+            type: "integer",
+            name: "surname2",
+            placeholder: "Surname",
+            validators: ["strMin(5)"]
+          },
+          {
+            type: "float",
+            name: "surname3",
+            placeholder: "Surname",
+            validators: []
+          },
+          {
+            type: "select",
+            name: "gender",
+            placeholder: "Gender",
+            options: [{
+              name: "Male",
+              value: "male"
+            }, {
+              name: "Female",
+              value: "female"
+            }],
+            validators: ["notEmpty()"]
+          },
+          {
+            type: "date",
+            name: "date_of_birth",
+            placeholder: "Date of Birth",
+            validators: ["notEmpty()"]
+          },
+          {
+            type: "string",
+            name: "username",
+            placeholder: "Username",
+            validators: ["remote()", "notEmpty()"]
+          },
+          {
+            type: "email",
+            name: "email",
+            placeholder: "Email Address",
+            validators: ["remote()", "strMin(5)"]
+          },
+          {
+            type: "password",
+            name: "password",
+            placeholder: "New Password",
+            validators: ["strMin(5)"]
+          },
+          {
+            type: "confirm-password",
+            name: "confirm",
+            placeholder: "Confirm Password",
+            validators: ["strMin(5)"]
+          },
+        ],
+
+        remote: {
+          submit: {
+            method: "POST",
+            url: "http://localhost:1234/auth/register"
+          },
+          validate: {
+            method: "POST",
+            url: "http://localhost:1234/auth/register_validate"
+          },
+        },
+
+        onSuccess(data, status, xhr) {
+          $("#register").find("button[type='submit']").attr("disabled", "");
+          M.toast({
+            html: "Register Successful!"
+          });
+          setTimeout(function() {
+            window.location.replace("/");
+          }, 2000)
+        },
+
+        onFail(xhr, status) {
+          try {
+            var error = xhr.responseJSON.error_msg;
+          } catch (err) {
+            var error = "Server Error, Try again.";
+          }
+          M.toast({
+            html: error
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
