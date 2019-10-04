@@ -1,0 +1,84 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+  input {
+    text-align: center;
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container">
+
+
+
+  <div class="col s12 mobile-form">
+    <div class="card-panel {{ colours['primary_card'] }} mt-4">
+      <h4>RAW DATA - situp</h4>
+      <h6>Previous</h6>
+      <code>
+        {{ ft }}
+      </code>
+      <form id="situp">
+
+        <div class="row mb-0">
+          <button class="btn btn-lg btn-success" type="submit">Submit</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function() {
+
+
+    new formGen("#situp", {
+      form: [{
+          type: "integer",
+          name: "value",
+          placeholder: "situp",
+          validators: ["notEmpty()"]
+        },
+      ],
+
+      remote: {
+        submit: {
+          method: "POST",
+          url: "{{ url_for('PTCaptureView:fitness_test_post', user=client.username, test='situp') }}"
+        },
+      },
+
+      onSuccess(data, status, xhr) {
+        $("#situp").find("button[type='submit']").attr("disabled", "");
+        Swal.fire({
+          type: 'success',
+          timer: 300,
+          showConfirmButton: false,
+          title: `success`,
+          onClose: () => {
+            window.location.replace("{{ url_for('PTCaptureView:index') }}");
+          }
+        });
+
+      },
+
+      onFail(xhr, status) {
+        try {
+          var error = xhr.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
+        alert(error)
+      }
+    });
+  });
+</script>
+{% endblock scripts %}

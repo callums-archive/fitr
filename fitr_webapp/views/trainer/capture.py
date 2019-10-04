@@ -8,7 +8,7 @@ from flask import (
 
 from flask_classy import route
 
-from fitr_webapp.models import Users
+from fitr_webapp.models import Users, FitnessTests
 
 from fitr_webapp.system.exceptions import DBError
 
@@ -51,6 +51,30 @@ class PTCaptureView(Base):
             abort(404)
         return render_template("trainer/weights.html", client=user)
 
+    @route('/<user>/pushup', methods=['GET'])
+    @permission('pt_clients')
+    def clients_get_pushups(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+        return render_template("trainer/pushups.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "pushup"))
+
+    @route('/<user>/stepper', methods=['GET'])
+    @permission('pt_clients')
+    def clients_get_stepper(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+        return render_template("trainer/stepper.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "stepper"))
+
+    @route('/<user>/situp', methods=['GET'])
+    @permission('pt_clients')
+    def clients_get_situp(self, user):
+        user = Users.by_username(user)
+        if user is None:
+            abort(404)
+        return render_template("trainer/situp.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "situp"))
+
     @route('/<user>/measurements', methods=['GET'])
     @permission('pt_clients')
     def clients_get_measurements(self, user):
@@ -89,7 +113,8 @@ class PTCaptureView(Base):
             abort(404)
 
         if test == "pushup":
-            if user.capture_fitness_test(
+            if FitnessTests.capture(
+                    user,
                     test,
                     {
                         "unit": "pushups",
@@ -99,7 +124,8 @@ class PTCaptureView(Base):
                     return "OK"
 
         elif test == "situp":
-            if user.capture_fitness_test(
+            if FitnessTests.capture(
+                    user,
                     test,
                     {
                         "unit": "situps",
@@ -108,7 +134,8 @@ class PTCaptureView(Base):
                 ):
                     return "OK"
         elif test == "stepper":
-            if user.capture_fitness_test(
+            if FitnessTests.capture(
+                    user,
                     test,
                     {
                         "unit": "bpm",

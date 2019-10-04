@@ -1,80 +1,51 @@
 {% set menu_items = [
-  {"name": 'test', "permission": "zuck", "url": "//test"},
-  {"name": 'test', "permission": "zuck", "url": "//test"},
-  {"name": 'test', "permission": "zuck", "url": "//test"},
-  {"name": 'test', "permission": "zuck", "url": "//test"},
 
-  {"name": '<i class="material-icons left">group</i>Clients', "ref": "clients", "permission": "pt_clients", "children": [
-    {"name":'<i class="fas fa-weight nav-fa fa-lg left"></i> Capture', "url": url_for('PTCaptureView:index')},
+  {"name": 'Clients', "ref": "clients", "permission": "pt_clients", "children": [
+    {"name":'Capture', "url": url_for('PTCaptureView:index')},
   ]},
 
-  {"name": '<i class="material-icons left">account_circle</i>' + user().first_name, "ref": "user", "permission": "user", "children": [
-    {"name": '<i class="fas fa-user-ninja nav-fa fa-lg left"></i> Profile', "url": "#"},
-    {"name": '<i class="fas fa-power-off nav-fa fa-lg left"></i>Logout', "url": url_for('UserAuthenticationView:logout')},
+  {"name": user().first_name, "ref": "user", "permission": "user", "children": [
+    {"name": '<i class="fas fa-power-off"></i> Logout', "url": url_for('UserAuthenticationView:logout')},
   ]},
-
 
 ] %}
 
-{% macro gen_menu_main() -%}
-  {% for menu_item in menu_items %}
-    {% if menu_item.children | length > 0 and has_permission(menu_item.permission) %}
-      <li><a class="dropdown-trigger" href="#!" data-target="{{ menu_item.ref }}">{{ menu_item.name | safe }}<i class="material-icons right">arrow_drop_down</i></a></li>
-      <ul id="{{ menu_item.ref }}" class="dropdown-content">
-        {% for child in menu_item.children %}
-          <li><a href="{{ child.url }}">{{ child.name | safe }}</a></li>
-        {% endfor %}
-      </ul>
-    {% elif has_permission(menu_item.permission) %}
-      <li><a href="{{ menu_item.url }}">{{ menu_item.name | safe }}</a></li>
-    {% endif %}
-  {% endfor %}
-{%- endmacro %}
 
-{% macro gen_mobile_main() -%}
+{% macro gen_main_menu() -%}
   {% for menu_item in menu_items %}
     {% if menu_item.children | length > 0 and has_permission(menu_item.permission) %}
-      <li class="no-padding">
-        <ul class="collapsible collapsible-accordion">
-          <li>
-            <a class="collapsible-header">{{ menu_item.name | safe }}<i class="material-icons">arrow_drop_down</i></a>
-            <div class="collapsible-body">
-              <ul>
-                {% for child in menu_item.children %}
-                  <li><a href="{{ child.url }}">{{ child.name | safe }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          </li>
-        </ul>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="{{ menu_item.ref }}" data-toggle="dropdown">
+          {{ menu_item.name | safe }}
+        </a>
+        <div class="dropdown-menu">
+          {% for child in menu_item.children %}
+            <a class="dropdown-item" href="{{ child.url }}">{{ child.name | safe }}</a>
+          {% endfor %}
+        </div>
       </li>
     {% elif has_permission(menu_item.permission) %}
-      <li><a href="{{ menu_item.url }}">{{ menu_item.name | safe }}</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ menu_item.url }}">
+          {{ menu_item.name | safe }}
+        </a>
+      </li>
     {% endif %}
   {% endfor %}
 {%- endmacro %}
 
-<div class="navbar-fixed">
-  <nav>
-    <div class="nav-wrapper {{ colours['nav'] }}">
 
-      <a href="{{ url_for('DashboardView:index') }}" class="left brand-logo">
-        <img class="center-align" src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
-      </a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light shadow">
+  <a class="navbar-brand" href="#">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_menu" aria-controls="main_menu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-      <ul class="right">
-        <li><a href="#" data-target="mobile-nav" class="right sidenav-trigger"><i class="material-icons">menu</i></a></li>
-        <div class="hide-on-med-and-down">
-          {{ gen_menu_main() }}
-        </div>
-      </ul>
-
-    </div>
-  </nav>
-</div>
-
-<aside>
-  <ul id="mobile-nav" class="sidenav">
-    {{ gen_mobile_main() }}
-  </ul>
-</aside>
+  <div class="collapse navbar-collapse" id="main_menu">
+    <ul class="navbar-nav ml-auto">
+      {{ gen_main_menu() }}
+    </ul>
+  </div>
+</nav>

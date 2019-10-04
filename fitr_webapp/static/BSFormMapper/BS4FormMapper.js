@@ -16,11 +16,11 @@ formGen.prototype = {
     this.formEle = $(this.formId);
     this.generateForm();
     this.registerEvents();
-    this.validationMethods.root = this;
+    this.validationMethods.self = this;
   },
 
   generateForm() {
-    var root = this;
+    var self = this;
     this.settings.form.forEach(function(formField) {
 
       // assign random id (screw you auto correct!)
@@ -28,50 +28,50 @@ formGen.prototype = {
         formField.id = formField.name;
         formField.autocomplete = formField.name
       } else {
-        formField.id = root.generateUUID();
-        formField.autocomplete = root.generateUUID();
+        formField.id = self.generateUUID();
+        formField.autocomplete = self.generateUUID();
       }
 
       switch (formField.type) {
         case "string":
-          formField.html = root.createStringInput(formField, "text");
-          root.addToForm(formField);
+          formField.html = self.createStringInput(formField, "text");
+          self.addToForm(formField);
           break;
         case "password":
-          formField.html = root.createStringInput(formField, "password");
-          root.addToForm(formField);
+          formField.html = self.createStringInput(formField, "password");
+          self.addToForm(formField);
           break;
         case "confirm-password":
-          formField.html = root.createStringInput(formField, "password");
-          root.addToForm(formField);
+          formField.html = self.createStringInput(formField, "password");
+          self.addToForm(formField);
           break;
         case "email":
-          formField.html = root.createStringInput(formField, "text");
-          root.addToForm(formField);
+          formField.html = self.createStringInput(formField, "text");
+          self.addToForm(formField);
           break;
         case "integer":
-          formField.html = root.createSpecialInput(formField, "integer");
-          root.addToForm(formField);
+          formField.html = self.createSpecialInput(formField, "integer");
+          self.addToForm(formField);
           break;
         case "float":
-          formField.html = root.createSpecialInput(formField, "float");
-          root.addToForm(formField);
+          formField.html = self.createSpecialInput(formField, "float");
+          self.addToForm(formField);
           break;
         case "date":
-          formField.html = root.createDateInput(formField);
-          root.addToForm(formField);
+          formField.html = self.createDateInput(formField);
+          self.addToForm(formField);
           if (formField.hasOwnProperty("value")) {
             set_date = new Date(formField.value);
             $(`#${formField.id}_year`).val(set_date.getFullYear());
             $(`#${formField.id}_month`).val(1 + set_date.getMonth());
-            root.dateAddDays(formField.id);
-            root.setDate(formField.id, (1 + set_date.getDate()));
+            self.dateAddDays(formField.id);
+            self.setDate(formField.id, (1 + set_date.getDate()));
             $(`#${formField.id}_day`).val(1 + set_date.getDate());
           }
           break;
         case "select":
-          formField.html = root.createSelectInput(formField);
-          root.addToForm(formField);
+          formField.html = self.createSelectInput(formField);
+          self.addToForm(formField);
           break;
         default:
           console.error(`field type not defined ${formField.type}`);
@@ -212,7 +212,7 @@ formGen.prototype = {
   },
 
   registerEvents() {
-    var root = this;
+    var self = this;
     var ignored = ["year", "month", "day"];
 
     this.formEle.on("change keyup", function(e) {
@@ -221,28 +221,28 @@ formGen.prototype = {
 
       if (!ignored.includes(e.target.id.split("_").pop())) {
         // set the valus and the "basic ref" for other fields (this is mainly for validation)
-        root.pullField(e.target.id).value = e.target.value
+        self.pullField(e.target.id).value = e.target.value
         ref = e.target.id;
       }
 
       // add days to day select
       if (e.target.id.split("_").pop() == "month" || e.target.id.split("_").pop() == "year") {
-        root.dateAddDays(ref, e.target.value);
+        self.dateAddDays(ref, e.target.value);
       }
 
       // set day
       if (e.target.id.split("_").pop() == "day") {
-        root.setDate(ref, e.target.value);
+        self.setDate(ref, e.target.value);
       }
 
       // validate form
-      root.validateForm(ref);
+      self.validateForm(ref);
 
       // try to unlock submit button
-      if (root.submitStatus == false && root.validateForm(ref) == 0) {
-        console.log(root.formEle.find(".invalid-feedback"));
-        if (root.formEle.find(".invalid-feedback").length == 0) {
-          root.unlockSubmit();
+      if (self.submitStatus == false && self.validateForm(ref) == 0) {
+        console.log(self.formEle.find(".invalid-feedback"));
+        if (self.formEle.find(".invalid-feedback").length == 0) {
+          self.unlockSubmit();
         }
       }
     })
@@ -250,17 +250,19 @@ formGen.prototype = {
     this.formEle.on("submit", function(e) {
       e.preventDefault();
       e.stopPropagation();
-      root.lockSubmit();
+      self.lockSubmit();
 
-      if (root.validateForm() != 0) {
+      if (self.validateForm() != 0) {
         $("html, body").animate({
           scrollTop: 0
         }, "slow");
       } else {
-        root.unlockSubmit();
+        // TODO XXX check this out (removed to lock submit)
+        // console.log("unlocked")
+        // self.unlockSubmit();
         // get the data ready
         formFields = {};
-        root.settings.form.forEach(function(field) {
+        self.settings.form.forEach(function(field) {
           formFields[field.name] = field.value;
         });
         formFields = JSON.stringify(formFields);
@@ -269,15 +271,15 @@ formGen.prototype = {
         $.ajax({
           accept: 'application/json',
           contentType: 'application/json',
-          type: root.settings.remote.submit.method,
-          url: root.settings.remote.submit.url,
+          type: self.settings.remote.submit.method,
+          url: self.settings.remote.submit.url,
           data: formFields
         }).done(function(data, status, jqXHR) {
-          root.settings.onSuccess(data, status, jqXHR);
+          self.settings.onSuccess(data, status, jqXHR);
         }).fail(function(jqXHR, status) {
-          root.settings.onFail(jqXHR, status);
+          self.settings.onFail(jqXHR, status);
         }).always(function() {
-          root.unlockSubmit();
+          self.unlockSubmit();
         })
       }
     })
@@ -340,14 +342,14 @@ formGen.prototype = {
   },
 
   validateForm(fieldValidate = null) {
-    var root = this;
+    var self = this;
     var total_errors = 0;
     var fieldArray = [];
 
     if (fieldValidate == null) {
       fieldArray = this.settings.form;
     } else {
-      fieldArray.push(root.pullField(fieldValidate));
+      fieldArray.push(self.pullField(fieldValidate));
     }
 
     fieldArray.forEach(function(field) {
@@ -361,31 +363,31 @@ formGen.prototype = {
       var res = true;
       var errors = 0;
 
-      root.validationMethods.value = field.value;
-      root.validationMethods.id = field.id;
-      root.validationMethods.name = field.name;
+      self.validationMethods.value = field.value;
+      self.validationMethods.id = field.id;
+      self.validationMethods.name = field.name;
 
       // general validation for types
       switch (field.type) {
         case 'float':
-          res = root.validationMethods.isFloat();
+          res = self.validationMethods.isFloat();
           break;
         case 'integer':
-          res = root.validationMethods.isInteger();
+          res = self.validationMethods.isInteger();
           break;
         case 'email':
-          res = root.validationMethods.isEmail();
+          res = self.validationMethods.isEmail();
           break;
         case 'confirm-password':
-          res = root.validationMethods.sameAs("password");
+          res = self.validationMethods.sameAs("password");
           break;
         case 'date':
-          res = root.validationMethods.isDate();
+          res = self.validationMethods.isDate();
       }
 
       if (res != true && res[0] == 0) {
         errors++;
-        root.attachError(field, res[1]);
+        self.attachError(field, res[1]);
       }
 
       if (field.hasOwnProperty("validators")) {
@@ -394,7 +396,7 @@ formGen.prototype = {
           if (canContinue) {
             if (typeof val_func === 'string') {
               // this is a default validator
-              res = eval(`root.validationMethods.${val_func}`);
+              res = eval(`self.validationMethods.${val_func}`);
             } else {
               res = val_func.call(field.value);
             }
@@ -402,14 +404,14 @@ formGen.prototype = {
 
           if (res[0] == 0) {
             errors++;
-            root.attachError(field, res[1]);
+            self.attachError(field, res[1]);
           }
         });
       }
 
       // clear errors if needed
       if (errors == 0) {
-        root.validField(field);
+        self.validField(field);
       } else {
         total_errors += errors;
       }
@@ -509,12 +511,12 @@ formGen.prototype = {
     isDate() {
       // this is here to check to see if a date is valid
       // see if date is required
-      var root = this;
+      var self = this;
       var required = false;
       var elem = null;
 
-      this.root.settings.form.forEach(function(ele) {
-        if (ele.name == root.name) {
+      this.self.settings.form.forEach(function(ele) {
+        if (ele.name == self.name) {
           if (ele.validators.includes("notEmpty()")) {
             required = true;
             elem = ele;
@@ -535,15 +537,15 @@ formGen.prototype = {
       // res scoped
       var res = [1, ""]
 
-      if (root.notEmpty()[0] == 1 & root.value.split("-").length == 3) {
-        dateArr = root.value.split("-");
+      if (self.notEmpty()[0] == 1 & self.value.split("-").length == 3) {
+        dateArr = self.value.split("-");
       } else {
-        return [0, "Date is invalid"];
+        return [0, "Date is required"];
       }
 
       dateArr.forEach(function(val) {
         if (!parseInt(val) >= 1) {
-          res = [0, "Date is invalid"];
+          res = [0, "Date is required"];
         }
       });
       return res;
@@ -594,22 +596,22 @@ formGen.prototype = {
       if (notEmptyRes[0] == 0) {
         return notEmptyRes;
       }
-      compairField = this.root.pullField(field, false);
+      compairField = this.self.pullField(field, false);
       if (compairField.value != this.value) {
         return [0, `This field doesn't match the ${compairField.name} field.`];
       }
       return [1, ""];
     },
     remote() {
-      var request_method = this.root.settings.remote.validate.method;
-      var validate_url = this.root.settings.remote.validate.url
+      var request_method = this.self.settings.remote.validate.method;
+      var validate_url = this.self.settings.remote.validate.url
 
       var formData = {}
       formData[this.name] = this.value;
 
-      var currentField = this.root.pullField(this.id, false);
+      var currentField = this.self.pullField(this.id, false);
 
-      var local_root = this;
+      var local_self = this;
 
       $.ajax({
         accept: 'application/json',
@@ -619,14 +621,14 @@ formGen.prototype = {
         data: JSON.stringify(formData),
       }).done(function(data, status, jqXHR) {
         if (data['valid'] == false) {
-          local_root.root.attachError(currentField, data['message']);
-          local_root.root.lockSubmit();
+          local_self.self.attachError(currentField, data['message']);
+          local_self.self.lockSubmit();
         } else if(data['valid'] == true)  {
-          local_root.root.validField(currentField)
+          local_self.self.validField(currentField)
         }
       }).fail(function(data, status, jqXHR) {
-        local_root.root.attachError(currentField, "Server Error. Try again.");
-        local_root.root.lockSubmit();
+        local_self.self.attachError(currentField, "Server Error. Try again.");
+        local_self.self.lockSubmit();
       });
 
       // innocent till prouven guilty
