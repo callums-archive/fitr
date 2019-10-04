@@ -19,7 +19,7 @@
       <form id="weight">
 
         <div class="row mb-0">
-          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Weight</button>
+          <button class="btn btn-lg btn-success" type="submit">Submit Weight</button>
         </div>
 
       </form>
@@ -82,7 +82,6 @@
         [0, "desc"]
       ]
     });
-    $("select[name='weights_datatable_length']").formSelect();
     // decide_form_card(".mobile-form");
 
     new formGen("#weight", {
@@ -109,9 +108,16 @@
 
       onSuccess(data, status, xhr) {
         $("#weight").find("button[type='submit']").attr("disabled", "");
-        M.toast({
-          html: `Weight Diff: ${data}`
+        Swal.fire({
+          type: 'success',
+          timer: 4500,
+          showConfirmButton: false,
+          title: `Weight Diff: ${data}`,
+          onClose: () => {
+            window.location.replace(data.redirect);
+          }
         });
+
         setTimeout(function() {
           window.location.replace("{{ url_for('PTCaptureView:index') }}");
         }, 4000)

@@ -21,67 +21,67 @@
             <table id="neck_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="bicep">
             <h6 class="center">Bicep</h6>
             <table id="bicep_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="chest">
             <h6 class="center">Chest</h6>
             <table id="chest_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="abs1">
             <h6 class="center">Abs 1</h6>
             <table id="abs1_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="abs2">
             <h6 class="center">Abs 2</h6>
             <table id="abs2_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="abs3">
             <h6 class="center">Abs 3</h6>
             <table id="abs3_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="upperthigh">
             <h6 class="center">Upper Thigh</h6>
             <table id="upperthigh_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="midthigh">
             <h6 class="center">Mid Thigh</h6>
             <table id="midthigh_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
         <div class="card-panel {{ colours['primary_card'] }} mt-4">
           <div id="calf">
             <h6 class="center">Calf</h6>
             <table id="calf_dt" class="display" style="width:100%; height: 100%"></table>
           </div>
         </div>
-
+<hr>
 
 
         <div class="row mb-0">
-          <button class="col s12 btn {{ colours['primary_btn'] }} modal-trigger" type="submit">Submit Measurement</button>
+          <button class="btn btn-lg btn-success" type="submit">Submit Measurement</button>
         </div>
 
       </form>
@@ -100,7 +100,7 @@
     var neck_datatable = $('#neck_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -132,13 +132,13 @@
         [0, "desc"]
       ]
     });
-    $("select[name='neck_datatable_length']").formSelect();
+    
 
 
     var bicep_datatable = $('#bicep_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -170,12 +170,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='bicep_datatable_length']").formSelect();
+    
 
     var chest_datatable = $('#chest_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -207,13 +207,13 @@
         [0, "desc"]
       ]
     });
-    $("select[name='chest_datatable_length']").formSelect();
+    
 
 
     var abs1_datatable = $('#abs1_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -249,12 +249,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='abs1_datatable_length']").formSelect();
+    
 
     var abs2_datatable = $('#abs2_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -290,12 +290,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='abs2_datatable_length']").formSelect();
+    
 
     var abs3_datatable = $('#abs3_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -331,12 +331,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='abs3_datatable_length']").formSelect();
+    
 
     var upperthigh_datatable = $('#upperthigh_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -368,12 +368,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='upperthigh_datatable_length']").formSelect();
+    
 
     var midthigh_datatable = $('#midthigh_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -405,12 +405,12 @@
         [0, "desc"]
       ]
     });
-    $("select[name='midthigh_datatable_length']").formSelect();
+    
 
     var calf_datatable = $('#calf_dt').DataTable({
       paging: false,
       info: false,
-      responsive: true,
+      
       lengthChange: false,
       filter: false,
       columns: [{
@@ -442,7 +442,7 @@
         [0, "desc"]
       ]
     });
-    $("select[name='calf_datatable_length']").formSelect();
+    
 
 
     new formGen("#measuremets", {
@@ -541,12 +541,15 @@
 
       onSuccess(data, status, xhr) {
         $("#measuremets").find("button[type='submit']").attr("disabled", "");
-        M.toast({
-          html: `Measure Status: ${data}`
+        Swal.fire({
+          type: 'success',
+          timer: 4500,
+          showConfirmButton: false,
+          title: `Measurement Success!`,
+          onClose: () => {
+            window.location.replace("{{ url_for('PTCaptureView:index') }}");
+          }
         });
-        setTimeout(function() {
-          window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 4000)
       },
 
       onFail(xhr, status) {

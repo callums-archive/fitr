@@ -63,7 +63,7 @@ class User(Base):
             "value": record.show_measurements.get(measure),
             "unit": record.unit,
             "create_user": record.create_user,
-            "create_stamp": datetimetools.cast_string(record.create_stamp, "dt"),
+            "create_stamp": datetimetools.cast_string(record.create_stamp, "d"),
             "comment": record.show_measurements.get(f"{measure}_comment"),
             "initial":Measurements.objects(user=self.context.to_dbref()).order_by("+create_stamp").first().show_measurements.get(measure)} for record in measurements]})
 

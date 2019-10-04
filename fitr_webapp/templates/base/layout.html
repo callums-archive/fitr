@@ -16,13 +16,9 @@
 
         <!-- materialize -->
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/css/custom/bootstrap.min.css') }}">
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/css/bootstrap.css') }}"> -->
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}"> -->
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/bs4-helpers.css') }}"> -->
-        <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 
         <!-- fitr main css -->
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}"> -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}">
 
         <!-- font awesome -->
         <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
@@ -44,7 +40,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='sweetAlert/sweetalert2.min.css') }}">
 
         <!-- init styles -->
-      {#  {% include 'base/styles.html' %}#}
+      {% include 'base/styles.html' %}
 
         {% block styles %}
         {% endblock styles %}
@@ -62,16 +58,15 @@
         {% block content %}
         {% endblock content %}
 
-        <!-- core js -->
+        <!-- bs and core js -->
         <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
-        <!-- <script src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script> -->
         <script src="{{ url_for('static', filename='bootstrap4/js/bootstrap.min.js') }}"></script>
 
         <!-- font awesome -->
         <script src="{{ url_for('static', filename='fontawesome/js/all.min.js') }}"></script>
 
         <!-- fitr main js -->
-        <!-- <script src="{{ url_for('static', filename='app/fitr.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='app/fitr.js') }}"></script>
 
         <!-- busy loader js -->
         <script src="{{ url_for('static', filename='jquery-busy-load/busyloader.min.js') }}"></script>

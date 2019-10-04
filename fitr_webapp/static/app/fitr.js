@@ -23,54 +23,54 @@ function castJson(arr) {
   };
 })(jQuery);
 
-// remove card if on small screen
-function decide_form_card(form_card) {
-  function apply() {
-    var window_width = $( window ).width();
-    if (window_width <= 550) {
-      var card = $(form_card).find(".card-panel");
-      if (window[`card_classes${form_card}`] == undefined) {
-        window[`card_classes${form_card}`] = card.attr("class");
-      }
-      card.removeAttr('class').addClass("p-3");
-    } else {
-      var card = $(form_card).find(".p-3");
-      card.removeAttr('class').attr("class", window[`card_classes${form_card}`]);
-    }
-  };
+// // remove card if on small screen
+// function decide_form_card(form_card) {
+//   function apply() {
+//     var window_width = $( window ).width();
+//     if (window_width <= 550) {
+//       var card = $(form_card).find(".card-panel");
+//       if (window[`card_classes${form_card}`] == undefined) {
+//         window[`card_classes${form_card}`] = card.attr("class");
+//       }
+//       card.removeAttr('class').addClass("p-3");
+//     } else {
+//       var card = $(form_card).find(".p-3");
+//       card.removeAttr('class').attr("class", window[`card_classes${form_card}`]);
+//     }
+//   };
 
-  // on change
-  window.addEventListener("resize", function() {
-    setTimeout(function() {
-      apply();
-    }, 120);
-  });
-
-  // init
-  setTimeout(function() {
-    apply();
-  }, 60);
-}
-
-// sidebar nav and dropdown
-// $(document).ready(function(){
-//   $('.sidenav').sidenav({
-//     edge: 'right'
+//   // on change
+//   window.addEventListener("resize", function() {
+//     setTimeout(function() {
+//       apply();
+//     }, 120);
 //   });
-//   $(".dropdown-trigger").dropdown();
-//   $('.collapsible').collapsible();
-// });
 
-// for chartjs
-var stringToColour = function(str) {
-  var hash = 0;
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  var colour = '#';
-  for (var i = 0; i < 3; i++) {
-    var value = (hash >> (i * 8)) & 0xFF;
-    colour += ('00' + value.toString(16)).substr(-2);
-  }
-  return colour;
-}
+//   // init
+//   setTimeout(function() {
+//     apply();
+//   }, 60);
+// }
+
+// // sidebar nav and dropdown
+// // $(document).ready(function(){
+// //   $('.sidenav').sidenav({
+// //     edge: 'right'
+// //   });
+// //   $(".dropdown-trigger").dropdown();
+// //   $('.collapsible').collapsible();
+// // });
+
+// // for chartjs
+// var stringToColour = function(str) {
+//   var hash = 0;
+//   for (var i = 0; i < str.length; i++) {
+//     hash = str.charCodeAt(i) + ((hash << 5) - hash);
+//   }
+//   var colour = '#';
+//   for (var i = 0; i < 3; i++) {
+//     var value = (hash >> (i * 8)) & 0xFF;
+//     colour += ('00' + value.toString(16)).substr(-2);
+//   }
+//   return colour;
+// }
