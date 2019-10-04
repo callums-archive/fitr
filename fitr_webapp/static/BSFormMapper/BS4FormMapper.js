@@ -538,12 +538,12 @@ formGen.prototype = {
       if (root.notEmpty()[0] == 1 & root.value.split("-").length == 3) {
         dateArr = root.value.split("-");
       } else {
-        return [0, "Date is invalid"];
+        return [0, "Date is required"];
       }
 
       dateArr.forEach(function(val) {
         if (!parseInt(val) >= 1) {
-          res = [0, "Date is invalid"];
+          res = [0, "Date is required"];
         }
       });
       return res;
