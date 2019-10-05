@@ -14,8 +14,10 @@
         <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
         <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
 
-        <!-- materialize -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/css/custom/bootstrap.min.css') }}">
+        <!-- bootstrap -->
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}"> -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-dashboard/css/sb-admin-2.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-better-nav/bootstrap-better-nav.css') }}">
 
         <!-- fitr main css -->
         <link rel="stylesheet" href="{{ url_for('static', filename='app/fitr.css') }}">
@@ -58,9 +60,11 @@
         {% block content %}
         {% endblock content %}
 
-        <!-- bs and core js -->
+        <!-- jquery and bootstrap -->
         <script src="{{ url_for('static', filename='jquery/jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='bootstrap4/js/bootstrap.min.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script> -->
+        <script src="{{ url_for('static', filename='bootstrap-dashboard/js/sb-admin-2.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap-better-nav/bootstrap-better-nav.js') }}"></script>
 
         <!-- font awesome -->
         <script src="{{ url_for('static', filename='fontawesome/js/all.min.js') }}"></script>
@@ -72,7 +76,6 @@
         <script src="{{ url_for('static', filename='jquery-busy-load/busyloader.min.js') }}"></script>
 
         <!-- form generator -->
-        <!-- <script src="{{ url_for('static', filename='materializeFormMapper/materializeFormMapper.js') }}"></script> -->
         <script src="{{ url_for('static', filename='BSFormMapper/BS4FormMapper.js') }}"></script>
 
         <!-- datatables -->
