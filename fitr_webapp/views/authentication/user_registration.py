@@ -13,6 +13,8 @@ from fitr_webapp.system.view_helpers import FormValidation
 
 from fitr_webapp.system.exceptions import DBError
 
+from fitr_webapp.system.stringtools import sanitize_lower
+
 
 class UserRegistrationView(FormValidation):
     excluded_methods = ['validate_username', 'validate_email']
@@ -35,7 +37,7 @@ class UserRegistrationView(FormValidation):
             # create account
             try:
                 Users.create_user(
-                    username = self.data.get('username'),
+                    username = sanitize_lower(self.data.get('username')),
                     password = self.data.get('password'),
                     email = self.data.get('email'),
                     gender = self.data.get('gender'),
