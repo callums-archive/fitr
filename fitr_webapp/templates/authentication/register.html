@@ -1,82 +1,65 @@
 {% extends  'base/layout.html'%}
 
 {% block styles %}
-<style>
-  .va-center {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
-
-  @media screen and (max-width: 768px) {
-    .va-center {
-      position: relative;
-      top: unset;
-      -webkit-transform: unset;
-      -ms-transform: unset;
-      transform: unset;
-
-    }
-  }
-
-</style>
 {% endblock styles %}
 
 {% block content %}
-
-
-<div style="height: 100vh;">
-  <div class="container va-center">
-
+<section class="section">
+  <div class="container mt-5">
     <div class="row">
-      <div class="col"></div>
-      <div class="col">
-        <img class="mx-auto d-block" width="200" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
-      </div>
-      <div class="col"></div>
-    </div>
-
-    <form id="register">
-      <div class="card border-primary mb-3">
-        <div class="card-header text-center">Registration</div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md">
-              <div id="basics"></div>
-            </div>
-
-            <div class="col-md">
-              <div id="identifiers"></div>
-            </div>
-          </div>
+      <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+        <div class="login-brand">
+          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="100">
         </div>
 
-        <div class="card-footer bg-primary">
-          <div class="row">
-            <div class="col"></div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
-            </div>
-            <div class="col"></div>
+        <div class="card card-primary">
+          <div class="card-header"><h4>Register</h4></div>
+
+          <div class="card-body">
+            <form id="register">
+              <h2 class="section-title mt-0">General Info</h2>
+              <div class="row">
+                <div id="first"></div>
+                <div id="surname"></div>
+              </div>
+
+              <div class="row">
+                <div id="email"></div>
+                <div id="username"></div>
+              </div>
+
+
+              <div class="row">
+                <div id="pass"></div>
+                <div id="confirm"></div>
+              </div>
+
+              <h2 class="section-title mt-0">More about you</h2>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <div id="date"></div>
+                </div>
+                <div class="col-lg-6">
+                  <div id="gender"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                  Register
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+        <div class="simple-footer">
+          Copyright &copy; CatByte <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>
+        </div>
       </div>
-    </form>
-
-    <div class="text-center">
-      <a class="badge badge-info mb-1" href="{{ url_for('UserAuthenticationView:login_get') }}"><b><i class="fas fa-info-circle"></i> Already have an account?</b></a>
-      <p class="mt-1 mb-4">&copy; <script>
-          document.write(new Date().getFullYear())
-        </script>
-      </p>
     </div>
-
   </div>
-</div>
-
-
+</section>
 {% endblock content %}
 
 {% block scripts %}
@@ -87,16 +70,17 @@
           type: "string",
           name: "first_name",
           placeholder: "First Name",
-          validators: ["strMin(5)"],
-          element: "#basics"
+          validators: ["strMin(3)"],
+          element: "#first",
+          formGroupAdj: "col-md-6"
         },
         {
           type: "string",
           name: "surname",
           placeholder: "Surname",
-          validators: ["strMin(5)"],
-          element: "#basics"
-
+          validators: ["strMin(3)"],
+          element: "#surname",
+          formGroupAdj: "col-md-6"
         },
         {
           type: "select",
@@ -110,48 +94,46 @@
             value: "female"
           }],
           validators: ["notEmpty()"],
-          element: "#basics"
-
+          element: "#gender"
         },
         {
           type: "date",
           name: "date_of_birth",
           placeholder: "Date of Birth",
           validators: ["notEmpty()"],
-          element: "#basics"
-
+          element: "#date"
         },
         {
           type: "string",
           name: "username",
-          placeholder: "Username",
+          placeholder: "Desired Username",
           validators: ["notEmpty()", "isUsername()", "remote()"],
-          element: "#identifiers"
-
+          element: "#username",
+          formGroupAdj: "col-md-6"
         },
         {
           type: "email",
           name: "email",
           placeholder: "Email Address",
           validators: ["strMin(5)", "remote()"],
-          element: "#identifiers"
-
+          element: "#email",
+          formGroupAdj: "col-md-6"
         },
         {
           type: "password",
           name: "password",
-          placeholder: "New Password",
+          placeholder: "Password",
           validators: ["strMin(5)"],
-          element: "#identifiers"
-
+          element: "#pass",
+          formGroupAdj: "col-md-6"
         },
         {
           type: "confirm-password",
           name: "confirm",
           placeholder: "Confirm Password",
           validators: ["strMin(5)"],
-          element: "#identifiers"
-
+          element: "#confirm",
+          formGroupAdj: "col-md-6"
         },
       ],
 
