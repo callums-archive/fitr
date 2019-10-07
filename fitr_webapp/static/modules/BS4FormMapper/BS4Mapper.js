@@ -698,7 +698,7 @@ formGen.prototype = {
       if (/^[A-Za-z0-9_]{3,16}$/.test(this.value) == false) {
         return [
           0,
-          "Username supports upto 16 letters and numbers and underscores, minimum 3."
+          "Username supports upto 16 letters, numbers and underscores, minimum 3."
         ];
       }
       return [1, ""];

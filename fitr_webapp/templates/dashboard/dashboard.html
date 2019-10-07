@@ -19,7 +19,7 @@
 {% endblock styles %}
 
 {% block content %}
-<div class="container cont-margin">
+<!-- <div class="container cont-margin">
   <div class="row row-flex">
     <div class="col s12 m6">
       <div class="card-panel {{ colours['primary_card'] }} p-2">
@@ -63,326 +63,345 @@
     </div>
 
   </div>
-</div>
+</div> -->
+<section class="section">
+  <div class="section-header">
+    <h1>Page</h1>
+    <!-- Breadcrumb -->
+    <div class="section-header-breadcrumb">
+      <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+      <div class="breadcrumb-item"><a href="#">Parent Page</a></div>
+      <div class="breadcrumb-item">Page</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <h2 class="section-title">Page</h2>
+    <p class="section-lead">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+    </p>
+    <!-- Your content goes here -->
+  </div>
+</section>
 
 {% endblock content %}
 
 {% block scripts %}
 <script>
-  $(document).ready(function() {
+  // $(document).ready(function() {
 
-    // weight table
-    var weights_datatable = $('#weights_datatable').DataTable({
-      paging: false,
-      info: false,
-      responsive: true,
-      lengthChange: false,
-      filter: false,
-      columns: [{
-          title: "Date",
-          data: "create_stamp"
-        },
-        {
-          title: "Weight",
-          data: "weight",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Prev. Diff",
-          data: "weight",
-          render: function(data, type, row, meta) {
-            prev = meta.row - 1;
-            if (prev != -1) {
-              diff_prev = data - weights_datatable.rows().data()[prev].weight;
-              return `${diff_prev.toFixed(1)}${row.unit}`;
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Diff Init.",
-          data: "weight",
-          render: function(data, type, row, meta) {
-            init = weights_datatable.ajax.json().initial_weight;
-            diff_init = data - init
-            return `${diff_init.toFixed(1)}${row.unit}`;
-          }
-        },
-        {
-          title: "Capturer",
-          data: "create_user"
-        },
-      ],
-      ajax: "{{ url_for('User:get_weights', user=request.user.username) }}",
-      order: [
-        [0, "desc"]
-      ],
-      "fnInitComplete": function(oSettings, json) {
-        chart_datasets = [];
-        data_len = json.data.length;
-        chart_lables = []
-        for (var i = 0; i != data_len; i++) {
-          data = json.data[i]
-          chart_datasets.push({meta: data["create_stamp"].split(" ")[0], value: data["weight"]});
-          chart_lables.push(data["create_stamp"].split(" ")[0]);
-        }
+  //   // weight table
+  //   var weights_datatable = $('#weights_datatable').DataTable({
+  //     paging: false,
+  //     info: false,
+  //     responsive: true,
+  //     lengthChange: false,
+  //     filter: false,
+  //     columns: [{
+  //         title: "Date",
+  //         data: "create_stamp"
+  //       },
+  //       {
+  //         title: "Weight",
+  //         data: "weight",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Prev. Diff",
+  //         data: "weight",
+  //         render: function(data, type, row, meta) {
+  //           prev = meta.row - 1;
+  //           if (prev != -1) {
+  //             diff_prev = data - weights_datatable.rows().data()[prev].weight;
+  //             return `${diff_prev.toFixed(1)}${row.unit}`;
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Diff Init.",
+  //         data: "weight",
+  //         render: function(data, type, row, meta) {
+  //           init = weights_datatable.ajax.json().initial_weight;
+  //           diff_init = data - init
+  //           return `${diff_init.toFixed(1)}${row.unit}`;
+  //         }
+  //       },
+  //       {
+  //         title: "Capturer",
+  //         data: "create_user"
+  //       },
+  //     ],
+  //     ajax: "{{ url_for('User:get_weights', user=request.user.username) }}",
+  //     order: [
+  //       [0, "desc"]
+  //     ],
+  //     "fnInitComplete": function(oSettings, json) {
+  //       chart_datasets = [];
+  //       data_len = json.data.length;
+  //       chart_lables = []
+  //       for (var i = 0; i != data_len; i++) {
+  //         data = json.data[i]
+  //         chart_datasets.push({meta: data["create_stamp"].split(" ")[0], value: data["weight"]});
+  //         chart_lables.push(data["create_stamp"].split(" ")[0]);
+  //       }
 
-        data = {
-          labels: chart_lables,
-          series: [chart_datasets],
-        };
+  //       data = {
+  //         labels: chart_lables,
+  //         series: [chart_datasets],
+  //       };
 
-        options = {
-          height: `${$('.encase_weights_datatable').height()}px`,
-          fullWidth: true,
-          chartPadding: {
-            right: 40,
-            left: -10
-          },
-          seriesBarDistance: 10,
-          plugins: [
-            Chartist.plugins.tooltip({
-              appendToBody: true
-            }),
-          ]
-        }
+  //       options = {
+  //         height: `${$('.encase_weights_datatable').height()}px`,
+  //         fullWidth: true,
+  //         chartPadding: {
+  //           right: 40,
+  //           left: -10
+  //         },
+  //         seriesBarDistance: 10,
+  //         plugins: [
+  //           Chartist.plugins.tooltip({
+  //             appendToBody: true
+  //           }),
+  //         ]
+  //       }
 
-        var weights_chart = new Chartist.Line('#weights_chart', data, options);
+  //       var weights_chart = new Chartist.Line('#weights_chart', data, options);
 
-      }
-    });
-    $("select[name='weights_datatable_length']").formSelect();
+  //     }
+  //   });
+  //   $("select[name='weights_datatable_length']").formSelect();
 
-    var measurements_datatable = $('#measurements_datatable').DataTable({
-      paging: false,
-      info: false,
-      responsive: true,
-      lengthChange: false,
-      filter: false,
-      columns: [{
-          title: "Date",
-          data: "create_stamp"
-        },
-        {
-          title: "Neck",
-          data: "neck",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Bicep",
-          data: "bicep",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Chest",
-          data: "chest",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "ABS 1",
-          data: "abs1",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "ABS 2",
-          data: "abs2",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "ABS 3",
-          data: "abs3",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Upper Thigh",
-          data: "upperthigh",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Mid Thigh",
-          data: "midthigh",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Calf",
-          data: "calf",
-          render: function(data, type, row, meta) {
-            if (data > 0) {
-              return `${data}${row.unit}`
-            }
-            return "-"
-          }
-        },
-        {
-          title: "Total",
-          render: function(data, type, row, meta) {
-            var total = 0;
-            for (measure in row) {
-              if (!measure.includes("_") & measure != "unit") {
-                total += row[measure];
-              }
-            }
-            return `${total}${row.unit}`
-          }
-        },
-        {
-          title: "Diff.",
-          render: function(data, type, row, meta) {
-            var prev = meta.row - 1;
-            var total_curr = 0;
-            var total_prev = 0;
-            if (prev != -1 & prev != meta.row) {
-              for (measure in row) {
-                if (!measure.includes("_") & measure != "unit") {
-                  total_curr += row[measure];
-                  total_prev += measurements_datatable.rows().data()[prev][measure];
-                }
-              }
-              return `${total_curr-total_prev}${row.unit}`;
-            }
-            return "-"
+  //   var measurements_datatable = $('#measurements_datatable').DataTable({
+  //     paging: false,
+  //     info: false,
+  //     responsive: true,
+  //     lengthChange: false,
+  //     filter: false,
+  //     columns: [{
+  //         title: "Date",
+  //         data: "create_stamp"
+  //       },
+  //       {
+  //         title: "Neck",
+  //         data: "neck",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Bicep",
+  //         data: "bicep",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Chest",
+  //         data: "chest",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "ABS 1",
+  //         data: "abs1",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "ABS 2",
+  //         data: "abs2",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "ABS 3",
+  //         data: "abs3",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Upper Thigh",
+  //         data: "upperthigh",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Mid Thigh",
+  //         data: "midthigh",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Calf",
+  //         data: "calf",
+  //         render: function(data, type, row, meta) {
+  //           if (data > 0) {
+  //             return `${data}${row.unit}`
+  //           }
+  //           return "-"
+  //         }
+  //       },
+  //       {
+  //         title: "Total",
+  //         render: function(data, type, row, meta) {
+  //           var total = 0;
+  //           for (measure in row) {
+  //             if (!measure.includes("_") & measure != "unit") {
+  //               total += row[measure];
+  //             }
+  //           }
+  //           return `${total}${row.unit}`
+  //         }
+  //       },
+  //       {
+  //         title: "Diff.",
+  //         render: function(data, type, row, meta) {
+  //           var prev = meta.row - 1;
+  //           var total_curr = 0;
+  //           var total_prev = 0;
+  //           if (prev != -1 & prev != meta.row) {
+  //             for (measure in row) {
+  //               if (!measure.includes("_") & measure != "unit") {
+  //                 total_curr += row[measure];
+  //                 total_prev += measurements_datatable.rows().data()[prev][measure];
+  //               }
+  //             }
+  //             return `${total_curr-total_prev}${row.unit}`;
+  //           }
+  //           return "-"
 
-          }
-        },
-        {
-          title: "Capturer",
-          data: "create_user"
-        },
-      ],
-      ajax: "{{ url_for('User:get_measurements', user=request.user.username) }}",
-      order: [
-        [11, "desc"]
-      ],
-      "fnInitComplete": function(oSettings, json) {
-        var data_len = json.data.length;
-        var chart_datasets = [];
-        var chart_lables = [];
+  //         }
+  //       },
+  //       {
+  //         title: "Capturer",
+  //         data: "create_user"
+  //       },
+  //     ],
+  //     ajax: "{{ url_for('User:get_measurements', user=request.user.username) }}",
+  //     order: [
+  //       [11, "desc"]
+  //     ],
+  //     "fnInitComplete": function(oSettings, json) {
+  //       var data_len = json.data.length;
+  //       var chart_datasets = [];
+  //       var chart_lables = [];
 
-        for (var i = 0; i < data_len; i++) {
-          data = json.data[i];
-          chart_datasets.push([{
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["neck"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["bicep"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["chest"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["abs1"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["abs2"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["abs3"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["upperthigh"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["midthigh"]
-            },
-            {
-              meta: data["create_stamp"].split(" ")[0],
-              value: data["calf"]
-            },
-          ]);
-          chart_lables.push(data["create_stamp"].split(" ")[0]);
-        }
+  //       for (var i = 0; i < data_len; i++) {
+  //         data = json.data[i];
+  //         chart_datasets.push([{
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["neck"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["bicep"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["chest"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["abs1"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["abs2"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["abs3"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["upperthigh"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["midthigh"]
+  //           },
+  //           {
+  //             meta: data["create_stamp"].split(" ")[0],
+  //             value: data["calf"]
+  //           },
+  //         ]);
+  //         chart_lables.push(data["create_stamp"].split(" ")[0]);
+  //       }
 
-        data = {
-          labels: ['Neck', 'Bicep', 'Chest', 'ABS1', 'ABS2', 'ABS3', 'Upper Thigh', 'Mid Thigh', 'Calf'],
-          series: chart_datasets,
-        };
+  //       data = {
+  //         labels: ['Neck', 'Bicep', 'Chest', 'ABS1', 'ABS2', 'ABS3', 'Upper Thigh', 'Mid Thigh', 'Calf'],
+  //         series: chart_datasets,
+  //       };
 
-        options = {
-          fullWidth: true,
-          chartPadding: {
-            right: 25,
-            left: -10
-          },
-          seriesBarDistance: 10,
-          plugins: [
-            Chartist.plugins.tooltip({
-              appendToBody: true
-            }),
-          ]
-        }
+  //       options = {
+  //         fullWidth: true,
+  //         chartPadding: {
+  //           right: 25,
+  //           left: -10
+  //         },
+  //         seriesBarDistance: 10,
+  //         plugins: [
+  //           Chartist.plugins.tooltip({
+  //             appendToBody: true
+  //           }),
+  //         ]
+  //       }
 
-        responsiveOptions = [
-          ['screen and (min-width: 601px) and (max-width: 1024px)', {
-            showPoint: false,
-          }],
-          ['screen and (max-width: 600px)', {
-            showLine: false,
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc: function(value) {
-                return value[0];
-              }
-            }
-          }]
-        ];
+  //       responsiveOptions = [
+  //         ['screen and (min-width: 601px) and (max-width: 1024px)', {
+  //           showPoint: false,
+  //         }],
+  //         ['screen and (max-width: 600px)', {
+  //           showLine: false,
+  //           seriesBarDistance: 5,
+  //           axisX: {
+  //             labelInterpolationFnc: function(value) {
+  //               return value[0];
+  //             }
+  //           }
+  //         }]
+  //       ];
 
-        var measurements_chart = new Chartist.Bar('#measurements_chart', data, options, responsiveOptions);
-      }
-    });
-    $("select[name='measurements_datatable_length']").formSelect();
-  });
+  //       var measurements_chart = new Chartist.Bar('#measurements_chart', data, options, responsiveOptions);
+  //     }
+  //   });
+  //   $("select[name='measurements_datatable_length']").formSelect();
+  // });
 </script>
 {% endblock scripts %}

@@ -10,28 +10,40 @@
     <div class="row">
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
         <div class="login-brand">
-          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="100">
+          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="85">
         </div>
 
         <div class="card card-primary">
-          <div class="card-header"><h4>Login</h4></div>
+          <div class="card-header">
+            <h4>Login</h4>
+          </div>
 
           <div class="card-body">
             <form id="login">
               <div class="form-group">
-                <div id="identifier"></div>
+                <div id="identifier">
+                  <div class="form-group ">
+                    <label>Username or EMail</label>
+                    <input name="identifier" class="form-control" type="text" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
               </div>
 
               <div class="form-group">
                 <div class="d-block">
                   <label for="password" class="control-label">Password</label>
                   <div class="float-right">
-                    <a href="{{ url_for('UserAuthenticationView:forgot_get') }}" class="text-small">
+                    <a href="/auth/forgot" class="text-small">
                       Forgot Password?
                     </a>
                   </div>
                 </div>
-                <div id="password"></div>
+                <div id="password">
+                  <div class="form-group ">
+
+                    <input class="form-control" name="password" type="password" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
               </div>
 
               <div class="form-group">
@@ -39,15 +51,18 @@
                   Login
                 </button>
               </div>
+              <div class="text-muted text-center">
+                Don't have an account? <a href="/auth/register">Create One</a>
+              </div>
             </form>
 
           </div>
         </div>
-        <div class="mt-5 text-muted text-center">
-          Don't have an account? <a href="{{ url_for('UserRegistrationView:register_get') }}">Create One</a>
-        </div>
-        <div class="simple-footer">
-          Copyright &copy; CatByte <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>
+        <div class="mt-5 simple-footer">
+          Copyright &copy; CatByte <script type="text/javascript">
+            var year = new Date();
+            document.write(year.getFullYear());
+          </script>
         </div>
       </div>
     </div>
@@ -57,59 +72,68 @@
 
 {% block scripts %}
 <script>
-$(document).ready(function() {
-
-  new formGen("#login", {
-    form: [{
-        type: "string",
-        name: "identifier",
-        placeholder: "Username or EMail",
-        validators: ["strMin(3)"],
-        element: "#identifier"
-      },
-      {
-        type: "password",
-        name: "password",
-        validators: ["notEmpty()", "strMin(5)"],
-        element: "#password"
-      },
-    ],
-
-    remote: {
-      submit: {
-        method: "POST",
-        url: "/auth/login"
-      },
-    },
-
-    onSuccess(data, status, xhr) {
-      $("#login").find("button[type='submit']").attr("disabled", "");
-      Swal.fire({
-        type: 'success',
-        timer: 2000,
-        showConfirmButton: false,
-        title: 'Authentication Complete',
-        text: "You have been successfully authenticated. Please wait...",
-        onClose: () => {
-          window.location.replace(data.redirect);
-        }
-      });
-    },
-
-    onFail(xhr, status) {
-      try {
-        var error = xhr.responseJSON.error_msg;
-      } catch (err) {
-        var error = "Server Error, Try again.";
+  document.addEventListener('DOMContentLoaded', function (e) {
+    FormValidation.formValidation(
+      document.getElementById('login'), {
+        fields: {
+          identifier: {
+            validators: {
+              notEmpty: {
+                message: 'field is required'
+              },
+              stringLength: {
+                min: 3,
+                max: 30,
+                message: 'Field must be between 3 and 30 characters'
+              }
+            }
+          },
+          password: {
+            validators: {
+              notEmpty: {
+                message: 'field is required'
+              }
+            }
+          },
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+        },
       }
+    ).on('core.form.valid', function () {
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('UserAuthenticationView:login_post') }}",
+        data: $('#login').jsonString()
+      }).done(function (data, status, jqXHR) {
+        Swal.fire({
+          type: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+          title: 'Authentication Complete',
+          text: "You have been successfully authenticated. Please wait...",
+          onClose: () => {
+            window.location.replace(data.redirect);
+          }
+        });
+      }).fail(function (data, status, jqXHR) {
+        try {
+          var error = data.responseJSON.error_msg;
+        } catch (err) {
+          var error = "Server Error, Try again.";
+        }
 
-      iziToast.error({
-        position: "bottomLeft",
-        title: 'Error',
-        message: error
+        iziToast.error({
+          position: "bottomLeft",
+          title: 'Error',
+          message: error
+        });
       });
-    }
+    });
   });
-});
 </script>
 {% endblock scripts %}

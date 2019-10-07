@@ -27,8 +27,22 @@
         <!-- sweet alert -->
         <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
 
+        <!-- core css -->
         <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
+
+        <!-- form validation -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='modules/form-validation/css/formValidation.min.css') }}">
+
+        <!-- pickadate -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.date.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.time.css') }}">
+
+        <!-- main stlye -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='system/app/main.css') }}">
+
+
         <!-- init styles -->
       {% include 'base/styles.html' %}
 
@@ -43,17 +57,20 @@
 
         {% if is_loggedin() %}
           {% include 'base/navbar.html' %}
+          <div class="main-content">
+        {% else %}
+          <div class="app">
         {% endif %}
 
-        <div class="app">
           {% block content %}
           {% endblock content %}
         </div>
 
-        <!-- jquery and bootstrap -->
+        <!-- jquery and bootstrap and core -->
         <script src="{{ url_for('static', filename='system/jquery/jquery-3.4.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='system/bootstrap/js/bootstrap.min.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='system/popperjs/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='system/app/main.js') }}"></script>
 
         <!-- other system modules -->
         <script src="{{ url_for('static', filename='system/nice-scroll/jquery.nicescroll.min.js') }}"></script>
@@ -62,14 +79,22 @@
         <script src="{{ url_for('static', filename='system/stisla/js/scripts.js') }}"></script>
         <script src="{{ url_for('static', filename='system/stisla/js/custom.js') }}"></script>
 
-        <!-- form mapper -->
-        <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
+        <!-- form validator -->
+        <script src="{{ url_for('static', filename='modules/form-validation/js/FormValidation.full.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='modules/form-validation/js/plugins/Bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='modules/form-validation/js/plugins/J.min.js') }}"></script>
 
         <!-- izizToast -->
         <script src="{{ url_for('static', filename='modules/izitoast/js/iziToast.min.js') }}"></script>
 
         <!-- sweetalert -->
         <script src="{{ url_for('static', filename='modules/sweetalert/sweetalert2.all.min.js') }}"></script>
+
+        <!-- pickadate -->
+        <script src="{{ url_for('static', filename='modules/pickadate/picker.js') }}"></script>
+        <script src="{{ url_for('static', filename='modules/pickadate/picker.date.js') }}"></script>
+        <script src="{{ url_for('static', filename='modules/pickadate/picker.time.js') }}"></script>
+
 
 
         <script>
@@ -80,5 +105,12 @@
 
         {% block scripts %}
         {% endblock scripts %}
+
+        <script>
+  $('#myDropdown').on('show.bs.dropdown', function () {
+  // do something…
+console.log("sdfsfdsdf")
+})
+  </script>
     </body>
 </html>

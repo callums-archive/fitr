@@ -1,0 +1,9 @@
+.picker__select--month,
+.picker__select--year {
+    border: 1px solid #b7b7b7;
+    height: 2em;
+    padding: 0;
+    margin-left: .25em;
+    margin-right: .25em;
+    font-size: 14px;
+}
