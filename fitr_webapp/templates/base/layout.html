@@ -1,84 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- META -->
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-        <meta content="utf-8" http-equiv="encoding">
-        <meta name="apple-mobile-web-app-status-bar-style" content="{{ colours['browser_theme'] }}">
-        <meta name="theme-color" content="{{ colours['browser_theme'] }}">
 
-        <!-- favicon -->
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ico.png') }}">
-        <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
-        <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
+<head>
+  <!-- META -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="apple-mobile-web-app-status-bar-style" content="{{ colours['browser_theme'] }}">
+  <meta name="theme-color" content="{{ colours['browser_theme'] }}">
 
-        <!-- Main CSS -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='system/bootstrap/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='system/fontawesome/css/all.min.css') }}">
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ico.png') }}">
+  <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
 
-        <!-- Bootstrap Social -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='modules/bootstrap-social/bootstrap-social.css') }}">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/fontawesome/css/all.min.css') }}">
 
-        <!-- iziToast -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='modules/izitoast/css/iziToast.min.css') }}">
+  <!-- Bootstrap Social -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/bootstrap-social/bootstrap-social.css') }}">
 
-        <!-- sweet alert -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
+  <!-- iziToast -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/izitoast/css/iziToast.min.css') }}">
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
-        <!-- init styles -->
-      {% include 'base/styles.html' %}
+  <!-- sweet alert -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
 
-        {% block styles %}
-        {% endblock styles %}
+  <!-- core css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
 
-        <title>Fitr</title>
-    </head>
+  <!-- form validation -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/form-validation/css/formValidation.min.css') }}">
 
-    <body>
-        <div class="se-pre-con"></div>
+  <!-- pickadate -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.date.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.time.css') }}">
 
-        {% if is_loggedin() %}
-          {% include 'base/navbar.html' %}
-        {% endif %}
+  <!-- main stlye -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/app/main.css') }}">
 
-        <div class="app">
-          {% block content %}
-          {% endblock content %}
-        </div>
-
-        <!-- jquery and bootstrap -->
-        <script src="{{ url_for('static', filename='system/jquery/jquery-3.4.1.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='system/bootstrap/js/bootstrap.min.js') }}"></script>
-        <script type="module" src="{{ url_for('static', filename='system/popperjs/popper.min.js') }}"></script>
-
-        <!-- other system modules -->
-        <script src="{{ url_for('static', filename='system/nice-scroll/jquery.nicescroll.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='system/momentjs/moment-with-locales.js') }}"></script>
-        <script src="{{ url_for('static', filename='system/stisla/js/stisla.js') }}"></script>
-        <script src="{{ url_for('static', filename='system/stisla/js/scripts.js') }}"></script>
-        <script src="{{ url_for('static', filename='system/stisla/js/custom.js') }}"></script>
-
-        <!-- form mapper -->
-        <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
-
-        <!-- izizToast -->
-        <script src="{{ url_for('static', filename='modules/izitoast/js/iziToast.min.js') }}"></script>
-
-        <!-- sweetalert -->
-        <script src="{{ url_for('static', filename='modules/sweetalert/sweetalert2.all.min.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
 
 
-        <script>
-        $(window).on('load', function() {
-          $(".se-pre-con").fadeOut("slow");
-        });
-        </script>
+  <!-- init styles -->
+  {% include 'base/styles.html' %}
 
-        {% block scripts %}
-        {% endblock scripts %}
-    </body>
+  {% block styles %}
+  {% endblock styles %}
+
+  <title>Fitr</title>
+</head>
+
+<body>
+  <div class="se-pre-con"></div>
+
+  {% if is_loggedin() %}
+  {% include 'base/navbar.html' %}
+  <div class="main-content">
+    {% else %}
+    <div class="app">
+      {% endif %}
+
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+    <!-- jquery and bootstrap and core -->
+    <script src="{{ url_for('static', filename='system/jquery/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='system/popperjs/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/app/main.js') }}"></script>
+
+    <!-- triggers -->
+    <script src="{{ url_for('static', filename='system/app/triggers.js') }}"></script>
+
+    <!-- other system modules -->
+    <script src="{{ url_for('static', filename='system/nice-scroll/jquery.nicescroll.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/momentjs/moment-with-locales.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/stisla/js/stisla.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/stisla/js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/stisla/js/custom.js') }}"></script>
+
+    <!-- form validator -->
+    <script src="{{ url_for('static', filename='modules/form-validation/js/FormValidation.full.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/form-validation/js/plugins/Bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/form-validation/js/plugins/J.min.js') }}"></script>
+
+    <!-- izizToast -->
+    <script src="{{ url_for('static', filename='modules/izitoast/js/iziToast.min.js') }}"></script>
+
+    <!-- sweetalert -->
+    <script src="{{ url_for('static', filename='modules/sweetalert/sweetalert2.all.min.js') }}"></script>
+
+    <!-- pickadate -->
+    <script src="{{ url_for('static', filename='modules/pickadate/picker.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/pickadate/picker.date.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/pickadate/picker.time.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
+
+    <script language="JavaScript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"
+      type="text/javascript"></script>
+    <script language="JavaScript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"
+      type="text/javascript"></script>
+    <script language="JavaScript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"
+      type="text/javascript"></script>
+    <script language="JavaScript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"
+      type="text/javascript"></script>
+
+
+
+    <script>
+      $(window).on('load', function () {
+        $(".se-pre-con").fadeOut("slow");
+      });
+    </script>
+
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+
 </html>

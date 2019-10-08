@@ -10,25 +10,40 @@
     <div class="row">
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
         <div class="login-brand">
-          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="100">
+          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="85">
         </div>
 
         <div class="card card-primary">
-          <div class="card-header"><h4>Reset Password</h4></div>
+          <div class="card-header">
+            <h4>Reset Password</h4>
+          </div>
 
           <div class="card-body">
             <p class="text-muted">We will send a link to reset your password</p>
             <form id="forgot">
+              <div id="formElements">
+                <div class="form-group ">
+                  <label>Your Email Address</label>
+                  <input class="form-control" name="identifier" type="text" autocorrect="off" autocapitalize="off">
+                </div>
+              </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                   Reset Password
                 </button>
               </div>
             </form>
+            <div class="text-muted text-center">
+              <a href="{{ url_for('UserRegistrationView:index') }}">Register Account</a> |
+              <a href="{{ url_for('UserAuthenticationView:login_get') }}">Login</a>
+            </div>
           </div>
         </div>
         <div class="simple-footer">
-          Copyright &copy; CatByte <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>
+          Copyright &copy; CatByte <script type="text/javascript">
+            var year = new Date();
+            document.write(year.getFullYear());
+          </script>
         </div>
       </div>
     </div>
@@ -39,37 +54,57 @@
 
 {% block scripts %}
 <script>
-  $(document).ready(function() {
+  document.addEventListener('DOMContentLoaded', function (e) {
 
-    new formGen("#forgot", {
-      form: [{
-          type: "email",
-          name: "identifier",
-          placeholder: "Your Email Address",
-          validators: ["strMin(5)"],
+    // autocomp out
+    generate_autocomp_hash([
+      'input[name="identifier"]',
+    ])
+
+    //form validation
+    FormValidation.formValidation(
+      document.getElementById('forgot'), {
+        fields: {
+          identifier: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required'
+              },
+              stringLength: {
+                min: 3,
+                max: 30,
+                message: 'Field must be between 3 and 30 characters'
+              }
+            }
+          },
         },
-      ],
-
-      remote: {
-        submit: {
-          method: "POST",
-          url: "{{ url_for('UserAuthenticationView:forgot_post') }}"
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
         },
-      },
-
-      onSuccess(data, status, xhr) {
+      }
+    ).on('core.form.valid', function () {
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('UserAuthenticationView:forgot_post') }}",
+        data: $('#forgot').jsonString()
+      }).done(function (data, status, jqXHR) {
         Swal.fire({
           type: 'success',
-          showConfirmButton: true,
-          title: 'Check your email',
-          text: "Reset link has been emailed to you.",
-          confirmButtonClass: "btn btn-primary"
+          timer: 2000,
+          showConfirmButton: false,
+          title: 'Authentication Complete',
+          text: "You have been successfully authenticated. Please wait...",
+          onClose: () => {
+            window.location.replace(data.redirect);
+          }
         });
-      },
-
-      onFail(xhr, status) {
+      }).fail(function (data, status, jqXHR) {
         try {
-          var error = xhr.responseJSON.error_msg;
+          var error = data.responseJSON.error_msg;
         } catch (err) {
           var error = "Server Error, Try again.";
         }
@@ -79,7 +114,7 @@
           title: 'Error',
           message: error
         });
-      }
+      });
     });
   });
 </script>

@@ -9,39 +9,84 @@
     <div class="row">
       <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
         <div class="login-brand">
-          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="100">
+          <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="85">
         </div>
 
         <div class="card card-primary">
-          <div class="card-header"><h4>Register</h4></div>
+          <div class="card-header">
+            <h4>Register</h4>
+          </div>
 
           <div class="card-body">
             <form id="register">
               <h2 class="section-title mt-0">General Info</h2>
               <div class="row">
-                <div id="first"></div>
-                <div id="surname"></div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input class="form-control" name="first_name" type="text" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Surname</label>
+                    <input class="form-control" name="surname" type="text" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
               </div>
 
               <div class="row">
-                <div id="email"></div>
-                <div id="username"></div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input class="form-control" name="email" type="text" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Desired Username</label>
+                    <input class="form-control" name="username" type="text" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
               </div>
 
-
               <div class="row">
-                <div id="pass"></div>
-                <div id="confirm"></div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" name="password" type="password" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input class="form-control" name="confirm" type="password" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
               </div>
 
               <h2 class="section-title mt-0">More about you</h2>
 
               <div class="row">
                 <div class="col-lg-6">
-                  <div id="date"></div>
+                  <label>Date of Birth</label>
+                  <div class="form-group">
+                    <input class="form-control" id="date_of_birth" name="date_of_birth" type="text" autocorrect="off"
+                      autocapitalize="off">
+                  </div>
                 </div>
+
                 <div class="col-lg-6">
-                  <div id="gender"></div>
+                  <div class="form-group">
+                    <label>Gender</label>
+                    <select class="form-control" name="gender">
+                      <option value="" disabled="" selected="">Choose Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -51,10 +96,16 @@
                 </button>
               </div>
             </form>
+            <div class="text-muted text-center">
+              Already have an account? <a href="{{ url_for('UserAuthenticationView:login_get') }}">Login</a>
+            </div>
           </div>
         </div>
         <div class="simple-footer">
-          Copyright &copy; CatByte <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>
+          Copyright &copy; CatByte <script type="text/javascript">
+            var year = new Date();
+            document.write(year.getFullYear());
+          </script>
         </div>
       </div>
     </div>
@@ -63,92 +114,165 @@
 {% endblock content %}
 
 {% block scripts %}
-<script>
-  $(document).ready(function() {
-    new formGen("#register", {
-      form: [{
-          type: "string",
-          name: "first_name",
-          placeholder: "First Name",
-          validators: ["strMin(3)"],
-          element: "#first",
-          formGroupAdj: "col-md-6"
-        },
-        {
-          type: "string",
-          name: "surname",
-          placeholder: "Surname",
-          validators: ["strMin(3)"],
-          element: "#surname",
-          formGroupAdj: "col-md-6"
-        },
-        {
-          type: "select",
-          name: "gender",
-          placeholder: "Gender",
-          options: [{
-            name: "Male",
-            value: "male"
-          }, {
-            name: "Female",
-            value: "female"
-          }],
-          validators: ["notEmpty()"],
-          element: "#gender"
-        },
-        {
-          type: "date",
-          name: "date_of_birth",
-          placeholder: "Date of Birth",
-          validators: ["notEmpty()"],
-          element: "#date"
-        },
-        {
-          type: "string",
-          name: "username",
-          placeholder: "Desired Username",
-          validators: ["notEmpty()", "isUsername()", "remote()"],
-          element: "#username",
-          formGroupAdj: "col-md-6"
-        },
-        {
-          type: "email",
-          name: "email",
-          placeholder: "Email Address",
-          validators: ["strMin(5)", "remote()"],
-          element: "#email",
-          formGroupAdj: "col-md-6"
-        },
-        {
-          type: "password",
-          name: "password",
-          placeholder: "Password",
-          validators: ["strMin(5)"],
-          element: "#pass",
-          formGroupAdj: "col-md-6"
-        },
-        {
-          type: "confirm-password",
-          name: "confirm",
-          placeholder: "Confirm Password",
-          validators: ["strMin(5)"],
-          element: "#confirm",
-          formGroupAdj: "col-md-6"
-        },
-      ],
+<script type="text/javascript">
+  // form validator
+  var fv = null;
+  // validation
+  document.addEventListener('DOMContentLoaded', function (e) {
 
-      remote: {
-        submit: {
-          method: "POST",
-          url: "{{ url_for('UserRegistrationView:register_post') }}"
-        },
-        validate: {
-          method: "POST",
-          url: "{{ url_for('UserRegistrationView:register_validate_post') }}"
-        },
-      },
+    // autocomp out
+    generate_autocomp_hash([
+      'input[name="first_name"]',
+      'input[name="surname"]',
+      'input[name="email"]',
+      'input[name="username"]',
+      'select[name="gender"]',
+      'input[name="date_of_birth"]',
+    ])
 
-      onSuccess(data, status, xhr) {
+    // form validate
+    fv = FormValidation.formValidation(
+      document.getElementById('register'), {
+        fields: {
+          first_name: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              stringLength: {
+                min: 2,
+                max: 50,
+                message: 'Field must be more than 2 and less than 50 characters long'
+              },
+              regexp: {
+                regexp: /^[a-zs]+$/i,
+                message: 'Field can consist of alphabetical characters and spaces only'
+              }
+            }
+          },
+          surname: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              stringLength: {
+                min: 2,
+                max: 50,
+                message: 'Field must be more than 2 and less than 50 characters long'
+              },
+              regexp: {
+                regexp: /^[a-zs]+$/i,
+                message: 'Field can consist of alphabetical characters and spaces only'
+              }
+            }
+          },
+          gender: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required'
+              }
+            }
+          },
+          date_of_birth: {
+            validators: {
+              notEmpty: {
+                message: 'Please complete the date',
+              },
+              callback: {
+                message: "You need to be 13+ to register",
+                callback: function (field) {
+                  var user_date = new Date(field.value);
+                  var ageDifMs = Date.now() - user_date.getTime();
+                  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                  if (Math.abs(ageDate.getUTCFullYear() - 1970) < 13) {
+                    return false
+                  } else {
+                    return true;
+                  }
+                }
+              }
+            }
+          },
+          username: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              stringLength: {
+                min: 4,
+                max: 16,
+                message: 'Field must be more than 4 and less than 16 characters long'
+              },
+              regexp: {
+                regexp: /^[a-zA-Z0-9_]+$/,
+                message: 'Field can only consist of alphabetical charectors and numbers'
+              },
+              remote: {
+                method: 'POST',
+                url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
+              },
+            }
+          },
+          password: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              stringLength: {
+                min: 6,
+                max: 50,
+                message: 'Field must be more than 6 and less than 50 characters long'
+              },
+            }
+          },
+          confirm: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              callback: {
+                message: "Passwords dont match",
+                callback: function (field) {
+                  if (field.value == $("input[name='password']").val()) {
+                    return true
+                  } else {
+                    return false
+                  }
+                }
+              }
+            }
+          },
+          email: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required'
+              },
+              regexp: {
+                regexp: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
+                message: 'Email address is invalid'
+              },
+              remote: {
+                method: 'POST',
+                url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
+              },
+            }
+          },
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+        },
+      }
+    ).on('core.form.valid', function () {
+      $("button[type='submit']").attr("disabled", true);
+      $.ajax({
+        accept: 'application/json',
+        contentType: 'application/json',
+        type: "POST",
+        url: "{{ url_for('UserRegistrationView:register_post') }}",
+        data: $('#register').jsonString()
+      }).done(function (data, status, jqXHR) {
         $("#register").find("button[type='submit']").attr("disabled", "");
         Swal.fire({
           type: 'success',
@@ -157,14 +281,13 @@
           title: 'Welcome 🎉',
           text: "You'r registration was successful! You will now be redirected to login.",
           onClose: () => {
-            window.location.replace("/");
+            window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
           }
         });
-      },
-
-      onFail(xhr, status) {
+      }).fail(function (data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
         try {
-          var error = xhr.responseJSON.error_msg;
+          var error = data.responseJSON.error_msg;
         } catch (err) {
           var error = "Server Error, Try again.";
         }
@@ -174,8 +297,22 @@
           title: 'Error',
           message: error
         });
-      }
-    });
+      });
+    })
+  });
+
+  // date of birth
+  $('#date_of_birth').pickadate({
+    selectYears: true,
+    selectMonths: true,
+    min: new Date(1920, 01, 01),
+    selectYears: 200,
+    format: 'yyyy-mm-d',
+  });
+
+  // events
+  $('input[name="confirm"]').on("input", function (e) {
+    fv.revalidateField('confirm');
   });
 </script>
 {% endblock scripts %}
