@@ -19,43 +19,48 @@ from fitr_webapp.system.stringtools import sanitize_lower
 class UserRegistrationView(FormValidation):
     excluded_methods = ['validate_username', 'validate_email']
 
-    def index(self):
-        abort(403, "Endpoint not in use.")
-
+    # register interface
     @route('/register')
-    def register_get(self):
+    def index(self):
         return render_template("authentication/register.html")
 
+    # register validation (AJAX)
     @route('/register_validate', methods=['POST'])
     def register_validate_post(self):
         return self.validate_x()
 
+    # register submit user data
     @route('/register', methods=['POST'])
     def register_post(self):
         errors = self.validate_x(strict=False)
+        print(errors)
         if errors['valid'] == True:
             # create account
             try:
                 Users.create_user(
-                    username = sanitize_lower(self.data.get('username')),
-                    password = self.data.get('password'),
-                    email = self.data.get('email'),
-                    gender = self.data.get('gender'),
-                    date_of_birth = self.data.get('date_of_birth'),
-                    first_name = self.data.get('first_name'),
-                    surname = self.data.get('surname'),
+                    username=sanitize_lower(self.data.get('username')),
+                    password=self.data.get('password'),
+                    email=self.data.get('email'),
+                    gender=self.data.get('gender'),
+                    date_of_birth=self.data.get('date_of_birth'),
+                    first_name=self.data.get('first_name'),
+                    surname=self.data.get('surname'),
                 )
                 return "OK"
             except DBError as e:
                 abort(412, {"error_msg": str(e)})
         else:
-            abort(412, {"error_msg": "There where errors in your submitted data, please retry."})
+            abort(
+                412, {"error_msg": errors['issues'][0]})
 
+    # validators
+    # validate email
     def validate_email(self, val):
         if Users.by_email(val) is not None:
             return 0, "Email already registered"
         return 1, ""
 
+    # validate username
     def validate_username(self, val):
         if Users.by_username(val) is not None:
             return 0, "Username already registered"
