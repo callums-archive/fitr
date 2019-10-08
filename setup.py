@@ -27,5 +27,6 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     extras_require={"test": ["pytest", "coverage"]},
-    scripts=['./fitr_webapp/scripts/init_db', './fitr_webapp/scripts/start_dev']
+    scripts=['./fitr_webapp/scripts/init_db',
+             './fitr_webapp/scripts/start_dev']
 )
