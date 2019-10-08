@@ -1,10 +1,10 @@
 {% extends  'base/layout.html'%}
 
+
 {% block styles %}
 {% endblock styles %}
 
 {% block content %}
-
 <section class="section">
   <div class="container mt-5">
     <div class="row">
@@ -19,12 +19,16 @@
           </div>
 
           <div class="card-body">
-            <p class="text-muted">We will send a link to reset your password</p>
-            <form id="forgot">
+            <p class="text-muted">Almost there! Please enter your new password.</p>
+            <form id="reset">
               <div id="formElements">
                 <div class="form-group ">
-                  <label>Your Email Address</label>
-                  <input class="form-control" name="identifier" type="text" autocorrect="off" autocapitalize="off">
+                  <label>New Password</label>
+                  <input class="form-control" name="password" type="password" autocorrect="off" autocapitalize="off">
+                </div>
+                <div class="form-group ">
+                  <label>Confirm Password</label>
+                  <input class="form-control" name="confirm" type="password" autocorrect="off" autocapitalize="off">
                 </div>
               </div>
               <div class="form-group">
@@ -33,10 +37,6 @@
                 </button>
               </div>
             </form>
-            <div class="text-muted text-center">
-              <a href="{{ url_for('UserRegistrationView:register_get') }}">Register Account</a> |
-              <a href="{{ url_for('UserAuthenticationView:login_get') }}">Login</a>
-            </div>
           </div>
         </div>
         <div class="simple-footer">
@@ -49,31 +49,51 @@
     </div>
   </div>
 </section>
-
 {% endblock content %}
 
 {% block scripts %}
 <script>
+  // form validator
+  var fv = null;
+  // validation
   document.addEventListener('DOMContentLoaded', function (e) {
 
     // autocomp out
     generate_autocomp_hash([
-      'input[name="identifier"]',
+      'input[name="password"]',
+      'input[name="confirm"]',
     ])
 
-    //form validation
-    FormValidation.formValidation(
-      document.getElementById('forgot'), {
+    // form validate
+    fv = FormValidation.formValidation(
+      document.getElementById('reset'), {
         fields: {
-          identifier: {
+          password: {
             validators: {
               notEmpty: {
-                message: 'This field is required'
+                message: 'This field is required',
               },
               stringLength: {
-                min: 3,
-                max: 30,
-                message: 'Field must be between 3 and 30 characters'
+                min: 6,
+                max: 50,
+                message: 'Field must be more than 6 and less than 50 characters long'
+              },
+            }
+          },
+          confirm: {
+            validators: {
+              notEmpty: {
+                message: 'This field is required',
+              },
+              callback: {
+                message: "Passwords dont match",
+                callback: function (field) {
+                  if (field.value == $("input[name='password']").val()) {
+                    return true
+                  } else {
+                    return false
+                  }
+                }
               }
             }
           },
@@ -85,24 +105,27 @@
         },
       }
     ).on('core.form.valid', function () {
+      $("button[type='submit']").attr("disabled", true);
       $.ajax({
         accept: 'application/json',
         contentType: 'application/json',
         type: "POST",
-        url: "{{ url_for('UserAuthenticationView:forgot_post') }}",
-        data: $('#forgot').jsonString()
+        url: "./",
+        data: $('#reset').jsonString()
       }).done(function (data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
         Swal.fire({
           type: 'success',
-          timer: 2000,
+          timer: 3000,
           showConfirmButton: false,
-          title: 'Authentication Complete',
-          text: "You have been successfully authenticated. Please wait...",
+          title: 'Password Reset Success!',
+          text: "Your password has been successfully reset. You are about to be logged in.",
           onClose: () => {
-            window.location.replace(data.redirect);
+            window.location.replace("/");
           }
         });
       }).fail(function (data, status, jqXHR) {
+        $("button[type='submit']").attr("disabled", false);
         try {
           var error = data.responseJSON.error_msg;
         } catch (err) {
@@ -115,7 +138,13 @@
           message: error
         });
       });
-    });
+    })
+  });
+
+
+  // events
+  $('input[name="confirm"]').on("input", function (e) {
+    fv.revalidateField('confirm');
   });
 </script>
 {% endblock scripts %}

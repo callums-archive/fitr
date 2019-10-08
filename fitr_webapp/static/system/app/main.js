@@ -22,3 +22,28 @@ function castJson(arr) {
         return JSON.stringify(jsonData);
     };
 })(jQuery);
+
+
+// uuid gen
+function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        var r = (Math.random() * 16) | 0,
+            v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
+// element redraw
+jQuery.fn.redraw = function () {
+    return this.hide(0, function () {
+        $(this).show();
+    });
+};
+
+// generate auto complete for forms
+function generate_autocomp_hash(elements_arr) {
+    elements_arr.forEach(element => {
+        $(element).attr("autocomplete", generateUUID());
+        $(element).redraw();
+    });
+}

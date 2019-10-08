@@ -7,3 +7,7 @@
     margin-right: .25em;
     font-size: 14px;
 }
+
+.ac_hash {
+    visibility: hidden;
+}

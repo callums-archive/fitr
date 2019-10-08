@@ -59,7 +59,7 @@ class UserAuthenticationView(Base):
     def forgot_reset_get(self, key):
         try:
             if AccountRecovery.process_response(key):
-                return render_template("authentication/password_reset.html")
+                return render_template("authentication/forget_reset.html")
         except DBError as e:
             return str(e)
 

@@ -27,7 +27,6 @@
                     <input class="form-control" name="first_name" type="text" autocorrect="off" autocapitalize="off">
                   </div>
                 </div>
-
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Surname</label>
@@ -51,7 +50,6 @@
                   </div>
                 </div>
               </div>
-
 
               <div class="row">
                 <div class="col-md-6">
@@ -116,19 +114,30 @@
 {% endblock content %}
 
 {% block scripts %}
-<script>
-  // $(document).ready(function () {
+<script type="text/javascript">
   // form validator
   var fv = null;
   // validation
   document.addEventListener('DOMContentLoaded', function (e) {
+
+    // autocomp out
+    generate_autocomp_hash([
+      'input[name="first_name"]',
+      'input[name="surname"]',
+      'input[name="email"]',
+      'input[name="username"]',
+      'select[name="gender"]',
+      'input[name="date_of_birth"]',
+    ])
+
+    // form validate
     fv = FormValidation.formValidation(
       document.getElementById('register'), {
         fields: {
           first_name: {
             validators: {
               notEmpty: {
-                message: 'field is required',
+                message: 'This field is required',
               },
               stringLength: {
                 min: 2,
@@ -144,7 +153,7 @@
           surname: {
             validators: {
               notEmpty: {
-                message: 'field is required',
+                message: 'This field is required',
               },
               stringLength: {
                 min: 2,
@@ -160,7 +169,7 @@
           gender: {
             validators: {
               notEmpty: {
-                message: 'field is required'
+                message: 'This field is required'
               }
             }
           },
@@ -170,12 +179,12 @@
                 message: 'Please complete the date',
               },
               callback: {
-                message: "You need to be 18+ to register",
+                message: "You need to be 13+ to register",
                 callback: function (field) {
                   var user_date = new Date(field.value);
                   var ageDifMs = Date.now() - user_date.getTime();
                   var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                  if (Math.abs(ageDate.getUTCFullYear() - 1970) < 18) {
+                  if (Math.abs(ageDate.getUTCFullYear() - 1970) < 13) {
                     return false
                   } else {
                     return true;
@@ -187,15 +196,15 @@
           username: {
             validators: {
               notEmpty: {
-                message: 'field is required',
+                message: 'This field is required',
               },
               stringLength: {
                 min: 4,
-                max: 30,
-                message: 'Field must be more than 4 and less than 30 characters long'
+                max: 16,
+                message: 'Field must be more than 4 and less than 16 characters long'
               },
               regexp: {
-                regexp: /^[a-zA-Z0-9]+$/,
+                regexp: /^[a-zA-Z0-9_]+$/,
                 message: 'Field can only consist of alphabetical charectors and numbers'
               },
               remote: {
@@ -207,7 +216,7 @@
           password: {
             validators: {
               notEmpty: {
-                message: 'field is required',
+                message: 'This field is required',
               },
               stringLength: {
                 min: 6,
@@ -219,7 +228,7 @@
           confirm: {
             validators: {
               notEmpty: {
-                message: 'field is required',
+                message: 'This field is required',
               },
               callback: {
                 message: "Passwords dont match",
@@ -236,7 +245,7 @@
           email: {
             validators: {
               notEmpty: {
-                message: 'field is required'
+                message: 'This field is required'
               },
               regexp: {
                 regexp: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
@@ -264,21 +273,17 @@
         url: "{{ url_for('UserRegistrationView:register_post') }}",
         data: $('#register').jsonString()
       }).done(function (data, status, jqXHR) {
-        // $.busyLoadFull("show", {
-        //   spinner: false,
-        //   image: false,
-        //   fontawesome: false,
-        //   custom: false,
-        //   color: "#fff",
-        //   background: "rgba(0, 0, 0, 0.80)",
-        //   animation: 'fade',
-        //   text: `🎉 Welcome ${$('input[name="first_name"]').val()}`,
-        //   textPosition: "bottom",
-        //   fontSize: "2rem",
-        // });
-        setTimeout(function () {
-          window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
-        }, 2500)
+        $("#register").find("button[type='submit']").attr("disabled", "");
+        Swal.fire({
+          type: 'success',
+          timer: 3500,
+          showConfirmButton: false,
+          title: 'Welcome 🎉',
+          text: "You'r registration was successful! You will now be redirected to login.",
+          onClose: () => {
+            window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
+          }
+        });
       }).fail(function (data, status, jqXHR) {
         $("button[type='submit']").attr("disabled", false);
         try {
@@ -286,22 +291,12 @@
         } catch (err) {
           var error = "Server Error, Try again.";
         }
-        // $.toast({
-        //   text: error,
-        //   heading: 'Error!',
-        //   icon: 'error',
-        //   showHideTransition: 'slide',
-        //   allowToastClose: false,
-        //   hideAfter: 3000,
-        //   stack: 5,
-        //   position: 'top-center',
-        //   textAlign: 'left',
-        //   loader: true,
-        //   beforeShow: function() {},
-        //   afterShown: function() {},
-        //   beforeHide: function() {},
-        //   afterHidden: function() {}
-        // });
+
+        iziToast.error({
+          position: "bottomLeft",
+          title: 'Error',
+          message: error
+        });
       });
     })
   });
@@ -319,121 +314,5 @@
   $('input[name="confirm"]').on("input", function (e) {
     fv.revalidateField('confirm');
   });
-
-
-  // new formGen("#register", {
-  //   form: [{
-  //       type: "string",
-  //       name: "first_name",
-  //       placeholder: "First Name",
-  //       validators: ["strMin(3)"],
-  //       element: "#first",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //     {
-  //       type: "string",
-  //       name: "surname",
-  //       placeholder: "Surname",
-  //       validators: ["strMin(3)"],
-  //       element: "#surname",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //     {
-  //       type: "select",
-  //       name: "gender",
-  //       placeholder: "Gender",
-  //       options: [{
-  //         name: "Male",
-  //         value: "male"
-  //       }, {
-  //         name: "Female",
-  //         value: "female"
-  //       }],
-  //       validators: ["notEmpty()"],
-  //       element: "#gender"
-  //     },
-  //     {
-  //       type: "date",
-  //       name: "date_of_birth",
-  //       placeholder: "Date of Birth",
-  //       validators: ["notEmpty()"],
-  //       element: "#date"
-  //     },
-  //     {
-  //       type: "string",
-  //       name: "username",
-  //       placeholder: "Desired Username",
-  //       validators: ["notEmpty()", "isUsername()", "remote()"],
-  //       element: "#username",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //     {
-  //       type: "email",
-  //       name: "email",
-  //       placeholder: "Email Address",
-  //       validators: ["strMin(5)", "remote()"],
-  //       element: "#email",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //     {
-  //       type: "password",
-  //       name: "password",
-  //       placeholder: "Password",
-  //       validators: ["strMin(5)"],
-  //       element: "#pass",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //     {
-  //       type: "confirm-password",
-  //       name: "confirm",
-  //       placeholder: "Confirm Password",
-  //       validators: ["strMin(5)"],
-  //       element: "#confirm",
-  //       formGroupAdj: "col-md-6"
-  //     },
-  //   ],
-
-  //   remote: {
-  //     submit: {
-  //       method: "POST",
-  //       url: "{{ url_for('UserRegistrationView:register_post') }}"
-  //     },
-  //     validate: {
-  //       method: "POST",
-  //       url: "{{ url_for('UserRegistrationView:register_validate_post') }}"
-  //     },
-  //   },
-
-  //   onSuccess(data, status, xhr) {
-  //     $("#register").find("button[type='submit']").attr("disabled", "");
-  //     Swal.fire({
-  //       type: 'success',
-  //       timer: 3500,
-  //       showConfirmButton: false,
-  //       title: 'Welcome 🎉',
-  //       text: "You'r registration was successful! You will now be redirected to login.",
-  //       onClose: () => {
-  //         window.location.replace("/");
-  //       }
-  //     });
-  //   },
-
-  //   onFail(xhr, status) {
-  //     try {
-  //       var error = xhr.responseJSON.error_msg;
-  //     } catch (err) {
-  //       var error = "Server Error, Try again.";
-  //     }
-
-  //     iziToast.error({
-  //       position: "bottomLeft",
-  //       title: 'Error',
-  //       message: error
-  //     });
-  //   }
-  // });
-
-
-  // });
 </script>
 {% endblock scripts %}
