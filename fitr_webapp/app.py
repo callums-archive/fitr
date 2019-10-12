@@ -76,7 +76,7 @@ if app.config.get("SENTRY", "") != "":
 def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
-    return redirect(url_for('UserAuthenticationView:login_get'))
+    return redirect(url_for('UserAuthentication:login_get'))
 
 
 @app.before_request

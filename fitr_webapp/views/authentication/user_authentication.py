@@ -20,7 +20,7 @@ from fitr_webapp.system.session import clear_session
 from fitr_webapp.system.stringtools import sanitize_lower
 
 
-class UserAuthenticationView(Base):
+class UserAuthentication(Base):
 
     # login interface
     @route('/login')
@@ -84,6 +84,6 @@ class UserAuthenticationView(Base):
 
     # logout
     @route("/logout", methods=['GET'])
-    def logout(self):
+    def logout_get(self):
         clear_session()
         return redirect(url_for("index"))

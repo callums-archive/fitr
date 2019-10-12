@@ -97,7 +97,7 @@
               </div>
             </form>
             <div class="text-muted text-center">
-              Already have an account? <a href="{{ url_for('UserAuthenticationView:login_get') }}">Login</a>
+              Already have an account? <a href="{{ url_for('UserAuthentication:login_get') }}">Login</a>
             </div>
           </div>
         </div>
@@ -281,7 +281,7 @@
           title: 'Welcome 🎉',
           text: "You'r registration was successful! You will now be redirected to login.",
           onClose: () => {
-            window.location.replace("{{ url_for('UserAuthenticationView:login_get') }}");
+            window.location.replace("{{ url_for('UserAuthentication:login_get') }}");
           }
         });
       }).fail(function (data, status, jqXHR) {

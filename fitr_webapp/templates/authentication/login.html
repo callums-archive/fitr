@@ -110,7 +110,7 @@
         accept: 'application/json',
         contentType: 'application/json',
         type: "POST",
-        url: "{{ url_for('UserAuthenticationView:login_post') }}",
+        url: "{{ url_for('UserAuthentication:login_post') }}",
         data: $('#login').jsonString()
       }).done(function (data, status, jqXHR) {
         Swal.fire({
