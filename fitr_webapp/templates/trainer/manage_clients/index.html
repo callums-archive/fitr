@@ -24,7 +24,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Group</th>
+                        <th>Surname</th>
                         <th>Option</th>
                     </tr>
                 </thead>
@@ -41,36 +41,8 @@
     $(document).ready(function (e) {
         toTheTop("#client-search");
 
-        // $('#clients-table').DataTable({
-        //     serverSide: true,
-        //     "dom": '<"top">rt<"bottom"><"clear">',
-
-        //     ordering: false,
-        //     searching: false,
-        //     ajax: function (data, callback, settings) {
-        //         var out = [];
-
-        //         for (var i = data.start, ien = data.start + data.length; i < ien; i++) {
-        //             out.push([i + '-1', i + '-2', i + '-3', i + '-4', i + '-5']);
-        //         }
-
-        //         setTimeout(function () {
-        //             callback({
-        //                 draw: data.draw,
-        //                 data: out,
-        //                 recordsTotal: 5000000,
-        //                 recordsFiltered: 5000000
-        //             });
-        //         }, 50);
-        //     },
-        //     scrollY: 200,
-        //     scroller: {
-        //         loadingIndicator: true
-        //     },
-        // });
-
         var clients_table = $("#clients-table").DataTable({
-            "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block dt-text-adj'i>",
+            "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block container dt-text-adj'i>",
             "processing": true,
             "serverSide": true,
             "paging": true,
@@ -89,7 +61,10 @@
                 },
                 {
                     "data": "username",
-                    "autoWidth": true
+                    "autoWidth": true,
+                    "render": function (data, type, row) {
+                        return `<a href="./${data}" class="btn btn-xs-table btn-primary btn-block" onclick="setButtonProcess(this, 'btn btn-xs-table btn-primary btn-block')"><span class="ion-wand"></span> Manage</a>`
+                    }
                 },
             ],
         });

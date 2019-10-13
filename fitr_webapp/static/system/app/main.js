@@ -106,3 +106,7 @@ function clearTable(table) {
         $(ele).remove();
     });
 }
+
+function setButtonProcess(ele, classes) {
+    ele.classList = classes + "disabled btn-progress";
+}

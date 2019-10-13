@@ -104,5 +104,23 @@ body.noti-dark:before {
     .dt-text-adj {
         font-size: 12px;
         padding-bottom: 5px;
+        overflow: auto;
     }
+}
+
+/* xs button */
+.btn-group-xs>.btn,
+.btn-xs-table {
+    padding: .1rem .4rem !important;
+    font-size: .875rem !important;
+    line-height: .5 !important;
+    border-radius: .2rem !important;
+}
+
+.btn-group-xs>.btn,
+.btn-xs {
+    padding: .25rem .4rem !important;
+    font-size: .875rem !important;
+    line-height: .5 !important;
+    border-radius: .2rem !important;
 }
