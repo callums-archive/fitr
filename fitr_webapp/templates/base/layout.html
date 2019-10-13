@@ -28,10 +28,6 @@
   <!-- sweet alert -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
 
-  <!-- core css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
-
   <!-- form validation -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/form-validation/css/formValidation.min.css') }}">
 
@@ -40,8 +36,16 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.date.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.time.css') }}">
 
+  <!-- datatable -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.bootstrap.min.css') }}">
+
   <!-- main stlye -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/app/main.css') }}">
+
+  <!-- core css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
 
 
   <!-- init styles -->
@@ -57,12 +61,12 @@
   <div class="se-pre-con"></div>
 
   {% if is_loggedin() %}
-    {% include 'base/navbar.html' %}
-    {% include 'base/sidebar.html' %}
-    <div class="main-content">
-  {% else %}
+  {% include 'base/navbar.html' %}
+  {% include 'base/sidebar.html' %}
+  <div class="main-content">
+    {% else %}
     <div class="app">
-  {% endif %}
+      {% endif %}
       {% block content %}
       {% endblock content %}
     </div>
@@ -99,12 +103,17 @@
     <script src="{{ url_for('static', filename='modules/pickadate/picker.date.js') }}"></script>
     <script src="{{ url_for('static', filename='modules/pickadate/picker.time.js') }}"></script>
 
+    <!-- datatable -->
+    <script src="{{ url_for('static', filename='modules/datatables/js/datatable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/datatables/js/datatable.bootstrap.min.js') }}"></script>
+
+
     <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
 
 
     {% include 'base/scripts.html' %}
     {% if is_loggedin() %}
-      {% include 'base/scripts_logged_in.html' %}
+    {% include 'base/scripts_logged_in.html' %}
     {% endif %}
 
     {% block scripts %}

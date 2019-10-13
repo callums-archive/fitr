@@ -65,3 +65,44 @@ function stringToColor(i) {
 
     return "00000".substring(0, 6 - c.length) + c;
 }
+
+// element to the top onclick
+function toTheTop(ele, behaviour = "click") {
+    $(ele).on(behaviour, function (e) {
+        if ($(document).width() <= "480") {
+            setTimeout(function () {
+                $(ele)[0].scrollIntoView({
+                    behavior: "smooth", // or "auto" or "instant"
+                    block: "start" // or "end"
+                });
+
+                setTimeout(function () {
+                    $(ele)[0].scrollIntoView({
+                        behavior: "smooth", // or "auto" or "instant"
+                        block: "start" // or "end"
+                    });
+                }, 2300);
+            }, 1200);
+        }
+    });
+}
+
+// add row to table
+function addToTable(table, data) {
+    tr_data = "";
+    data.forEach(function (td) {
+        tr_data = tr_data + `<td>${td}</td>`;
+    });
+
+    var new_row = $('<tr>').html(tr_data);
+    new_row.hide();
+    $(table).find('tbody').append(new_row);
+    new_row.fadeIn();
+}
+
+// clear table rows
+function clearTable(table) {
+    Array($(table).find("tbody").find("tr")).forEach(function (ele) {
+        $(ele).remove();
+    });
+}

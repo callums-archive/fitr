@@ -38,3 +38,39 @@ body.noti-dark:before {
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
 }
+
+.useFontAwesomeFamily::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}
+
+.useFontAwesomeFamily:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}
+
+.useFontAwesomeFamily::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}
+
+.useFontAwesomeFamily:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}
+
+.useFontAwesomeFamily::-ms-input-placeholder {
+    /* Microsoft Edge */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}
+
+.useFontAwesomeFamily::placeholder {
+    /* Most modern browsers */
+    font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
+    font-weight: 550;
+}

@@ -29,12 +29,12 @@ class PTCaptureView(Base):
     # route_prefix="/trainer/"
 
     @route('/')
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def index(self):
         return render_template("trainer/capture.html")
 
     @route('/clients_search', methods=['POST'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_post(self):
         term = self.data.get('term')
         if len(term) > 1:
@@ -44,7 +44,7 @@ class PTCaptureView(Base):
         return {}
 
     @route('/<user>/weights', methods=['GET'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_get_weight(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -52,7 +52,7 @@ class PTCaptureView(Base):
         return render_template("trainer/weights.html", client=user)
 
     @route('/<user>/pushup', methods=['GET'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_get_pushups(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -60,7 +60,7 @@ class PTCaptureView(Base):
         return render_template("trainer/pushups.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "pushup"))
 
     @route('/<user>/stepper', methods=['GET'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_get_stepper(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -68,7 +68,7 @@ class PTCaptureView(Base):
         return render_template("trainer/stepper.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "stepper"))
 
     @route('/<user>/situp', methods=['GET'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_get_situp(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -76,7 +76,7 @@ class PTCaptureView(Base):
         return render_template("trainer/situp.html", client=user, ft=FitnessTests.by_user(user.to_dbref(), "situp"))
 
     @route('/<user>/measurements', methods=['GET'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def clients_get_measurements(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -84,7 +84,7 @@ class PTCaptureView(Base):
         return render_template("trainer/measurements.html", client=user)
 
     @route('/<user>/weight', methods=['POST'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def weight_post(self, user):
         user = Users.by_username(user)
         if user is None:
@@ -103,7 +103,7 @@ class PTCaptureView(Base):
         return f"{sign}{diff}KG's"
 
     @route('/<user>/fitness_test/<test>', methods=['POST'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def fitness_test_post(self, user, test):
         user = Users.by_username(user)
         if user is None:
@@ -145,7 +145,7 @@ class PTCaptureView(Base):
                     return "OK"
 
     @route('/<user>/measuremets', methods=['POST'])
-    @permission('pt_clients')
+    @permission('trainer_clients')
     def measurements_post(self, user):
         user = Users.by_username(user)
         if user is None:

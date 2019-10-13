@@ -1,8 +1,15 @@
 {% set menu_items = [
 
         {"heading": "Your Health", "contents": 
-            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "pt_clients", "children": [
+            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
                     {"name":'Capture', "url": url_for('PTCaptureView:index')},
+                ]
+            }
+        },
+
+        {"heading": "Clients", "contents": 
+            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
+                    {"name":'Manage Clients', "url": url_for('TrainerManageClients:index')},
                 ]
             }
         },

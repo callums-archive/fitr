@@ -1,0 +1,150 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+<section class="section">
+
+    <div class="section-header">
+        <div class="mx-2 my-auto d-inline w-100">
+            <div class="input-group">
+                <input type="text" class="useFontAwesomeFamily form-control" id="client-search"
+                    placeholder="&#xf002; Search Client">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm mb-0" id="clients-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Group</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fulton</td>
+                        <td>Arcu Curabitur Foundation</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>David</td>
+                        <td>Aptent Taciti Limited</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Patrick</td>
+                        <td>Convallis Company</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Caesar</td>
+                        <td>Vestibulum Ante Ipsum PC</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Kadeem</td>
+                        <td>Mi Enim Foundation</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Chantale</td>
+                        <td>Ultricies Adipiscing Foundation</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Adena</td>
+                        <td>Erat Eget Ipsum LLP</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Danielle</td>
+                        <td>Ullamcorper Viverra Incorporated</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Boris</td>
+                        <td>Sed Industries</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Odessa</td>
+                        <td>Fusce Aliquam Industries</td>
+                        <td><a href="sdfsdf">link</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function (e) {
+        toTheTop("#client-search");
+
+        var clients_table = $("#clients-table").DataTable({
+            "dom": '<"top">rt<"bottom"><"clear">',
+            "columnDefs": [{
+                "sortable": false,
+                "targets": [2]
+            }]
+        });
+
+        $('#client-search').keyup(function () {
+            clients_table.search($(this).val()).draw();
+        })
+    });
+
+
+    $('#client_name').on('input', function (e) {
+        $.ajax({
+            accept: 'application/json',
+            contentType: 'application/json',
+            type: "POST",
+            url: "{{ url_for('PTCaptureView:clients_post') }}",
+            data: JSON.stringify({
+                term: $("#client_name").val()
+            })
+        }).done(function (data, status, jqXHR) {
+            new_results(data);
+        }).fail(function (data, status, jqXHR) {
+            try {
+                var error = data.responseJSON.error_msg;
+            } catch (err) {
+                var error = "Server Error, Try again.";
+            }
+        });
+    });
+
+    function new_results(data) {
+        console.log("here ")
+        $("#results").empty();
+        if (data.constructor === Array) {
+            data.forEach(function (user) {
+                $('#results').append($(`
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title"><i class="far fa-user"></i> ${user.full_name}</span>
+                  <p>@${user.username}</p>
+                </div>
+                <div class="card-action">
+                  <a href="${user.username}/weights">Weights</a>
+                  <a href="${user.username}/measurements">Measurements</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `))
+            })
+        }
+    }
+</script>
+{% endblock scripts %}

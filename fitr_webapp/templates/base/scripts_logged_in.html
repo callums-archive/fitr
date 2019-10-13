@@ -1,3 +1,8 @@
 <script>
-    $("#user-name-text").css("backgroundColor", `#${stringToColor("{{ request.user.username }}")}`);
+    initials = "";
+    var name = $("#user-name-text").text().split(" ").splice(1).forEach(function (el) {
+        initials = initials + el.charAt(0);
+    });
+    $("#user-name-circle").css("backgroundColor", `#${stringToColor("{{ request.user.username }}")}`);
+    $("#user-name-circle").attr("data-initial", initials);
 </script>
