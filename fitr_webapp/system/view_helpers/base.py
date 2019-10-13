@@ -5,11 +5,11 @@ from flask import (
 
 from flask_classy import FlaskView
 
+
 class Base(FlaskView):
     def __init__(self):
         super(Base, self).__init__()
         self.request = request
-
 
     @property
     def data(self):

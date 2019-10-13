@@ -74,3 +74,35 @@ body.noti-dark:before {
     font-family: "Font Awesome 5 Free", Helvetica, sans-serif !important;
     font-weight: 550;
 }
+
+.dt-text-adj {
+    padding-left: 2px;
+    font-size: 12px;
+}
+
+.dt-height-adj .float-left {
+    padding-right: 5px;
+}
+
+@media screen and (max-width: 767px) {
+    li.paginate_button.previous {
+        display: inline;
+    }
+
+    li.paginate_button.next {
+        display: inline;
+    }
+
+    li.paginate_button {
+        display: none;
+    }
+
+    .dt-height-adj {
+        height: 40px;
+    }
+
+    .dt-text-adj {
+        font-size: 12px;
+        padding-bottom: 5px;
+    }
+}

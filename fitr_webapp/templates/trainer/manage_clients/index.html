@@ -1,6 +1,9 @@
 {% extends  'base/layout.html'%}
 
 {% block styles %}
+<style>
+
+</style>
 {% endblock styles %}
 
 {% block content %}
@@ -26,56 +29,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Fulton</td>
-                        <td>Arcu Curabitur Foundation</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>David</td>
-                        <td>Aptent Taciti Limited</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Patrick</td>
-                        <td>Convallis Company</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Caesar</td>
-                        <td>Vestibulum Ante Ipsum PC</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Kadeem</td>
-                        <td>Mi Enim Foundation</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Chantale</td>
-                        <td>Ultricies Adipiscing Foundation</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Adena</td>
-                        <td>Erat Eget Ipsum LLP</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Danielle</td>
-                        <td>Ullamcorper Viverra Incorporated</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Boris</td>
-                        <td>Sed Industries</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
-                    <tr>
-                        <td>Odessa</td>
-                        <td>Fusce Aliquam Industries</td>
-                        <td><a href="sdfsdf">link</a></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -88,12 +41,57 @@
     $(document).ready(function (e) {
         toTheTop("#client-search");
 
+        // $('#clients-table').DataTable({
+        //     serverSide: true,
+        //     "dom": '<"top">rt<"bottom"><"clear">',
+
+        //     ordering: false,
+        //     searching: false,
+        //     ajax: function (data, callback, settings) {
+        //         var out = [];
+
+        //         for (var i = data.start, ien = data.start + data.length; i < ien; i++) {
+        //             out.push([i + '-1', i + '-2', i + '-3', i + '-4', i + '-5']);
+        //         }
+
+        //         setTimeout(function () {
+        //             callback({
+        //                 draw: data.draw,
+        //                 data: out,
+        //                 recordsTotal: 5000000,
+        //                 recordsFiltered: 5000000
+        //             });
+        //         }, 50);
+        //     },
+        //     scrollY: 200,
+        //     scroller: {
+        //         loadingIndicator: true
+        //     },
+        // });
+
         var clients_table = $("#clients-table").DataTable({
-            "dom": '<"top">rt<"bottom"><"clear">',
-            "columnDefs": [{
-                "sortable": false,
-                "targets": [2]
-            }]
+            "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block dt-text-adj'i>",
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+            },
+            "autoWidth": false,
+            "ajax": "{{ url_for('TrainerManageClientsDataTable:index') }}",
+            "columns": [{
+                    "data": "first_name",
+                    "autoWidth": true
+                },
+                {
+                    "data": "surname",
+                    "autoWidth": true
+                },
+                {
+                    "data": "username",
+                    "autoWidth": true
+                },
+            ],
         });
 
         $('#client-search').keyup(function () {

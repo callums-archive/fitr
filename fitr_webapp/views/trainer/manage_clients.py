@@ -12,7 +12,7 @@ from fitr_webapp.models import Users, FitnessTests
 
 from fitr_webapp.system.exceptions import DBError
 
-from fitr_webapp.system.view_helpers import Base
+from fitr_webapp.system.view_helpers import Base, Datatable
 
 from fitr_webapp.system.permissions import permission, has_permission
 
@@ -25,6 +25,22 @@ from fitr_webapp.models import (
 )
 
 from fitr_webapp.system import mailer
+
+
+class TrainerManageClientsDataTable(Datatable):
+    @route('/datatable')
+    @permission('trainer_clients')
+    def index(self):
+        return self.datatable()
+
+    def columns(self):
+        return ['first_name', 'surname', 'username']
+
+    def model(self):
+        return Users.objects.filter(trainers__contains=request.user.to_dbref())
+
+    def search(self, term):
+        return Users.search(term).filter(trainers__contains=request.user.to_dbref())
 
 
 class TrainerManageClients(Base):
