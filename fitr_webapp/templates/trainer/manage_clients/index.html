@@ -63,7 +63,7 @@
                     "data": "username",
                     "autoWidth": true,
                     "render": function (data, type, row) {
-                        return `<a href="./${data}" class="btn btn-xs-table btn-primary btn-block" onclick="setButtonProcess(this, 'btn btn-xs-table btn-primary btn-block')"><span class="ion-wand"></span> Manage</a>`
+                        return `<a href="{{ url_for('TrainerManageClientAPI:index', user="") }}${data}" class="btn btn-xs-table btn-primary btn-block" onclick="setButtonProcess(this, 'btn btn-xs-table btn-primary btn-block')"><span class="ion-wand"></span> Manage</a>`
                     }
                 },
             ],

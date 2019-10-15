@@ -50,3 +50,15 @@ class TrainerManageClients(Base):
     def index(self):
         # display manage clients interface
         return render_template("trainer/manage_clients/index.html")
+
+
+class TrainerManageClientAPI(Base):
+
+    def before_request(self, name, **user):
+        self.context = Users.serve_context(user.get("user"))
+
+    @route('/clients/<user>')
+    @permission('trainer_clients')
+    def index(self, user):
+        # display manage clients interface
+        return render_template("trainer/manage_clients/index.html")

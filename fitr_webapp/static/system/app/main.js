@@ -81,7 +81,7 @@ function toTheTop(ele, behaviour = "click") {
                         behavior: "smooth", // or "auto" or "instant"
                         block: "start" // or "end"
                     });
-                }, 1000);
+                }, 3000);
             }, 1000);
         }
     });
