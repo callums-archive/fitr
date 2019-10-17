@@ -114,13 +114,9 @@
           showConfirmButton: false,
           title: `Weight Diff: ${data}`,
           onClose: () => {
-            window.location.replace(data.redirect);
+            window.location.replace("{{ url_for('PTCaptureView:index') }}");
           }
         });
-
-        setTimeout(function() {
-          window.location.replace("{{ url_for('PTCaptureView:index') }}");
-        }, 4000)
       },
 
       onFail(xhr, status) {

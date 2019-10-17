@@ -94,7 +94,11 @@ class PTCaptureView(Base):
             abort(412, "Failed to add weight")
 
         weights = Weight.objects(user=user).order_by("-create_stamp").limit(2)
-        diff = weights[0].weight - weights[1].weight
+        try:
+            diff = weights[0].weight - weights[1].weight
+        except:
+            diff = 0
+            
         sign = ""
         if diff > 0:
             sign="+"
