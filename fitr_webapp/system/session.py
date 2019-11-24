@@ -1,5 +1,6 @@
 from flask import session, abort
 from fitr_webapp.models.Session import DBSession
+from datetime import datetime
 
 from fitr_webapp.models import Users
 
@@ -8,6 +9,7 @@ def set_session(user_obj):
     session['username'] = user_obj.username
     session['email'] = user_obj.email
     session['groups'] = user_obj.groups
+    session['start_stamp'] = datetime.utcnow()
     return session.sid
 
 def clear_session():

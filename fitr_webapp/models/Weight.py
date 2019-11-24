@@ -11,6 +11,7 @@ from fitr_webapp.system.exceptions import DBError
 import fitr_webapp.system.datetimetools as datetimetools
 
 
+
 db = MongoEngine()
 
 
@@ -27,6 +28,24 @@ class Weight(db.Document):
     modified_user = db.ReferenceField("Users")
     modified_stamp = db.DateTimeField()
 
+    @classmethod
+    def by_uid(cls, uid):
+        return cls.objects.filter(user=uid).order_by('-create_stamp').all()
+
+    @classmethod
+    def by_uid_latest(cls, uid):
+        return cls.objects.filter(user=uid).order_by('-create_stamp').first()
+
+    @classmethod
+    def by_uid_initial(cls, uid):
+        return cls.objects.filter(user=uid).order_by('create_stamp').first()
+
+    @classmethod
+    def get_difference(cls, uid):
+        weights = cls.objects.filter(user=uid).order_by('create_stamp')
+        return {"weight": round(weights[0].weight - weights[len(weights)-1].weight, 2),
+                "unit": weights[0].unit}
+
     @property
     def show_weights(self):
         return {
@@ -35,6 +54,10 @@ class Weight(db.Document):
             "create_stamp": datetimetools.cast_string(self.create_stamp, "dt"),
             "weight": self.weight,
         }
+
+    @property
+    def show_weight(self):
+        return f"{self.weight} {self.unit}"
 
     @classmethod
     def add_weight(cls, user, weight, date=False):

@@ -1,0 +1,166 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+
+</style>
+{% endblock styles %}
+
+{% block content %}
+<section class="section">
+    <div class="section-header">
+      <h1><i class="far fa-user-circle fa-2x" style="font-size: 19px"></i> {{ client.full_name }}</h1>
+    </div>
+
+    <div class="section-body">
+      <h2 class="section-title">Person Trainer Tools</h2>
+      <p class="section-lead">
+        This is where you can have a quick look at a client as well as submit new data.
+      </p>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card card-large-icons">
+            <div class="card-icon bg-primary text-white">
+              <i class="fas fa-weight"></i>
+            </div>
+            <div class="card-body">
+              <h4>Weight</h4>
+                <p>
+                    <b>Initial: </b>{{ client.initial_weight.show_weight }}<br>
+                    <b>Latest: </b>{{ client.latest_weight.show_weight }}<br>
+                    <b>Difference: </b>{{ client.weight_difference }}
+                </p>
+              <a href="features-setting-detail.html" class="card-cta btn btn-sm btn-primary">Manage Weights <i class="fas fa-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-large-icons">
+                <div class="card-icon bg-primary text-white">
+                <i class="fas fa-ruler"></i>
+                </div>
+                <div class="card-body">
+                <h4>Measurements</h4>
+                    <p>
+                        <b>Initial: </b>{{ client.initial_weight.weight }}{{ client.initial_weight.unit }}<br>
+                        <b>Latest: </b>{{ client.latest_weight.weight }}{{ client.latest_weight.unit }}<br>
+                        <b>Difference: </b>{{ client.weight_difference }}
+                    </p>
+                <a href="features-setting-detail.html" class="card-cta btn btn-sm btn-primary">Manage Measurements <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-large-icons">
+            <div class="card-icon bg-primary text-white">
+              <i class="fas fa-running"></i>
+            </div>
+            <div class="card-body">
+              <h4>Fitness Tests</h4>
+              <p>Email SMTP settings, notifications and others related to email.</p>
+              <a href="features-setting-detail.html" class="card-cta">Change Setting <i class="fas fa-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-large-icons">
+            <div class="card-icon bg-primary text-white">
+              <i class="fas fa-power-off"></i>
+            </div>
+            <div class="card-body">
+              <h4>System</h4>
+              <p>PHP version settings, time zones and other environments.</p>
+              <a href="features-setting-detail.html" class="card-cta">Change Setting <i class="fas fa-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-large-icons">
+            <div class="card-icon bg-primary text-white">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="card-body">
+              <h4>Security</h4>
+              <p>Security settings such as firewalls, server accounts and others.</p>
+              <a href="features-setting-detail.html" class="card-cta">Change Setting <i class="fas fa-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-large-icons">
+            <div class="card-icon bg-primary text-white">
+              <i class="fas fa-stopwatch"></i>
+            </div>
+            <div class="card-body">
+              <h4>Automation</h4>
+              <p>Settings about automation such as cron job, backup automation and so on.</p>
+              <a href="features-setting-detail.html" class="card-cta text-primary">Change Setting <i class="fas fa-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function (e) {
+        toTheTop("#client-search");
+
+        var clients_table = $("#clients-table").DataTable({
+            "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block container dt-text-adj'i>",
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+            },
+            "autoWidth": false,
+            "ajax": "{{ url_for('TrainerManageClientsDataTable:index') }}",
+            "columns": [{
+                    "data": "first_name",
+                    "autoWidth": true
+                },
+                {
+                    "data": "surname",
+                    "autoWidth": true
+                },
+                {
+                    "data": "username",
+                    "autoWidth": true,
+                    "render": function (data, type, row) {
+                        return `<a href="{{ url_for('TrainerManageClientAPI:index', user="") }}${data}" class="btn btn-xs-table btn-primary btn-block" onclick="setButtonProcess(this, 'btn btn-xs-table btn-primary btn-block')"><span class="ion-wand"></span> Manage</a>`
+                    }
+                },
+            ],
+        });
+
+        $('#client-search').keyup(function () {
+            clients_table.search($(this).val()).draw();
+        })
+    });
+
+
+    $('#client_name').on('input', function (e) {
+        $.ajax({
+            accept: 'application/json',
+            contentType: 'application/json',
+            type: "POST",
+            url: "{{ url_for('PTCaptureView:clients_post') }}",
+            data: JSON.stringify({
+                term: $("#client_name").val()
+            })
+        }).done(function (data, status, jqXHR) {
+            new_results(data);
+        }).fail(function (data, status, jqXHR) {
+            try {
+                var error = data.responseJSON.error_msg;
+            } catch (err) {
+                var error = "Server Error, Try again.";
+            }
+        });
+    });
+</script>
+{% endblock scripts %}
