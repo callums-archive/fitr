@@ -25,15 +25,27 @@ class FitnessTests(db.Document):
     modified_user = db.ReferenceField("Users")
     modified_stamp = db.DateTimeField()
 
+    @classmethod
+    def by_uid(cls, uid):
+        return cls.objects.filter(user=uid).order_by('-create_stamp').all()
 
     @classmethod
-    def by_user(cls, user, test):
-        op = dict()
-        for x in cls.objects.filter(user=user).all():
-            if x.name == test:
-                print("HERE HERE ++++++++++++++++++++++++++++++++++++++++++++++++++")
-                op[cast_string(x.create_stamp, "d")] = x.data
-        return op
+    def by_uid_latest(cls, uid):
+        return cls.objects.filter(user=uid).order_by('-create_stamp').first()
+
+    @classmethod
+    def by_uid_initial(cls, uid):
+        return cls.objects.filter(user=uid).order_by('create_stamp').first()
+
+
+    # @classmethod
+    # def by_user(cls, user, test):
+    #     op = dict()
+    #     for x in cls.objects.filter(user=user).all():
+    #         if x.name == test:
+    #             print("HERE HERE ++++++++++++++++++++++++++++++++++++++++++++++++++")
+    #             op[cast_string(x.create_stamp, "d")] = x.data
+    #     return op
 
     @classmethod
     def capture(cls, user, test, value):

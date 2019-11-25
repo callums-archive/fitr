@@ -55,7 +55,6 @@ app.jinja_env.globals.update(is_loggedin=is_loggedin)
 app.jinja_env.globals.update(user=get_current_user)
 app.jinja_env.globals.update(has_permission=has_permission)
 app.jinja_env.globals.update(datetimetools=datetimetools)
-app.jinja_env.globals.update(datetimetools=datetimetools)
 app.jinja_env.globals.update(colours=app.config['COLOURS'])
 
 # register views
@@ -76,7 +75,7 @@ if app.config.get("SENTRY", "") != "":
 def index():
     if is_loggedin():
         return redirect(url_for('DashboardView:index'))
-    return redirect(url_for('UserAuthenticationView:login_get'))
+    return redirect(url_for('UserAuthentication:login_get'))
 
 
 @app.before_request

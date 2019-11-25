@@ -1,0 +1,275 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+
+</style>
+{% endblock styles %}
+
+{% block content %}
+<section class="section">
+
+    <div class="section-header">
+        <div class="mx-2 my-auto d-inline w-100">
+            <div class="input-group">
+                <input type="text" class="useFontAwesomeFamily form-control" id="client-search"
+                    placeholder="&#xf002; Search Client">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm mb-0" id="clients-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="user-details-modal" class="user-details"></div>
+
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    var username = null;
+    var clients_table = null;
+
+    function setUser(user) {
+        username = user;
+    }
+
+    function deleteClient(user, full_name) {
+        Swal.fire({
+            title: 'Detaching Client',
+            text: `You are about to detach ${full_name} as a client, are you sure?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    accept: 'application/json',
+                    contentType: 'application/json',
+                    type: "DELETE",
+                    url: `{{ url_for('TrainerManageClientAPI:index', user='') }}${user}/`,
+                }).done(function (data, status, jqXHR) {
+                    Swal.fire(
+                        'Detach Success',
+                        `${full_name} has been detached.`,
+                        'success'
+                    ).then((result) => {
+                        clients_table.ajax.reload();
+                        $('[data-izimodal-close]')[0].click();
+                    })
+                }).fail(function (data, status, jqXHR) {
+                    try {
+                        var error = data.responseJSON.error_msg;
+                    } catch (err) {
+                        var error = "Server Error, Try again.";
+                    }
+
+                    Swal.fire(
+                        'failed',
+                        `Unable to detach ${full_name}. Pleasew try again.`,
+                        'success'
+                    )
+                });
+
+            }
+        })
+    }
+
+    $(document).ready(function (e) {
+        toTheTop("#client-search");
+
+        clients_table = $("#clients-table").DataTable({
+            "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block container dt-text-adj'i>",
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+            },
+            "autoWidth": false,
+            "ajax": "{{ url_for('TrainerManageClientsDataTable:index') }}",
+            "columns": [{
+                    "data": "first_name",
+                    "autoWidth": true
+                },
+                {
+                    "data": "surname",
+                    "autoWidth": true
+                },
+                {
+                    "data": "username",
+                    "autoWidth": true,
+                    "render": function (data, type, row) {
+                        return `<a href="#" class="btn btn-xs-table btn-primary btn-block" data-izimodal-open="#user-details-modal" onclick="setUser('${data}')"><span class="ion-wand"></span> Manage</a>`
+                    }
+                },
+            ],
+        });
+
+        $('#client-search').keyup(function () {
+            clients_table.search($(this).val()).draw();
+        });
+
+        $(".user-details").iziModal({
+            history: false,
+            openFullscreen: true,
+            fullscreen: false,
+            headerColor: "#6777ef",
+            background: "#f4f6f9",
+            title: "Client Management",
+            subtitle: "View and edit client data.",
+            onOpening: function (modal) {
+                modal.startLoading();
+
+                $.ajax({
+                    accept: 'application/json',
+                    type: "GET",
+                    url: `{{ url_for('TrainerManageClientAPI:index', user='') }}${username}/details`
+                }).done(function (data, status, jqXHR) {
+                    $(".user-details").iziModal('setTitle', data.fullname);
+                    $(".user-details").find(".iziModal-content").html(`
+                        <div class="row p-3">
+                            <div class="col pb-0">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="mr-auto w-100">
+                                            <h4 class="float-left"><i class="fas fa-user"></i> User Info</h4>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <dl>
+                                                    <dt>Full Name</dt>
+                                                    <dd>${data.fullname} (@${data.username})</dd>
+                                                    <dt>Gender</dt>
+                                                    <dd>${data.gender}</dd>
+                                                    <dt>Date of Birth</dt>
+                                                    <dd>${data.birth_date} (${data.age.years} y/o)</dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col">
+                                                    <dl>
+                                                    <dt>Last Seen Online</dt>
+                                                    <dd>${data.last_seen}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="mr-auto w-100">
+                                            <h4 class="float-left"><i class="fas fa-weight"></i> Weight</h4>
+                                            <a href="{{ url_for('TrainerManageClientAPI:index', user='') }}${username}/weight" class="btn btn-sm btn-primary float-right">
+                                                <i class="fas fa-pen"></i> Enter
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>
+                                            <dt>Latest Weight</dt>
+                                            <dd>${data.latest_weight}</dd>
+                                            <dt>Initial Weight</dt>
+                                            <dd>${data.initial_weight}</dd>
+                                            <dt>Weight Difference</dt>
+                                            <dd>${data.weight_difference}</dd>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="mr-auto w-100">
+                                            <h4 class="float-left"><i class="fas fa-ruler"></i> Measurements</h4>
+                                            <a href="#" class="btn btn-sm btn-primary float-right">
+                                                <i class="fas fa-pen"></i> Enter
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>
+                                            <dt>Initial Measurement Total</dt>
+                                            <dd>${data.initial_measurement}</dd>
+                                            <dt>Latest Measurement Total</dt>
+                                            <dd>${data.latest_measurement}</dd>
+                                            <dt>Measurement Difference Total</dt>
+                                            <dd>${data.measurement_difference}</dd>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="card card-primary mb-0">
+                                    <div class="card-header">
+                                        <div class="mr-auto w-100">
+                                            <h4 class="float-left"><i class="fas fa-running"></i> Fitness Tests</h4>
+                                            <a href="#" class="btn btn-sm btn-primary float-right">
+                                                <i class="fas fa-pen"></i> Enter
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>
+                                            <dt>Total Number of tests</dt>
+                                            <dd>${data.fitness_tests_total}</dd>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button type="button" onclick="deleteClient('${data.username}', '${data.fullname}')" class="btn btn-danger btn-block mt-3"><i class="fas fa-trash-alt"></i> Detach Client</button>
+                            </div>
+                        </div>
+                `)
+                }).fail(function (data, status, jqXHR) {
+                    try {
+                        var error = data.responseJSON.error_msg;
+                    } catch (err) {
+                        var error = "Server Error, Try again.";
+                    }
+                }).always(function () {
+                    modal.stopLoading();
+                });
+
+            }
+        });
+    });
+
+
+    $('#client_name').on('input', function (e) {
+        $.ajax({
+            accept: 'application/json',
+            contentType: 'application/json',
+            type: "POST",
+            url: "{{ url_for('PTCaptureView:clients_post') }}",
+            data: JSON.stringify({
+                term: $("#client_name").val()
+            })
+        }).done(function (data, status, jqXHR) {
+            new_results(data);
+        }).fail(function (data, status, jqXHR) {
+            try {
+                var error = data.responseJSON.error_msg;
+            } catch (err) {
+                var error = "Server Error, Try again.";
+            }
+        });
+    });
+
+</script>
+{% endblock scripts %}

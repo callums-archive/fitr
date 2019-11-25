@@ -82,6 +82,31 @@ def age_lower(birth_date, age):
         return True
     return False
 
+def age(birth_date):
+    """Compairs birthdate to current date to check for a valid age or lower
+
+    Args:
+        birth_date: birthdate(date/datetime obj)
+        age: required age(date/datetime obj)
+
+    Returns:
+        boolean
+
+    """
+    if type(birth_date) != type(date):
+        birth_date = birth_date.date()
+
+    today = date.today()
+    delta = today - birth_date
+    print(dir(delta))
+    return {
+        "days": delta.days,
+        "years": int(delta.days / 365)
+    }
+    # if (delta.days / 365) <= age:
+    #     return True
+    # return False
+
 def cast_string(obj, cast_opt, tz="Africa/Johannesburg"):
     """Converts datetime, time and date objects to formatted ISO strings
 

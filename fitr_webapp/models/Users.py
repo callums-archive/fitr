@@ -28,6 +28,10 @@ import fitr_webapp.system.stringtools as stringtools
 from fitr_webapp.models.AccountRecovery import *
 from fitr_webapp.models.Groups import *
 from fitr_webapp.models.Logins import *
+from fitr_webapp.models.Weight import Weight
+from fitr_webapp.models.Session import DBSession
+from fitr_webapp.models.Measurements import CapturedMeasurements
+from fitr_webapp.models.FitnessTests import FitnessTests
 
 
 db = MongoEngine()
@@ -58,6 +62,79 @@ class Users(db.Document):
     def full_name(self):
         return f"{self.first_name} {self.surname}"
 
+    @property
+    def last_seen(self):
+        try:
+            session = DBSession.by_uid_latest(self.username)
+            return session['data'].get("start_stamp", session.expiration)
+        except:
+            return "No Data"
+
+    #
+    # WEIGHT
+    #
+    @property
+    def initial_weight(self):
+        try:
+           return Weight.by_uid_initial(self.id)
+        except:
+            return {"weight": "No Data", "unit": ""}
+
+    @property
+    def latest_weight(self):
+        try:
+            return Weight.by_uid_latest(self.id)
+        except:
+            return {"weight": "No Data", "unit": ""}
+
+    @property
+    def weight_difference(self):
+        try:
+            return Weight.get_difference(self.id)
+        except:
+            return {"weight": "No Data", "unit": ""}
+
+    @property
+    def weight_difference_previous(self):
+        try:
+            return Weight.get_difference_previous(self.id)
+        except:
+            return {"weight": "No Data", "unit": ""}
+
+    #
+    # MEASUREMENTS
+    #
+    @property
+    def initial_measurement(self):
+        try:
+            return CapturedMeasurements.by_uid_initial(self.id)
+        except:
+            return "No Data"
+
+    @property
+    def latest_measurement(self):
+        try:
+            return CapturedMeasurements.by_uid_latest(self.id)
+        except:
+            return "No Data"
+
+    @property
+    def measurement_difference(self):
+        try:
+            return CapturedMeasurements.get_difference(self.id)
+        except:
+            return "No Data"
+
+    #
+    # FITNESS TESTS
+    #
+    @property
+    def fitness_tests(self):
+        return FitnessTests.by_uid(self.id)
+
+    #
+    # QUERY
+    #
     @classmethod
     def by_username(cls, username):
         return cls.objects.filter(username=username).first()
@@ -81,6 +158,9 @@ class Users(db.Document):
         q = {"$or": q}
         return cls.objects(__raw__=q).limit(limit).all()
 
+    #
+    # CREATE
+    #
     @classmethod
     def create_user(cls, username, password, email, gender, date_of_birth, first_name, surname, groups=['everyone']):
         user = None
@@ -130,11 +210,16 @@ class Users(db.Document):
         Logins.new_login(user, sid)
         return True
 
+    #
+    # CONTEXT
+    #
     @classmethod
     def serve_context(cls, username):
         user = cls.by_username(username)
         if user is None:
             abort(404)
+        if request.user not in user.trainers:
+            return abort(403)
         if decide_context_acl([user, user.trainers], True):
             return user
         return abort(403)

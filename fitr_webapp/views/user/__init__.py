@@ -1,5 +1,6 @@
-from .user import User
-
+from .user import UserAPI
+from .user import UserAPIWeightDatatable
 
 def register_views(app, base):
-    User.register(app, route_base=base)
+    UserAPIWeightDatatable.register(app, route_base=base)
+    UserAPI.register(app, route_base=base)

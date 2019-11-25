@@ -35,7 +35,7 @@
             </form>
             <div class="text-muted text-center">
               <a href="{{ url_for('UserRegistrationView:index') }}">Register Account</a> |
-              <a href="{{ url_for('UserAuthenticationView:login_get') }}">Login</a>
+              <a href="{{ url_for('UserAuthentication:login_get') }}">Login</a>
             </div>
           </div>
         </div>
@@ -89,18 +89,15 @@
         accept: 'application/json',
         contentType: 'application/json',
         type: "POST",
-        url: "{{ url_for('UserAuthenticationView:forgot_post') }}",
+        url: "{{ url_for('UserAuthentication:forgot_post') }}",
         data: $('#forgot').jsonString()
       }).done(function (data, status, jqXHR) {
         Swal.fire({
           type: 'success',
           timer: 2000,
-          showConfirmButton: false,
-          title: 'Authentication Complete',
-          text: "You have been successfully authenticated. Please wait...",
-          onClose: () => {
-            window.location.replace(data.redirect);
-          }
+          showConfirmButton: true,
+          title: 'We have emailed you',
+          text: "We have emailed you a password reset link.",
         });
       }).fail(function (data, status, jqXHR) {
         try {

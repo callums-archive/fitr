@@ -1,149 +1,45 @@
-{% set menu_items = [
-
-  {"name": 'Clients', "ref": "clients", "permission": "pt_clients", "children": [
-    {"name":'Capture', "url": url_for('PTCaptureView:index')},
-  ]},
-
-  {"name": user().first_name, "ref": "user", "permission": "user", "children": [
-    {"name": '<i class="fas fa-power-off"></i> Logout', "url": url_for('UserAuthenticationView:logout')},
-  ]},
-
-] %}
-
-
-{% macro gen_main_menu() -%}
-{% for menu_item in menu_items %}
-{% if menu_item.children | length > 0 and has_permission(menu_item.permission) %}
-<li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="{{ menu_item.ref }}" data-toggle="dropdown">
-    {{ menu_item.name | safe }}
-  </a>
-  <div class="dropdown-menu">
-    {% for child in menu_item.children %}
-    <a class="dropdown-item" href="{{ child.url }}">{{ child.name | safe }}</a>
-    {% endfor %}
-  </div>
-</li>
-{% elif has_permission(menu_item.permission) %}
-<li class="nav-item">
-  <a class="nav-link" href="{{ menu_item.url }}">
-    {{ menu_item.name | safe }}
-  </a>
-</li>
-{% endif %}
-{% endfor %}
-{%- endmacro %}
-
-
-{# <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0">
-  <a class="navbar-brand" href="#">
-    <img src="{{ url_for('static', filename='images/logo_white.png') }}" alt="">
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_menu" aria-controls="main_menu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="main_menu">
-    <ul class="navbar-nav ml-auto">
-      {{ gen_main_menu() }}
-    </ul>
-  </div>
-</nav> #}
-
-<!-- navbar background color -->
 <div class="navbar-bg"></div>
-<!-- navbar -->
 <nav class="navbar navbar-expand-lg main-navbar">
-  <!-- navbar nav left -->
-  <form class="form-inline mr-auto">
-    <!-- navbar toggler -->
+  <div class="mr-auto">
     <ul class="navbar-nav mr-3">
-      <li><a href="#" id="sidebar" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a>
-      </li>
+      <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
       <li class="dropdown dropdown-list-toggle " id="navDrop">
-        <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep"><i
-            class="far fa-bell"></i></a>
+        <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep">
+          <i class="far fa-bell"></i>
+        </a>
         <div class="dropdown-menu dropdown-list dropdown-menu-left mt-2">
           <div class="dropdown-header rounded-top">Notifications
             <div class="float-right">
               <a href="#">View All</a>
             </div>
           </div>
-          <!-- navbar notification dropdown content -->
           <div class="dropdown-list-content">
-            <!-- navbar notification dropdown item -->
-            {# <a href="#" class="dropdown-item">
-              <img src="../dist/img/avatar/avatar-5.png" class="rounded-circle dropdown-item-img">
+            <a href="#" class="dropdown-item">
               <div class="dropdown-item-desc">
-                <b>Alfa Zulkarnain</b> has moved task <b>Add logo</b> to <b>Done</b>
-                <div class="time">Yesterday</div>
+                <b>No New Notifications</b>
               </div>
-            </a> #}
+            </a>
           </div>
         </div>
       </li>
-      <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
     </ul>
-    <!-- navbar search -->
-    <!-- <div class="search-element">
-      <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-    </div> -->
-  </form>
-  <!-- navbar right -->
+  </div>
   <ul class="navbar-nav navbar-right">
-    <!-- navbar notification toggle -->
-    <!-- navbar notification dropdown -->
-
     </li>
-    <!-- navbar right item -->
     <li class="dropdown" id="profileDrop">
-      {# <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-        <figure class="avatar mr-1" data-initial="CF" width="30" style="background-color: #5755d9;"></figure>
-        <div class="d-sm-none d-lg-inline-block">Hi, Callum Fleming</div>
+      <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+        <figure class="avatar mr-1" width="30" id="user-name-circle"></figure>
+        <div class="d-sm-none d-lg-inline-block" id="user-name-text">Hi, {{ request.user.full_name }}</div>
       </a>
       <div class="dropdown-menu dropdown-menu-right">
-        <div class="dropdown-title">Logged in 5 min ago</div>
         <a href="features-profile.html" class="dropdown-item has-icon">
-          <i class="far fa-user"></i> Profile
+          <i class="far fa-user"></i> Profile and Settings
         </a>
-        <a href="features-activities.html" class="dropdown-item has-icon">
-          <i class="fas fa-bolt"></i> Activities
-        </a>
-        <a href="features-settings.html" class="dropdown-item has-icon">
-          <i class="fas fa-cog"></i> Settings
-        </a>
-        <div class="dropdown-divider"></div> #}
-        <a href="/auth/logout" class="dropdown-item has-icon text-danger">
+        <div class="dropdown-divider"></div>
+        <a href="{{ url_for('UserAuthentication:logout_get') }}" class="dropdown-item has-icon text-danger">
           <i class="fas fa-sign-out-alt"></i> Logout
         </a>
       </div>
     </li>
   </ul>
 </nav>
-</div>
-
-<!-- Sidebar outter -->
-<div class="main-sidebar">
-  <!-- sidebar wrapper -->
-  <aside id="sidebar-wrapper">
-    <!-- sidebar brand -->
-    <div class="sidebar-brand sidebar-brand-sm">
-      <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="45">
-    </div>
-    <div class="sidebar-brand">
-      <img src="{{ url_for('static', filename='img/temple_port.png') }}" alt="logo" width="85">
-    </div>
-    <!-- sidebar menu -->
-    <ul class="sidebar-menu">
-      <!-- menu header -->
-      <li class="menu-header">Dashboard</li>
-      <!-- menu item -->
-      {% if has_permission('pt_clients') %}
-      <li class="active">
-        <a href="/trainer"><i class="fas fa-fire"></i><span>Clients</span></a>
-      </li>
-      {% endif %}
-    </ul>
-  </aside>
-</div>

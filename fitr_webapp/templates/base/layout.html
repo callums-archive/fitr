@@ -15,9 +15,12 @@
   <link rel="icon" sizes="192x192" href="{{ url_for('static', filename='images/ico.png') }}">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/ico.png') }}">
 
-  <!-- Main CSS -->
+  <!-- BS4 CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/bootstrap/css/bootstrap.min.css') }}">
+
+  <!-- icons -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/fontawesome/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/ion-icons/css/ion.min.css') }}">
 
   <!-- Bootstrap Social -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/bootstrap-social/bootstrap-social.css') }}">
@@ -28,10 +31,6 @@
   <!-- sweet alert -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
 
-  <!-- core css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
-
   <!-- form validation -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/form-validation/css/formValidation.min.css') }}">
 
@@ -40,13 +39,26 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.date.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.time.css') }}">
 
+  <!-- datatable -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.bootstrap.min.css') }}">
+
+  <!-- apex charts -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/apex-charts/apexcharts.css') }}">
+
+  <!-- izimodal -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/iziModal/css/iziModal.css') }}">
+
+  <!-- select 2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modules/select2/css/select2-bootstrap4.min.css') }}">
+
   <!-- main stlye -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/app/main.css') }}">
 
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css"
-    href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+  <!-- core css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
 
 
   <!-- init styles -->
@@ -63,19 +75,19 @@
 
   {% if is_loggedin() %}
   {% include 'base/navbar.html' %}
+  {% include 'base/sidebar.html' %}
   <div class="main-content">
     {% else %}
     <div class="app">
       {% endif %}
-
       {% block content %}
       {% endblock content %}
     </div>
 
     <!-- jquery and bootstrap and core -->
     <script src="{{ url_for('static', filename='system/jquery/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='system/popperjs/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='system/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='system/popperjs/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='system/app/main.js') }}"></script>
 
     <!-- triggers -->
@@ -104,24 +116,28 @@
     <script src="{{ url_for('static', filename='modules/pickadate/picker.date.js') }}"></script>
     <script src="{{ url_for('static', filename='modules/pickadate/picker.time.js') }}"></script>
 
+    <!-- datatable -->
+    <script src="{{ url_for('static', filename='modules/datatables/js/datatable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/datatables/js/datatable.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='modules/datatables/js/datatables.scrolling.js') }}"></script>
+
+    <!-- apex charts -->
+    <script src="{{ url_for('static', filename='modules/apex-charts/apexcharts.min.js') }}"></script>
+
+    <!-- select 2 -->
+    <script src="{{ url_for('static', filename='modules/select2/js/select2.full.min.js') }}"></script>
+
+    <!-- izimodal -->
+    <script src="{{ url_for('static', filename='modules/iziModal/js/iziModal.min.js') }}"></script>
+
+    <!-- bs 4 mapper - temp -->
     <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
 
-    <script language="JavaScript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"
-      type="text/javascript"></script>
-    <script language="JavaScript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"
-      type="text/javascript"></script>
-    <script language="JavaScript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"
-      type="text/javascript"></script>
-    <script language="JavaScript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"
-      type="text/javascript"></script>
 
-
-
-    <script>
-      $(window).on('load', function () {
-        $(".se-pre-con").fadeOut("slow");
-      });
-    </script>
+    {% include 'base/scripts.html' %}
+    {% if is_loggedin() %}
+    {% include 'base/scripts_logged_in.html' %}
+    {% endif %}
 
     {% block scripts %}
     {% endblock scripts %}

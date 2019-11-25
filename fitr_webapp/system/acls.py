@@ -17,7 +17,7 @@ acls["everyone"] = [
 ]
 
 acls["trainer"] = [
-    Permission([Allow, "pt_clients"]),
+    Permission([Allow, "trainer_clients"]),
     acls["everyone"]
 ]
 

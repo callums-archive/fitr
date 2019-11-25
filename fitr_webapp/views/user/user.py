@@ -12,7 +12,7 @@ from fitr_webapp.models import Users
 
 from fitr_webapp.system.exceptions import DBError
 
-from fitr_webapp.system.view_helpers import Base
+from fitr_webapp.system.view_helpers import Base, Datatable
 
 from fitr_webapp.system.permissions import permission, has_permission
 
@@ -30,14 +30,52 @@ from fitr_webapp.models import (
     Users
 )
 
-class User(Base):
+
+class UserAPIWeightDatatable(Datatable):
+
+    def before_request(self, name, **user):
+        self.context = Users.serve_context(user.get("user"))
+
+    @route('/<user>/weight/datatable')
+    @permission('trainer_clients')
+    def index(self, user):
+        return self.datatable()
+
+    def columns(self):
+        return ["weight", "create_stamp", "unit"]
+
+    def adj_create_stamp(self, val, row):
+        return datetimetools.cast_string(val, "dt")
+    
+    def adj_weight(self, val, row):
+        return f"{val} {row['unit']}"
+
+    def model(self):
+        return Weight.objects.filter(user=self.context)
+
+    def search(self, term):
+        return Weight.objects.filter(user=self.context)
+
+class UserAPI(Base):
     # route_prefix="/<user>/"
 
     def before_request(self, name, **user):
-        print("here here here")
-        print("here here here")
-        print("here here here")
         self.context = Users.serve_context(user.get("user"))
+
+    #
+    # Weight
+    #
+
+    @permission("user")
+    @route("/<user>/weight", methods=["POST"])
+    def post_weight(self, user):
+        if Weight.add(self.context, self.data['weight'], self.data['backdate']):
+            return {"diff_init": self.context.weight_difference, "diff_prev": self.context.weight_difference_previous}
+        abort(412, {"error_msg": "Failed to add weight. Please try again!"})
+
+    # @permission('user')
+    # @route('/<user>/weight/datatable')
+    # def weight_datatable
 
     @permission('user')
     def index(self):

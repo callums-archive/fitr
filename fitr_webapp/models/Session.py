@@ -20,3 +20,12 @@ class DBSession(db.Document):
         session = cls.objects.filter(sid=sid)
         session.delete()
         return True
+
+    @classmethod
+    def by_uid(cls, user):
+        return cls.objects.filter(data__username=user).order_by('-expiration')
+
+    @classmethod
+    def by_uid_latest(cls, user):
+        return cls.objects.filter(data__username=user).order_by('-expiration').first()
+

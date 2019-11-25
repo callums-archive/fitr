@@ -74,7 +74,7 @@ class AccountRecovery(db.Document):
 
         # send recovery email
         send_short_message(user.email, "Account Recovery",
-        f"Click on the link to reset you password :{url_for('UserAuthenticationView:forgot_reset_get', key=rec.reference, _external=True)}")
+        f"Click on the link to reset you password :{url_for('UserAuthentication:forgot_reset_get', key=rec.reference, _external=True)}")
         return True
 
     @classmethod
