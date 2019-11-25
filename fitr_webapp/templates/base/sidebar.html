@@ -1,11 +1,6 @@
 {% set menu_items = [
 
-        {"heading": "Your Health", "contents": 
-            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
-                    {"name":'Capture', "url": url_for('PTCaptureView:index')},
-                ]
-            }
-        },
+
 
         {"heading": "Clients", "contents": 
             {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
@@ -16,6 +11,13 @@
         
 
 ]%}
+
+        {# {"heading": "Your Health", "contents": 
+            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
+                    {"name":'Capture', "url": url_for('PTCaptureView:index')},
+                ]
+            }
+        }, #}
 
 
 {% macro gen_main_menu() -%}

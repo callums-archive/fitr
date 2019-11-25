@@ -41,6 +41,12 @@ class Datatable(Base):
                     row[field] = getattr(record, field)
             data.append(row)
 
+        # val adj
+        for field in fields:
+            if hasattr(self, f"adj_{field}"):
+                for row in data:
+                    row[field] = getattr(self, f"adj_{field}")(row[field], row)
+
         return jsonify({
             "draw": int(self.request.args.get('draw', 1)),
             "recordsTotal": record_total,

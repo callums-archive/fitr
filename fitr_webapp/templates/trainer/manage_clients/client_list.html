@@ -42,6 +42,7 @@
 {% block scripts %}
 <script>
     var username = null;
+    var clients_table = null;
 
     function setUser(user) {
         username = user;
@@ -68,7 +69,8 @@
                         `${full_name} has been detached.`,
                         'success'
                     ).then((result) => {
-                        location.reload("{{ url_for('TrainerManageClients:index') }}");
+                        clients_table.ajax.reload();
+                        $('[data-izimodal-close]')[0].click();
                     })
                 }).fail(function (data, status, jqXHR) {
                     try {
@@ -91,7 +93,7 @@
     $(document).ready(function (e) {
         toTheTop("#client-search");
 
-        var clients_table = $("#clients-table").DataTable({
+        clients_table = $("#clients-table").DataTable({
             "dom": "rt<'d-block dt-height-adj'<'float-left'l><'float-right'p>><'d-block container dt-text-adj'i>",
             "processing": true,
             "serverSide": true,
@@ -123,7 +125,7 @@
             clients_table.search($(this).val()).draw();
         });
 
-        user_details = $(".user-details").iziModal({
+        $(".user-details").iziModal({
             history: false,
             openFullscreen: true,
             fullscreen: false,
@@ -139,6 +141,7 @@
                     type: "GET",
                     url: `{{ url_for('TrainerManageClientAPI:index', user='') }}${username}/details`
                 }).done(function (data, status, jqXHR) {
+                    $(".user-details").iziModal('setTitle', data.fullname);
                     $(".user-details").find(".iziModal-content").html(`
                         <div class="row p-3">
                             <div class="col pb-0">
@@ -181,10 +184,10 @@
                                     </div>
                                     <div class="card-body">
                                         <p>
-                                            <dt>Initial Weight</dt>
-                                            <dd>${data.initial_weight}</dd>
                                             <dt>Latest Weight</dt>
                                             <dd>${data.latest_weight}</dd>
+                                            <dt>Initial Weight</dt>
+                                            <dd>${data.initial_weight}</dd>
                                             <dt>Weight Difference</dt>
                                             <dd>${data.weight_difference}</dd>
                                         </p>
@@ -245,7 +248,6 @@
 
             }
         });
-
     });
 
 
@@ -269,6 +271,5 @@
         });
     });
 
-    function user_details(user) {}
 </script>
 {% endblock scripts %}

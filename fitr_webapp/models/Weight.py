@@ -1,5 +1,6 @@
 # flask
 from flask_mongoengine import MongoEngine
+from flask import request
 
 # std
 from datetime import datetime
@@ -43,7 +44,13 @@ class Weight(db.Document):
     @classmethod
     def get_difference(cls, uid):
         weights = cls.objects.filter(user=uid).order_by('create_stamp')
-        return {"weight": round(weights[0].weight - weights[len(weights)-1].weight, 2),
+        return {"weight": round(weights[len(weights)-1].weight - weights[0].weight, 2),
+                "unit": weights[0].unit}
+
+    @classmethod
+    def get_difference_previous(cls, uid):
+        weights = cls.objects.filter(user=uid).order_by('create_stamp')
+        return {"weight": round(weights[len(weights)-1].weight - weights[len(weights)-2].weight, 2),
                 "unit": weights[0].unit}
 
     @property
@@ -60,13 +67,16 @@ class Weight(db.Document):
         return f"{self.weight} {self.unit}"
 
     @classmethod
-    def add_weight(cls, user, weight, date=False):
+    def add(cls, user, weight, date=False):
         row = cls()
-        row.user = user
-        row.weight = float(weight)
+
         try:
             row.create_stamp = datetimetools.parse_date(date)
         except:
-            row.create_stamp = datetime.utcnow()
+            pass
+
+        row.user = user
+        row.weight = float(weight)
+        row.create_user = request.user.to_dbref()
         row.save()
         return True

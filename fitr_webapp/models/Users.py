@@ -94,6 +94,13 @@ class Users(db.Document):
         except:
             return {"weight": "No Data", "unit": ""}
 
+    @property
+    def weight_difference_previous(self):
+        try:
+            return Weight.get_difference_previous(self.id)
+        except:
+            return {"weight": "No Data", "unit": ""}
+
     #
     # MEASUREMENTS
     #

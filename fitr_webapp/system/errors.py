@@ -22,8 +22,8 @@ def register_errors(app):
         if not request.user:
             return redirect(url_for("UserAuthentication:login_get"))
         else:
-            return render_template('errors/403.html')
+            return render_template('errors/403.html'), 403
 
     @app.errorhandler(404)
     def not_found(error):
-        return render_template('errors/404.html')
+        return render_template('errors/404.html'), 404
