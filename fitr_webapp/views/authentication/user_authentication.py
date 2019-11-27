@@ -34,7 +34,7 @@ class UserAuthentication(Base):
     # porcess login details
     @route('/login', methods=['POST'])
     def login_post(self):
-        if not Captcha.by_ip(get_ip(), "login")[0].recall:
+        if not Captcha.get_status_ip(get_ip(), "login"):
             abort(412, {"error_msg": "Failed to authenticate request. Please try again."})
 
         identifier, password = sanitize_lower(
