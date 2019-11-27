@@ -101,7 +101,7 @@ def age(birth_date):
     """
     today = date.today()
     if isinstance(birth_date, datetime):
-        today = birth_date.date()
+        birth_date = birth_date.date()
 
     delta = today - birth_date
     return {
