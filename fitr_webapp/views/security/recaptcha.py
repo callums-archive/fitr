@@ -22,7 +22,8 @@ import requests
 from flask import current_app as app
 
 actions = [
-    "register" # user registration
+    "register", # user registration
+    "login" # user login
 ]
 
 class RecaptchaAPI(Base):
@@ -39,5 +40,5 @@ class RecaptchaAPI(Base):
 
         res_j = resp.json()
         if res_j['success'] and res_j['action'] in actions and res_j['action'] == action:
-            Captcha.create_record(res_j['action'], ip=get_ip())
+            Captcha.create_record(res_j['action'], ip=get_ip(), user=self.request.user)
         return jsonify(res_j)
