@@ -23,7 +23,8 @@ from flask import current_app as app
 
 actions = [
     "register", # user registration
-    "login" # user login
+    "login", # user login
+    "forgot" # forgot password interface
 ]
 
 class RecaptchaAPI(Base):

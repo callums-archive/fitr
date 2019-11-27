@@ -35,7 +35,8 @@ class UserAuthentication(Base):
     @route('/login', methods=['POST'])
     def login_post(self):
         if not Captcha.get_status_ip(get_ip(), "login"):
-            abort(412, {"error_msg": "Failed to authenticate request. Please try again."})
+            abort(
+                412, {"error_msg": "Failed to authenticate request. Please try again."})
 
         identifier, password = sanitize_lower(
             self.data.get('identifier')), self.data.get('password')
@@ -50,11 +51,14 @@ class UserAuthentication(Base):
     # forgot password interface
     @route("/forgot", methods=['GET'])
     def forgot_get(self):
-        return render_template("authentication/forgot.html")
+        return render_template("authentication/forgot.html", captcha_site_key=app.config['CAPTCHA_SITE'])
 
     # forgot password identifier post
     @route("/forgot", methods=['POST'])
     def forgot_post(self):
+        if not Captcha.get_status_ip(get_ip(), "login"):
+            abort(
+                412, {"error_msg": "Failed to authenticate request. Please try again."})
         user = Users.by_identifier(self.data.get('identifier'))
         if user is None:
             abort(412, jsonify({"error_msg": "Error submitting request."}))
