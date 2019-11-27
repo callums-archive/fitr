@@ -36,7 +36,7 @@ class UserRegistrationView(FormValidation):
     # register submit user data
     @route('/register', methods=['POST'])
     def register_post(self):
-        if not Captcha.by_ip(get_ip(), "register")[0].recall:
+        if not Captcha.get_status_ip(get_ip(), "register"):
             abort(412, {"error_msg": "Failed to authenticate request. Please try again."})
 
         errors = self.validate_x(strict=False)
