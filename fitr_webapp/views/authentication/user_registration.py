@@ -2,18 +2,22 @@ from flask import (
     render_template,
     abort,
     redirect,
-    url_for
+    url_for,
 )
 
 from flask_classy import route
 
-from fitr_webapp.models import Users
+from fitr_webapp.models import Users, Captcha
 
 from fitr_webapp.system.view_helpers import FormValidation
 
 from fitr_webapp.system.exceptions import DBError
 
-from fitr_webapp.system.stringtools import sanitize_lower
+from fitr_webapp.system import stringtools, datetimetools
+
+from flask import current_app as app
+
+from fitr_webapp.system.ip import get_ip
 
 
 class UserRegistrationView(FormValidation):
@@ -22,7 +26,7 @@ class UserRegistrationView(FormValidation):
     # register interface
     @route('/register')
     def index(self):
-        return render_template("authentication/register.html")
+        return render_template("authentication/register.html", captcha_site_key=app.config['CAPTCHA_SITE'])
 
     # register validation (AJAX)
     @route('/register_validate', methods=['POST'])
@@ -32,13 +36,16 @@ class UserRegistrationView(FormValidation):
     # register submit user data
     @route('/register', methods=['POST'])
     def register_post(self):
+        if not Captcha.by_ip(get_ip(), "register")[0].is_valid:
+            abort(412, {"error_msg": "Failed to authenticate request. Please try again."})
+
         errors = self.validate_x(strict=False)
-        print(errors)
+
         if errors['valid'] == True:
             # create account
             try:
                 Users.create_user(
-                    username=sanitize_lower(self.data.get('username')),
+                    username=self.data.get('username'),
                     password=self.data.get('password'),
                     email=self.data.get('email'),
                     gender=self.data.get('gender'),
@@ -56,12 +63,41 @@ class UserRegistrationView(FormValidation):
     # validators
     # validate email
     def validate_email(self, val):
+        if stringtools.re_email.match(val) is None:
+            return 0, "Email is invalid."
         if Users.by_email(val) is not None:
-            return 0, "Email already registered"
+            return 0, "Email already registered."
         return 1, ""
 
     # validate username
     def validate_username(self, val):
+        if stringtools.re_username.match(val) is None:
+            return 0, "Field can only consist of alphabetical charectors and numbers. Min length 3 charectors"
         if Users.by_username(val) is not None:
-            return 0, "Username already registered"
+            return 0, "Username already registered."
+        return 1, ""
+
+    # validate gender
+    def validate_gender(self, val):
+        if val not in ['male', 'female']:
+            return 0, "Gender is invalid."
+        return 1, ""
+
+    # validate date of birth
+    def validate_date_of_birth(self, val):
+        try:
+            bd = datetimetools.parse_date(val)
+            print(datetimetools.age_lower(bd, 13))
+            print(datetimetools.age_lower(bd, 13))
+            print(datetimetools.age_lower(bd, 13))
+            if datetimetools.age_lower(bd, 13):
+                return 0, "Age is too young."
+            return 1, ""
+        except Exception as e:
+            return 0, "Date is incorrect."
+
+    # validate_password
+    def validate_password(self, val):
+        if stringtools.re_password.match(val) is None:
+            return 0, "Password needs to be minimum 8 characters, at least one letter and one number"
         return 1, ""

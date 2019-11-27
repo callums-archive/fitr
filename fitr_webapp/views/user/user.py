@@ -42,13 +42,16 @@ class UserAPIWeightDatatable(Datatable):
         return self.datatable()
 
     def columns(self):
-        return ["weight", "create_stamp", "unit"]
+        return ["weight", "create_stamp", "create_user", "unit"]
 
     def adj_create_stamp(self, val, row):
         return datetimetools.cast_string(val, "dt")
     
     def adj_weight(self, val, row):
         return f"{val} {row['unit']}"
+
+    def adj_create_user(self, val, row):
+        return str(val)
 
     def model(self):
         return Weight.objects.filter(user=self.context)

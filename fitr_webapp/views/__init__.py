@@ -2,6 +2,7 @@ from .authentication import register_views as auth_views
 from .dashboard import register_views as dash_views
 from .trainer import register_views as trainer_views
 from .user import register_views as user_views
+from .security import register_views as recaptcha_views
 
 
 def register_views(app):
@@ -16,3 +17,6 @@ def register_views(app):
 
     # register user views
     user_views(app, '/users/')
+
+    # recaptcha
+    recaptcha_views(app, '/recaptcha/')

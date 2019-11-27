@@ -6,3 +6,4 @@ from .Weight import *
 from .Groups import *
 from .AccountRecovery import *
 from .Session import *
+from .Recptcha import *
