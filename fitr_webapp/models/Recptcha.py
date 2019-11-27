@@ -42,10 +42,12 @@ class Captcha(db.Document):
             return cls.objects.filter(ip=ip, action=action).order_by("-create_stamp")
 
     @property
-    def is_valid(self):
+    def recall(self):
         now = mktime(datetime.utcnow().timetuple())
         record = mktime(self.create_stamp.timetuple())
         res = now - record
+
+        self.delete()
 
         if res > 5:
             return False

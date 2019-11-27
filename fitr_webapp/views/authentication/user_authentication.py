@@ -9,7 +9,7 @@ from flask import (
 
 from flask_classy import route
 
-from fitr_webapp.models import Users, AccountRecovery
+from fitr_webapp.models import Users, AccountRecovery, Captcha
 
 from fitr_webapp.system.exceptions import DBError
 
@@ -19,17 +19,24 @@ from fitr_webapp.system.session import clear_session
 
 from fitr_webapp.system.stringtools import sanitize_lower
 
+from flask import current_app as app
+
+from fitr_webapp.system.ip import get_ip
+
 
 class UserAuthentication(Base):
 
     # login interface
     @route('/login')
     def login_get(self):
-        return render_template("authentication/login.html")
+        return render_template("authentication/login.html", captcha_site_key=app.config['CAPTCHA_SITE'])
 
     # porcess login details
     @route('/login', methods=['POST'])
     def login_post(self):
+        if not Captcha.by_ip(get_ip(), "login")[0].recall:
+            abort(412, {"error_msg": "Failed to authenticate request. Please try again."})
+
         identifier, password = sanitize_lower(
             self.data.get('identifier')), self.data.get('password')
         try:

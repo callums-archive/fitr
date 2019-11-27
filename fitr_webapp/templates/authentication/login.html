@@ -47,6 +47,7 @@
                 <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                   Login
                 </button>
+                <div id="captchaContainer"></div>
               </div>
               <div class="text-muted text-center">
                 Don't have an account? <a href="{{ url_for('UserRegistrationView:index') }}">Create One</a>
@@ -103,6 +104,13 @@
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap: new FormValidation.plugins.Bootstrap(),
           submitButton: new FormValidation.plugins.SubmitButton(),
+          recaptcha3: new FormValidation.plugins.Recaptcha3({
+            action: "login",
+            backendVerificationUrl: "{{ url_for('RecaptchaAPI:index') }}",
+            element: 'captchaContainer',
+            message: "captcha failure",
+            siteKey: "{{ captcha_site_key }}",
+          }),
         },
       }
     ).on('core.form.valid', function () {
