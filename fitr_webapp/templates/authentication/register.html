@@ -94,7 +94,9 @@
                 <button type="submit" class="btn btn-primary btn-lg btn-block">
                   Register
                 </button>
+                <div id="captchaContainer"></div>
               </div>
+
             </form>
             <div class="text-muted text-center">
               Already have an account? <a href="{{ url_for('UserAuthentication:login_get') }}">Login</a>
@@ -114,6 +116,7 @@
 {% endblock content %}
 
 {% block scripts %}
+<script src="https://www.google.com/recaptcha/api.js?render=_reCAPTCHA_site_key"></script>
 <script type="text/javascript">
   // form validator
   var fv = null;
@@ -170,7 +173,11 @@
             validators: {
               notEmpty: {
                 message: 'This field is required'
-              }
+              },
+              remote: {
+                method: 'POST',
+                url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
+              },
             }
           },
           date_of_birth: {
@@ -178,34 +185,16 @@
               notEmpty: {
                 message: 'Please complete the date',
               },
-              callback: {
-                message: "You need to be 13+ to register",
-                callback: function (field) {
-                  var user_date = new Date(field.value);
-                  var ageDifMs = Date.now() - user_date.getTime();
-                  var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                  if (Math.abs(ageDate.getUTCFullYear() - 1970) < 13) {
-                    return false
-                  } else {
-                    return true;
-                  }
-                }
-              }
+              remote: {
+                method: 'POST',
+                url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
+              },
             }
           },
           username: {
             validators: {
               notEmpty: {
                 message: 'This field is required',
-              },
-              stringLength: {
-                min: 4,
-                max: 16,
-                message: 'Field must be more than 4 and less than 16 characters long'
-              },
-              regexp: {
-                regexp: /^[a-zA-Z0-9_]+$/,
-                message: 'Field can only consist of alphabetical charectors and numbers'
               },
               remote: {
                 method: 'POST',
@@ -218,10 +207,9 @@
               notEmpty: {
                 message: 'This field is required',
               },
-              stringLength: {
-                min: 6,
-                max: 50,
-                message: 'Field must be more than 6 and less than 50 characters long'
+              remote: {
+                method: 'POST',
+                url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
               },
             }
           },
@@ -247,10 +235,6 @@
               notEmpty: {
                 message: 'This field is required'
               },
-              regexp: {
-                regexp: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i,
-                message: 'Email address is invalid'
-              },
               remote: {
                 method: 'POST',
                 url: '{{ url_for("UserRegistrationView:register_validate_post") }}'
@@ -262,9 +246,17 @@
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap: new FormValidation.plugins.Bootstrap(),
           submitButton: new FormValidation.plugins.SubmitButton(),
+          recaptcha3: new FormValidation.plugins.Recaptcha3({
+            action: "register",
+            backendVerificationUrl: "{{ url_for('RecaptchaAPI:index') }}",
+            element: 'captchaContainer',
+            message: "captcha failure",
+            siteKey: "{{ captcha_site_key }}",
+          }),
         },
       }
     ).on('core.form.valid', function () {
+
       $("button[type='submit']").attr("disabled", true);
       $.ajax({
         accept: 'application/json',
@@ -279,7 +271,7 @@
           timer: 3500,
           showConfirmButton: false,
           title: 'Welcome 🎉',
-          text: "You'r registration was successful! You will now be redirected to login.",
+          text: "Your registration was successful! You will now be redirected to login.",
           onClose: () => {
             window.location.replace("{{ url_for('UserAuthentication:login_get') }}");
           }
