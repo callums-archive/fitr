@@ -63,5 +63,5 @@ class DashboardView(Base):
         #         e.create_stamp = m.show_measurements['create_stamp']
         #         e.save()
 
-        print(CapturedMeasurements.objects.all()[0].to_dict)
+        # print(CapturedMeasurements.objects.all()[0].to_dict)
         return render_template("dashboard/dashboard.html")
