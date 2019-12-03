@@ -17,7 +17,7 @@ from fitr_webapp.system.view_helpers import Base
 from fitr_webapp.system.permissions import permission, has_permission
 from fitr_webapp.system.session import clear_session
 
-from fitr_webapp.models import Measurements, CapturedMeasurements, MeasurementTemplates, Users
+# from fitr_webapp.models import Measurements, CapturedMeasurements, MeasurementTemplates, Users
 
 
 class DashboardView(Base):

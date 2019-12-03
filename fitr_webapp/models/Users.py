@@ -30,7 +30,7 @@ from fitr_webapp.models.Groups import *
 from fitr_webapp.models.Logins import *
 from fitr_webapp.models.Weight import Weight
 from fitr_webapp.models.Session import DBSession
-from fitr_webapp.models.Measurements import CapturedMeasurements
+# from fitr_webapp.models.Measurements import CapturedMeasurements
 from fitr_webapp.models.FitnessTests import FitnessTests
 
 
@@ -106,24 +106,24 @@ class Users(db.Document):
     #
     @property
     def initial_measurement(self):
-        try:
-            return CapturedMeasurements.by_uid_initial(self.id)
-        except:
-            return "No Data"
+        # try:
+        #     return CapturedMeasurements.by_uid_initial(self.id)
+        # except:
+        return "No Data"
 
     @property
     def latest_measurement(self):
-        try:
-            return CapturedMeasurements.by_uid_latest(self.id)
-        except:
-            return "No Data"
+        # try:
+        #     return CapturedMeasurements.by_uid_latest(self.id)
+        # except:
+        return "No Data"
 
     @property
     def measurement_difference(self):
-        try:
-            return CapturedMeasurements.get_difference(self.id)
-        except:
-            return "No Data"
+        # try:
+        #     return CapturedMeasurements.get_difference(self.id)
+        # except:
+        return "No Data"
 
     #
     # FITNESS TESTS
