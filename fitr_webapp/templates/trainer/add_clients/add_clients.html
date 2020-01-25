@@ -1,0 +1,111 @@
+{% extends  'base/layout.html'%}
+
+{% block styles %}
+<style>
+
+</style>
+{% endblock styles %}
+
+{% block content %}
+<section class="section">
+
+    <div class="section-header">
+        <div class="mx-2 my-auto d-inline w-100">
+            <div class="input-group">
+                <input type="text" class="useFontAwesomeFamily form-control" id="client-search"
+                    placeholder="&#xf002; Add Client">
+            </div>
+        </div>
+    </div>
+
+    <div class="results"></div>
+
+
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+$('#client-search').on('keyup', (el) => {
+    console.log("here")
+    console.log({"term": $('#client-search').val()})
+    $.ajax({
+        url: '{{ url_for("TrainerAddClientsAPI:client_search_post") }}',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({"term": $('#client-search').val()}),
+        success: function( data, textStatus, jQxhr  ) {
+            $('.results').empty();
+            var contents = "";
+
+            data.forEach(ele => {
+                contents += `
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h5 class="left">${ele.full_name}</h5>
+                        <div class="ml-auto">
+                            <button class="btn btn-success" onclick="addClient('${ele.username}', '${ele.full_name}')">Add</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+
+            $('.results').html(contents);
+        },
+        error: function( jqXhr, textStatus, errorThrown ) {
+            iziToast.error({
+                position: "bottomLeft",
+                title: 'Error',
+                message: "Please try again."
+            });
+        }
+    });
+});
+
+
+function addClient(user, full_name) {
+    Swal.fire({
+            title: 'Attaching Client',
+            text: `You are about to add ${full_name} as a client, are you sure?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    accept: 'application/json',
+                    contentType: 'application/json',
+                    type: "POST",
+                    url: `{{ url_for('TrainerAddClientsAPI:add_client') }}`,
+                    data: JSON.stringify({"username": user})
+                }).done(function (data, status, jqXHR) {
+                    Swal.fire(
+                        'Attachment Success',
+                        `${full_name} has been added as a client.`,
+                        'success'
+                    ).then((result) => {
+                        clients_table.ajax.reload();
+                        $('[data-izimodal-close]')[0].click();
+                    })
+                }).fail(function (data, status, jqXHR) {
+                    try {
+                        var error = data.responseJSON.error_msg;
+                    } catch (err) {
+                        var error = "Server Error, Try again.";
+                    }
+
+                    Swal.fire(
+                        'Failed',
+                        `Unable to attach ${full_name}. Please try again.`,
+                        'error'
+                    )
+                });
+
+            }
+        })
+    }
+</script>
+
+{% endblock scripts %}
