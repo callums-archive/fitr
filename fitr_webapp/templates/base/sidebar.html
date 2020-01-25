@@ -1,7 +1,7 @@
 {% set menu_items = [
-        {"heading": "Clients", "permission": "trainer_clients", "contents":
+        {"heading": '<i class="fas fa-users"></i> Clients', "permission": "trainer_clients", "contents":
             [
-                {"name":'<i class="fas fa-users"></i> Manage Clients', "permission": "trainer_clients", "url": url_for('TrainerManageClients:index')},
+                {"name":'<i class="fas fa-users-cog"></i> Manage Clients', "permission": "trainer_clients", "url": url_for('TrainerManageClients:index')},
                 {"name":'<i class="fas fa-user-plus"></i> Add Clients', "permission": "trainer_clients", "url": url_for('TrainerAddClientsAPI:index')},
             ]
         }
@@ -29,10 +29,14 @@
 <div class="main-sidebar sidebar-style-2" tabindex="1">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand sidebar-brand-sm">
-            <img src="{{ url_for('static', filename='img/muscle.png') }}" alt="logo" width="45">
+            <a href="{{ url_for('DashboardView:index') }}">
+                <img src="{{ url_for('static', filename='img/muscle.png') }}" alt="logo" width="45">
+            </a>
         </div>
         <div class="sidebar-brand">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="85">
+            <a href="{{ url_for('DashboardView:index') }}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="85">
+            </a>
         </div>
         <ul class="sidebar-menu">
             {{ gen_main_menu() }}

@@ -27,8 +27,6 @@
 {% block scripts %}
 <script>
 $('#client-search').on('keyup', (el) => {
-    console.log("here")
-    console.log({"term": $('#client-search').val()})
     $.ajax({
         url: '{{ url_for("TrainerAddClientsAPI:client_search_post") }}',
         type: 'POST',
@@ -86,8 +84,7 @@ function addClient(user, full_name) {
                         `${full_name} has been added as a client.`,
                         'success'
                     ).then((result) => {
-                        clients_table.ajax.reload();
-                        $('[data-izimodal-close]')[0].click();
+                        window.location.reload();
                     })
                 }).fail(function (data, status, jqXHR) {
                     try {

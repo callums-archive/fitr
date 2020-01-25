@@ -34,13 +34,10 @@ class TrainerAddClientsAPI(Base):
     @route('/', methods=['POST'])
     @permission('trainer_clients')
     def add_client(self):
-        print(self.data)
-        print(self.data)
-        print(self.data)
-        print(self.data)
-        print(self.data)
-        print(self.data)
-        return "sdfsdf"
+        user = Users.by_username(self.data.get("username"))
+        user.trainers.append(self.request.user)
+        user.save()
+        return "OK"
 
     @route('/clients_search', methods=['POST'])
     @permission('trainer_clients')
