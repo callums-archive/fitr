@@ -218,6 +218,8 @@ class Users(db.Document):
         user = cls.by_username(username)
         if user is None:
             abort(404)
+        if request.user == user:
+            return user
         if request.user not in user.trainers:
             return abort(403)
         if decide_context_acl([user, user.trainers], True):
