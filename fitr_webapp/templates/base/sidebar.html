@@ -1,52 +1,26 @@
 {% set menu_items = [
-
-
-
-        {"heading": "Clients", "contents": 
-            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
-                    {"name":'Manage Clients', "url": url_for('TrainerManageClients:index')},
-                ]
-            }
-        },
-        
-
-]%}
-
-        {# {"heading": "Your Health", "contents": 
-            {"name": '<i class="fas fa-fire"></i><span>Clients</span>', "ref": "clients", "permission": "trainer_clients", "children": [
-                    {"name":'Capture', "url": url_for('PTCaptureView:index')},
-                ]
-            }
-        }, #}
+        {"heading": "Clients", "permission": "trainer_clients", "contents":
+            [
+                {"name":'<i class="fas fa-users"></i> Manage Clients', "permission": "trainer_clients", "url": url_for('TrainerManageClients:index')},
+                {"name":'<i class="fas fa-user-plus"></i> Add Clients', "permission": "trainer_clients", "url": url_for('TrainerAddClientsAPI:index')},
+            ]
+        }
+] %}
 
 
 {% macro gen_main_menu() -%}
     {% for subject in menu_items %}
-        <li class="menu-header">{{ subject.heading }}</li>
-        {% if subject.contents['children'] | length > 0 and has_permission(subject.contents['permission']) %}
-        {% set mark_active = {"is_active": False, "children": []} %}
-        {% for child in subject.contents['children'] %}
-          {% if child.url == request.path %}
-            {% if mark_active.update({"is_active": True}) %} {% endif %}
-          {% endif %}
-          {% if mark_active.children.append(child) %} {% endif %}
-        {% endfor %}
-        <li class="dropdown {{ 'active' if mark_active.is_active else '' }}">
-            <a class="nav-link has-dropdown" href="#" id="{{ subject.contents['ref'] }}" data-toggle="dropdown">
-              {{ subject.contents['name'] | safe }}
-            </a>
-            <ul class="dropdown-menu">
-                {% for child in mark_active.children %}
-                  <li class="{{ 'active' if request.path == child.url else '' }}"><a class="nav-link" href="{{ child.url }}">{{ child.name | safe }}</a></li>
-                {% endfor %}
-            </ul>
-        </li>
-        {% elif has_permission(subject.contents['permission']) %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ subject.contents['url'] }}">
-              {{ subject.contents['name'] | safe }}
-            </a>
-        </li>
+        {% if has_permission(subject['permission']) %}
+            <li class="menu-header">{{ subject['heading'] | safe }}</li>
+            {% for item in subject['contents'] %}
+                {% if has_permission(item['permission']) %}
+                    <li class="nav-item {{ 'active' if item['url'] == request.path else '' }}">
+                        <a class="nav-link" href="{{ item['url'] }}">
+                        {{ item['name'] | safe }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
         {% endif %}
     {% endfor %}
 {%- endmacro %}
@@ -55,10 +29,10 @@
 <div class="main-sidebar sidebar-style-2" tabindex="1">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand sidebar-brand-sm">
-            <img src="{{ url_for('static', filename='img/temple_squ.png') }}" alt="logo" width="45">
+            <img src="{{ url_for('static', filename='img/muscle.png') }}" alt="logo" width="45">
         </div>
         <div class="sidebar-brand">
-            <img src="{{ url_for('static', filename='img/temple_port.png') }}" alt="logo" width="85">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="85">
         </div>
         <ul class="sidebar-menu">
             {{ gen_main_menu() }}
