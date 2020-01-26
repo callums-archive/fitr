@@ -1,0 +1,15 @@
+{
+    "background_color": "blue",
+    "description": "Best fitness application in SA",
+    "display": "fullscreen",
+    "icons": [
+      {
+        "src": "https://fitr.gq/static/img/ico_app.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "name": "Fitr",
+    "short_name": "Fitr",
+    "start_url": "https://fitr.gq/"
+  }
