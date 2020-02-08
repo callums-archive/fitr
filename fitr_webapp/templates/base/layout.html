@@ -11,6 +11,7 @@
   <meta name="theme-color" content="{{ colours['browser_theme'] }}">
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
+  
   <!-- favicon -->
   <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png')}}">
   <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png')}}">
@@ -29,65 +30,67 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png')}}">
   <meta name="theme-color" content="#ffffff">
-
+  
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-
+  
   <!-- aths -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/aths/addtohomescreen.css') }}">
-
+  
   <!-- BS4 CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/bootstrap/css/bootstrap.min.css') }}">
-
+  
   <!-- icons -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/fontawesome/css/all.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/ion-icons/css/ion.min.css') }}">
-
+  
   <!-- Bootstrap Social -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/bootstrap-social/bootstrap-social.css') }}">
-
+  
   <!-- iziToast -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/izitoast/css/iziToast.min.css') }}">
-
+  
   <!-- sweet alert -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/sweetalert/sweetalert2.min.css') }}">
-
+  
   <!-- form validation -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/form-validation/css/formValidation.min.css') }}">
-
+  
   <!-- pickadate -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.date.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/pickadate/themes/default.time.css') }}">
-
+  
   <!-- datatable -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/datatables/css/datatable.bootstrap.min.css') }}">
-
+  
   <!-- apex charts -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/apex-charts/apexcharts.css') }}">
-
+  
   <!-- izimodal -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/iziModal/css/iziModal.css') }}">
-
+  
   <!-- select 2 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/select2/css/select2.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='modules/select2/css/select2-bootstrap4.min.css') }}">
-
+  
   <!-- main stlye -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/app/main.css') }}">
-
+  
   <!-- core css -->
   <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='system/stisla/css/components.css') }}">
-
-
+  
+  <!-- adsense -->
+  <script data-ad-client="ca-pub-4307877140088490" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
   <!-- init styles -->
   {% include 'base/styles.html' %}
-
+  
   {% block styles %}
   {% endblock styles %}
-
+  
   <title>Fitr</title>
 </head>
 
