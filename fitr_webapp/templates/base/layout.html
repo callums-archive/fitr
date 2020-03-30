@@ -12,6 +12,11 @@
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
   
+
+  <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
   <!-- favicon -->
   <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png')}}">
   <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png')}}">
@@ -163,6 +168,7 @@
     <!-- bs 4 mapper - temp -->
     <script src="{{ url_for('static', filename='modules/BS4FormMapper/BS4Mapper.js') }}"></script>
 
+    <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
 
     {% include 'base/scripts.html' %}
     {% if is_loggedin() %}
