@@ -30,6 +30,8 @@
 
 {% endblock content %} {% block scripts %}
 <script>
+
+  {% if request.user.trainers[0].username == "wendy" %}
   $(document).ready(function(e) {
     $.ajax({
       type: "GET",
@@ -74,6 +76,8 @@
           videojs(`#my-video-${vd['video']}`, {}, function(){
   // Player (this) is initialized and ready.
 });
+
+{% endif %}
 
         })
       },
