@@ -35,7 +35,7 @@
       type: "GET",
       crossDomain: true,
       dataType: "json",
-      url: "http://vidserve.tk/req.json",
+      url: "https://vidserve.tk/req.json",
       success: function(d, t, e) {
         d.forEach((vd) => {
           $("#ctx").append(`
@@ -56,7 +56,7 @@
           poster="MY_VIDEO_POSTER.jpg"
           data-setup="{}"
         >
-          <source src="http://vidserve.tk/${vd['video']}.mp4" type="video/mp4" />
+          <source src="https://vidserve.tk/${vd['video']}.mp4" type="video/mp4" />
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
             web browser that
